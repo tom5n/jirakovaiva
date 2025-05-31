@@ -100,6 +100,25 @@ export default function Reservation() {
     if (error) {
       alert('Chyba při ukládání rezervace: ' + error.message)
     } else {
+      // Odeslat email na info@jirakovaiva.cz
+      try {
+        await fetch('/api/notify-reservation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            phone,
+            date: dateStr,
+            time,
+          }),
+        });
+      } catch (e) {
+        // případně logovat chybu
+      }
       alert('Rezervace byla úspěšně odeslána!')
       // případně reset formuláře nebo redirect
     }
