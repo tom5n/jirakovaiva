@@ -46,6 +46,16 @@ export default function AdminReservationsCalendar() {
   const selectedDateStr = selectedDate ? new Date(selectedDate).toISOString().slice(0, 10) : '';
 
   useEffect(() => {
+    if (!selectedDate) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      setSelectedDate(`${year}-${month}-${day}`);
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
     if (!selectedDate) return;
     const fetchReservations = async () => {
       setLoading(true);
