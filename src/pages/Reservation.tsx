@@ -226,63 +226,14 @@ export default function Reservation() {
 
   // Nastav automaticky dnešní den po načtení stránky
   useEffect(() => {
-    const initializeCalendar = async () => {
-      if (!selectedDate) {
-        const today = new Date();
-        today.setHours(0,0,0,0);
-        const todayIso = today.toISOString();
-        setSelectedDate(todayIso);
-        setValue('date', todayIso);
-      }
-
-      // Zkontroluj dostupné termíny v aktuálním měsíci
-      const days = getDaysInMonth(currentMonth);
-      let hasAvailableSlots = false;
-
-      for (const date of days) {
-        if (!date) continue;
-        
-        const isToday = date && date.toDateString() === new Date().toDateString();
-        const isPast = date && !isToday && date < new Date(new Date().setHours(0,0,0,0));
-        const isClosed = isClosedDay(date);
-        
-        if (isPast || isClosed) continue;
-
-        // Zkontroluj pracovní dobu pro tento den
-        const weekday = getWeekday(date.toISOString());
-        const { data: workingHour } = await supabase
-          .from('working_hours')
-          .select('*')
-          .eq('weekday', weekday)
-          .single();
-
-        if (!workingHour || !workingHour.enabled || !workingHour.start_time || !workingHour.end_time) continue;
-
-        // Zkontroluj obsazené časy pro tento den
-        const dateStr = date.toISOString().slice(0, 10);
-        const { data: reservations } = await supabase
-          .from('reservations')
-          .select('time')
-          .eq('date', dateStr)
-          .eq('status', 'confirmed');
-
-        const bookedTimes = reservations?.map(r => r.time) || [];
-        const availableTimeSlots = getAvailableTimeSlots().filter(time => !bookedTimes.includes(time));
-
-        if (availableTimeSlots.length > 0) {
-          hasAvailableSlots = true;
-          break;
-        }
-      }
-
-      if (!hasAvailableSlots) {
-        const nextMonthDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
-        setCurrentMonth(nextMonthDate);
-      }
-    };
-
-    initializeCalendar();
-  }, []); // Spustí se pouze při načtení komponenty
+    if (!selectedDate) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const todayIso = today.toISOString();
+      setSelectedDate(todayIso);
+      setValue('date', todayIso);
+    }
+  }, []);
 
   // Pomocná funkce: je den zavřený?
   const isClosedDay = (date: Date | null) => {
