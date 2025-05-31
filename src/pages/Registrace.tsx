@@ -62,7 +62,7 @@ const Registrace = () => {
             <div className="rounded-2xl p-8 max-w-6xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
                 <div className="flex flex-col h-full">
-                  <form className="flex flex-col flex-1 justify-between h-full border border-[#21435F] rounded-2xl p-6 bg-[#F3E8E2]">
+                  <form className="flex flex-col flex-1 justify-between h-full border border-[#21435F] rounded-2xl p-6 bg-[#F3E8E2] max-w-md w-full mx-auto md:max-w-none">
                     <h2 className="text-xl font-medium text-[#21435F] mb-6">Vyplňte údaje</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
                       <div>
