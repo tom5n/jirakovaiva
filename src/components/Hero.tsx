@@ -26,32 +26,31 @@ const Hero = () => {
     <>
       <section
         id="home"
-        className="min-h-[100dvh] min-h-screen flex items-center relative bg-[#F3E8E2] pt-16"
+        className="min-h-[100dvh] min-h-screen flex flex-col justify-center items-center bg-[#F3E8E2]"
       >
-        <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center px-4">
-          <div className="order-1 md:order-1 mt-8 sm:mt-16 md:mt-0 hero-content">
-            <h2 className="reveal reveal-delay-200 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#21435F] font-['Montserrat'] font-light mb-6 max-w-2xl mx-auto sm:mx-0">
+        <div className="w-full flex-1 flex flex-col justify-center items-center px-4">
+          <div className="flex flex-col items-center text-center w-full max-w-xl hero-content">
+            <h2 className="reveal reveal-delay-200 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#21435F] font-['Montserrat'] font-light mb-6">
               Proměňte svou vášeň<br />
               v <strong className="font-medium">úspěšné podnikání.</strong><br />
             </h2>
-            <p className="reveal reveal-delay-400 text-lg sm:text-xl md:text-2xl text-gray-700 mb-8 max-w-xl mx-auto sm:mx-0">
-            Pomáhám ženám vydělávat online odkudkoliv. Vybudujte si kariéru z pohodlí domova.
+            <p className="reveal reveal-delay-400 text-lg sm:text-xl md:text-2xl text-gray-700 mb-8">
+              Pomáhám ženám vydělávat online odkudkoliv. Vybudujte si kariéru z pohodlí domova.
             </p>
-            <div className="reveal reveal-delay-600 flex flex-col sm:flex-row gap-4 max-w-xl mx-auto sm:mx-0">
-              <a href="#collaboration" className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 flex items-center justify-center px-8 py-4 text-lg sm:text-xl rounded-full group w-full sm:w-auto">
+            <div className="reveal reveal-delay-600 flex flex-col gap-4 w-full">
+              <a href="#collaboration" className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 flex items-center justify-center px-8 py-4 text-lg sm:text-xl rounded-full group w-full">
                 Chci vědět víc
                 <ArrowRight size={22} className="ml-2 transition-transform duration-300 group-hover:rotate-45" />
               </a>
-              <a href="#contact" className="bg-[#FFD1C1] text-gray-800 hover:bg-[#FFD1C1]/90 transition-colors duration-300 flex items-center justify-center px-8 py-4 text-lg sm:text-xl rounded-full w-full sm:w-auto">
+              <a href="#contact" className="bg-[#FFD1C1] text-gray-800 hover:bg-[#FFD1C1]/90 transition-colors duration-300 flex items-center justify-center px-8 py-4 text-lg sm:text-xl rounded-full w-full">
                 Kontaktujte mě
               </a>
             </div>
           </div>
-          <div className="order-2 md:order-2 flex justify-center">
+          <div className="flex justify-center mt-10">
             <div className="relative w-[200px] h-[200px] sm:w-[260px] sm:h-[260px] md:w-[320px] md:h-[320px] lg:w-[500px] lg:h-[500px] reveal group">
               <div className="hidden sm:block absolute -top-4 -left-4 w-[270px] h-[270px] md:w-[320px] md:h-[320px] lg:w-[530px] lg:h-[530px] rounded-full border-4 border-[#21435F]/20"></div>
               <div className="hidden sm:block absolute -top-8 -left-8 w-[300px] h-[300px] md:w-[350px] md:h-[350px] lg:w-[560px] lg:h-[560px] rounded-full border-4 border-[#FFD1C1]/30"></div>
-              
               <div className="absolute inset-0 rounded-full overflow-hidden transform transition-all duration-700 group-hover:scale-[1.02]">
                 <img
                   src="/images/heroimg.webp"
