@@ -18,6 +18,7 @@ export default function AdminReservationsCalendar() {
   const [reservations, setReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [daysWithReservations, setDaysWithReservations] = useState<Set<string>>(new Set());
+  const [debugData, setDebugData] = useState<any[]>([]);
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -85,6 +86,7 @@ export default function AdminReservationsCalendar() {
         .lte('date', to)
         .eq('status', 'confirmed');
       if (!error && data) {
+        setDebugData(data);
         const days = new Set(
           data.map((r: any) => {
             if (typeof r.date === 'string') return r.date;
@@ -162,6 +164,7 @@ export default function AdminReservationsCalendar() {
             })}
           </div>
           <div style={{fontSize:'12px',color:'black',marginTop:'10px'}}>daysWithReservations: {Array.from(daysWithReservations).join(', ')}</div>
+          <div style={{fontSize:'12px',color:'black',marginTop:'10px'}}>DEBUG Supabase data: {JSON.stringify(debugData)}</div>
           {/* Vysvětlivky */}
           <div className="mt-4 flex flex-wrap gap-4 text-xs text-[#21435F]/80 items-center justify-center text-center">
             <div className="flex items-center gap-2">

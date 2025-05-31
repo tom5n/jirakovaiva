@@ -3,7 +3,7 @@ import { Home } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const ADMIN_USERNAME = "ivajirakova";
-const ADMIN_PASSWORD = "Farmasi8053."; // Změňte toto heslo na něco bezpečnějšího!
+const ADMIN_PASSWORD = "Farmasi8053.";
 
 export default function AuthForm() {
   const [username, setUsername] = useState('')
