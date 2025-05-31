@@ -93,9 +93,38 @@ function ApproveReservationsList() {
   const handleRejectSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (rejectId) {
+      const reservation = reservations.find(r => r.id === rejectId);
       const { error } = await supabase.from('reservations').update({ status: 'cancelled', reject_reason: rejectReason }).eq('id', rejectId);
-      if (!error) showToast('Rezervace byla zamítnuta.');
-      else showToast('Chyba při zamítnutí rezervace.', 'error');
+      if (!error) {
+        showToast('Rezervace byla zamítnuta.');
+        // Odeslat email o zamítnutí
+        if (reservation) {
+          try {
+            const response = await fetch('/api/reject-reservation', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                firstName: reservation.first_name,
+                lastName: reservation.last_name,
+                email: reservation.email,
+                phone: reservation.phone,
+                date: reservation.date,
+                time: reservation.time,
+                rejectReason,
+              }),
+            });
+            
+            if (!response.ok) {
+              throw new Error('Chyba při odesílání emailu');
+            }
+          } catch (e) {
+            console.error('Chyba při odesílání emailu:', e);
+            showToast('Chyba při odesílání emailu o zamítnutí.', 'error');
+          }
+        }
+      } else showToast('Chyba při zamítnutí rezervace.', 'error');
       setRejectId(null);
       setRejectReason('');
       fetchReservations();
