@@ -1,0 +1,21 @@
+{
+  "name": "Ivana Jiráková",
+  "short_name": "Jiráková",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFD1C1",
+  "theme_color": "#21435F",
+  "description": "Objednejte se na kosmetiku, registrujte se do FARMASI nebo mě kontaktujte. Moderní salon, osobní přístup a exkluzivní benefity.",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 64x64 96x96 128x128 256x256 512x512",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+} 

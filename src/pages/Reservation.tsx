@@ -7,6 +7,7 @@ import * as z from 'zod'
 import NewsNavbar from '@/components/NewsNavbar'
 import Footer from '@/components/Footer'
 import { supabase } from '@/lib/supabase'
+import SeoHead from '../components/SeoHead'
 
 type WorkingHour = {
   weekday: number;
@@ -258,211 +259,218 @@ export default function Reservation() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFD1C1]">
-      <NewsNavbar />
-      <main>
-        <section className="py-16 md:py-24 bg-[#F3E8E2]">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-8">
-              <h2 className="section-title inline-block text-[#21435F] font-['Dancing_Script'] text-4xl md:text-5xl mb-4 animate-fade-in">
-                Rezervace schůzky
-              </h2>
-              <p className="text-lg text-gray-700 max-w-3xl mx-auto animate-fade-in">
-                Vyberte si termín a čas, který vám vyhovuje. Ráda s vámi proberu možnosti spolupráce a pomohu vám na vaší cestě k úspěchu.
-              </p>
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="bg-white rounded-2xl shadow-lg border border-[#21435F] overflow-hidden animate-fade-in">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-                  {/* Kalendář */}
-                  <div className="p-6 min-h-[420px] border-b lg:border-b-0 lg:border-r border-[#21435F]/20">
-                    <h2 className="text-xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">Vyberte datum</h2>
-                    <div className="flex items-center justify-between mb-6">
-                      <button
-                        type="button"
-                        onClick={prevMonth}
-                        className="p-2 hover:bg-[#21435F]/10 rounded-lg transition-colors text-[#21435F]"
-                      >
-                        <ChevronLeft size={24} />
-                      </button>
-                      <h2 className="text-lg font-semibold text-[#21435F]">
-                        {(() => {
-                          const label = currentMonth.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' });
-                          return label.charAt(0).toUpperCase() + label.slice(1);
-                        })()}
-                      </h2>
-                      <button
-                        type="button"
-                        onClick={nextMonth}
-                        className="p-2 hover:bg-[#21435F]/10 rounded-lg transition-colors text-[#21435F]"
-                      >
-                        <ChevronRight size={24} />
-                      </button>
-                    </div>
-                    <div className="grid grid-cols-7 gap-2">
-                      {weekDays.map((day) => (
-                        <div key={day} className="text-center text-base font-medium text-[#21435F]/70 py-2">
-                          {day}
-                        </div>
-                      ))}
-                      {getDaysInMonth(currentMonth).map((date, index) => {
-                        const isToday = date && date.toDateString() === new Date().toDateString();
-                        const isPast = date && !isToday && date < new Date(new Date().setHours(0,0,0,0));
-                        const isClosed = date && isClosedDay(date);
-                        const isDisabled = (!date || (isPast && !isToday) || isClosed);
-                        return (
-                          <button
-                            key={index}
-                            type="button"
-                            onClick={() => date && handleDateSelect(date.toISOString())}
-                            disabled={isDisabled}
-                            className={`w-10 h-10 md:w-12 md:h-12 rounded-lg text-center text-lg font-normal transition-colors
-                              ${!date ? 'invisible' :
-                                selectedDate === date?.toISOString()
-                                  ? 'bg-[#21435F] text-white shadow-md'
-                                  : isToday && isDisabled
-                                    ? 'outline outline-2 outline-[#21435F] bg-gray-100 text-gray-400 cursor-not-allowed'
-                                    : isToday
-                                    ? 'outline outline-2 outline-[#21435F] text-[#21435F]'
-                                    : isDisabled
-                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                    : 'hover:bg-[#21435F]/10 text-[#21435F]'}
-                            `}
-                          >
-                            {date?.getDate()}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {/* Vysvětlivky */}
-                    <div className="mt-4 flex flex-wrap gap-4 text-xs text-[#21435F]/80 items-center justify-center text-center">
-                      <div className="flex items-center gap-2">
-                        <span className="w-4 h-4 rounded-lg bg-[#21435F] inline-block"></span>
-                        <span>Vybraný den</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="w-4 h-4 rounded-lg outline outline-2 outline-[#21435F] inline-block"></span>
-                        <span>Dnešní den</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="w-4 h-4 rounded-lg bg-gray-100 border border-gray-300 inline-block"></span>
-                        <span>Nedostupný den</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Časové sloty */}
-                  <div className="p-6 min-h-[420px] border-b lg:border-b-0 lg:border-r border-[#21435F]/20">
-                    <h2 className="text-xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">Vyberte čas</h2>
-                    <div className="grid grid-cols-2 gap-4">
-                      {(() => {
-                        if (timeSlots.length === 0) {
-                          const isTodaySelected = selectedDate && (new Date(selectedDate)).toDateString() === (new Date()).toDateString();
-                          return <div className="col-span-2 text-center text-gray-400">{isTodaySelected ? 'Dnes už není možné vytvořit rezervaci.' : 'V tento den není možné vytvořit rezervaci.'}</div>;
-                        }
-                        // Filtruj pouze budoucí a volné časy
-                        const available = timeSlots.filter(time => {
-                          const isPast = selectedDate && isPastTime(selectedDate, time);
-                          const isBooked = bookedTimes.includes(time);
-                          return !isPast && !isBooked;
-                        });
-                        if (available.length === 0) {
-                          // Pokud je dnes a všechny časy už proběhly, zobraz hlášku
-                          const isToday = selectedDate && (new Date(selectedDate)).toDateString() === (new Date()).toDateString();
-                          return <div className="col-span-2 text-center text-gray-400">{isToday ? 'Dnes už není možné vytvořit rezervaci.' : 'V tento den není možné vytvořit rezervaci.'}</div>;
-                        }
-                        return available.map(time => (
-                          <button
-                            key={time}
-                            type="button"
-                            onClick={() => handleTimeSelect(time)}
-                            className={`p-3 rounded-xl text-center transition-all font-medium text-base
-                              ${selectedTime === time
-                                ? 'bg-[#21435F] text-white shadow-md'
-                                : 'bg-white hover:bg-[#21435F]/10 text-[#21435F] border border-[#21435F]/20'}
-                            `}
-                          >
-                            {time}
-                          </button>
-                        ));
-                      })()}
-                    </div>
-                    {errors.time && (
-                      <p className="mt-2 text-sm text-red-600">{errors.time.message}</p>
-                    )}
-                  </div>
-
-                  {/* Formulář */}
-                  <div className="p-6 min-h-[420px]">
-                    <h2 className="text-xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">Osobní údaje</h2>
-                    <div className="space-y-5">
-                      <div>
-                        <label className="block text-sm font-medium text-[#21435F] mb-1">Jméno *</label>
-                        <input
-                          type="text"
-                          {...register('firstName')}
-                          className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base"
-                        />
-                        {errors.firstName && (
-                          <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-[#21435F] mb-1">Příjmení *</label>
-                        <input
-                          type="text"
-                          {...register('lastName')}
-                          className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base"
-                        />
-                        {errors.lastName && (
-                          <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-[#21435F] mb-1">Email *</label>
-                        <input
-                          type="email"
-                          {...register('email')}
-                          className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base"
-                        />
-                        {errors.email && (
-                          <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-[#21435F] mb-1">Telefon *</label>
-                        <input
-                          type="tel"
-                          inputMode="numeric"
-                          pattern="[0-9 ]*"
-                          maxLength={11} // 9 číslic + 2 mezery
-                          value={phoneInput}
-                          onChange={handlePhoneChange}
-                          className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base tracking-widest"
-                          placeholder="123 456 789"
-                        />
-                        {errors.phone && (
-                          <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-                        )}
-                      </div>
-                      <div className="flex justify-end mt-6">
+    <>
+      <SeoHead
+        title="Rezervace schůzky | Ivana Jiráková"
+        description="Rezervujte si termín na kosmetiku nebo konzultaci s Ivanou Jirákovou. Rychlá online rezervace, osobní přístup a moderní salon."
+        url="https://www.jirakovaiva.cz/rezervace"
+      />
+      <div className="min-h-screen bg-[#FFD1C1]">
+        <NewsNavbar />
+        <main>
+          <section className="py-16 md:py-24 bg-[#F3E8E2]">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-8">
+                <h2 className="section-title inline-block text-[#21435F] font-['Dancing_Script'] text-4xl md:text-5xl mb-4 animate-fade-in">
+                  Rezervace schůzky
+                </h2>
+                <p className="text-lg text-gray-700 max-w-3xl mx-auto animate-fade-in">
+                  Vyberte si termín a čas, který vám vyhovuje. Ráda s vámi proberu možnosti spolupráce a pomohu vám na vaší cestě k úspěchu.
+                </p>
+              </div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="bg-white rounded-2xl shadow-lg border border-[#21435F] overflow-hidden animate-fade-in">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                    {/* Kalendář */}
+                    <div className="p-6 min-h-[420px] border-b lg:border-b-0 lg:border-r border-[#21435F]/20">
+                      <h2 className="text-xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">Vyberte datum</h2>
+                      <div className="flex items-center justify-between mb-6">
                         <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-all duration-300 px-8 py-4 rounded-xl font-medium shadow-md hover:shadow-lg w-full"
+                          type="button"
+                          onClick={prevMonth}
+                          className="p-2 hover:bg-[#21435F]/10 rounded-lg transition-colors text-[#21435F]"
                         >
-                          {isSubmitting ? 'Odesílání...' : 'Rezervovat schůzku'}
+                          <ChevronLeft size={24} />
                         </button>
+                        <h2 className="text-lg font-semibold text-[#21435F]">
+                          {(() => {
+                            const label = currentMonth.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' });
+                            return label.charAt(0).toUpperCase() + label.slice(1);
+                          })()}
+                        </h2>
+                        <button
+                          type="button"
+                          onClick={nextMonth}
+                          className="p-2 hover:bg-[#21435F]/10 rounded-lg transition-colors text-[#21435F]"
+                        >
+                          <ChevronRight size={24} />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-7 gap-2">
+                        {weekDays.map((day) => (
+                          <div key={day} className="text-center text-base font-medium text-[#21435F]/70 py-2">
+                            {day}
+                          </div>
+                        ))}
+                        {getDaysInMonth(currentMonth).map((date, index) => {
+                          const isToday = date && date.toDateString() === new Date().toDateString();
+                          const isPast = date && !isToday && date < new Date(new Date().setHours(0,0,0,0));
+                          const isClosed = date && isClosedDay(date);
+                          const isDisabled = (!date || (isPast && !isToday) || isClosed);
+                          return (
+                            <button
+                              key={index}
+                              type="button"
+                              onClick={() => date && handleDateSelect(date.toISOString())}
+                              disabled={isDisabled}
+                              className={`w-10 h-10 md:w-12 md:h-12 rounded-lg text-center text-lg font-normal transition-colors
+                                ${!date ? 'invisible' :
+                                  selectedDate === date?.toISOString()
+                                    ? 'bg-[#21435F] text-white shadow-md'
+                                    : isToday && isDisabled
+                                      ? 'outline outline-2 outline-[#21435F] bg-gray-100 text-gray-400 cursor-not-allowed'
+                                      : isToday
+                                      ? 'outline outline-2 outline-[#21435F] text-[#21435F]'
+                                      : isDisabled
+                                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                      : 'hover:bg-[#21435F]/10 text-[#21435F]'}
+                              `}
+                            >
+                              {date?.getDate()}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {/* Vysvětlivky */}
+                      <div className="mt-4 flex flex-wrap gap-4 text-xs text-[#21435F]/80 items-center justify-center text-center">
+                        <div className="flex items-center gap-2">
+                          <span className="w-4 h-4 rounded-lg bg-[#21435F] inline-block"></span>
+                          <span>Vybraný den</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-4 h-4 rounded-lg outline outline-2 outline-[#21435F] inline-block"></span>
+                          <span>Dnešní den</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-4 h-4 rounded-lg bg-gray-100 border border-gray-300 inline-block"></span>
+                          <span>Nedostupný den</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Časové sloty */}
+                    <div className="p-6 min-h-[420px] border-b lg:border-b-0 lg:border-r border-[#21435F]/20">
+                      <h2 className="text-xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">Vyberte čas</h2>
+                      <div className="grid grid-cols-2 gap-4">
+                        {(() => {
+                          if (timeSlots.length === 0) {
+                            const isTodaySelected = selectedDate && (new Date(selectedDate)).toDateString() === (new Date()).toDateString();
+                            return <div className="col-span-2 text-center text-gray-400">{isTodaySelected ? 'Dnes už není možné vytvořit rezervaci.' : 'V tento den není možné vytvořit rezervaci.'}</div>;
+                          }
+                          // Filtruj pouze budoucí a volné časy
+                          const available = timeSlots.filter(time => {
+                            const isPast = selectedDate && isPastTime(selectedDate, time);
+                            const isBooked = bookedTimes.includes(time);
+                            return !isPast && !isBooked;
+                          });
+                          if (available.length === 0) {
+                            // Pokud je dnes a všechny časy už proběhly, zobraz hlášku
+                            const isToday = selectedDate && (new Date(selectedDate)).toDateString() === (new Date()).toDateString();
+                            return <div className="col-span-2 text-center text-gray-400">{isToday ? 'Dnes už není možné vytvořit rezervaci.' : 'V tento den není možné vytvořit rezervaci.'}</div>;
+                          }
+                          return available.map(time => (
+                            <button
+                              key={time}
+                              type="button"
+                              onClick={() => handleTimeSelect(time)}
+                              className={`p-3 rounded-xl text-center transition-all font-medium text-base
+                                ${selectedTime === time
+                                  ? 'bg-[#21435F] text-white shadow-md'
+                                  : 'bg-white hover:bg-[#21435F]/10 text-[#21435F] border border-[#21435F]/20'}
+                              `}
+                            >
+                              {time}
+                            </button>
+                          ));
+                        })()}
+                      </div>
+                      {errors.time && (
+                        <p className="mt-2 text-sm text-red-600">{errors.time.message}</p>
+                      )}
+                    </div>
+
+                    {/* Formulář */}
+                    <div className="p-6 min-h-[420px]">
+                      <h2 className="text-xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">Osobní údaje</h2>
+                      <div className="space-y-5">
+                        <div>
+                          <label className="block text-sm font-medium text-[#21435F] mb-1">Jméno *</label>
+                          <input
+                            type="text"
+                            {...register('firstName')}
+                            className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base"
+                          />
+                          {errors.firstName && (
+                            <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-[#21435F] mb-1">Příjmení *</label>
+                          <input
+                            type="text"
+                            {...register('lastName')}
+                            className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base"
+                          />
+                          {errors.lastName && (
+                            <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-[#21435F] mb-1">Email *</label>
+                          <input
+                            type="email"
+                            {...register('email')}
+                            className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base"
+                          />
+                          {errors.email && (
+                            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-[#21435F] mb-1">Telefon *</label>
+                          <input
+                            type="tel"
+                            inputMode="numeric"
+                            pattern="[0-9 ]*"
+                            maxLength={11} // 9 číslic + 2 mezery
+                            value={phoneInput}
+                            onChange={handlePhoneChange}
+                            className="w-full h-12 p-3 border border-[#21435F]/20 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base tracking-widest"
+                            placeholder="123 456 789"
+                          />
+                          {errors.phone && (
+                            <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+                          )}
+                        </div>
+                        <div className="flex justify-end mt-6">
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-all duration-300 px-8 py-4 rounded-xl font-medium shadow-md hover:shadow-lg w-full"
+                          >
+                            {isSubmitting ? 'Odesílání...' : 'Rezervovat schůzku'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </form>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+              </form>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </div>
+    </>
   )
 } 

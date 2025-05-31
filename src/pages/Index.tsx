@@ -11,6 +11,7 @@ import ScrollToTop from "../components/ScrollToTop";
 import OverviewPrograms from "../components/OverviewPrograms";
 import FreeTemplates from "../components/FreeTemplates";
 import Courses from "../components/Courses";
+import SeoHead from '../components/SeoHead';
 
 const Index = () => {
   useEffect(() => {
@@ -40,35 +41,42 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <About />
-      <Collaboration />
-      <div className="w-full">
-        <img src="/images/programy-top.svg" alt="Separator" className="w-full h-auto" />
+    <>
+      <SeoHead
+        title="Ivana Jiráková – Kosmetika, FARMASI, rezervace a registrace"
+        description="Objednejte se na kosmetiku, registrujte se do FARMASI nebo mě kontaktujte. Moderní salon, osobní přístup a exkluzivní benefity."
+        url="https://www.jirakovaiva.cz/"
+      />
+      <div className="min-h-screen">
+        <Navbar />
+        <Hero />
+        <About />
+        <Collaboration />
+        <div className="w-full">
+          <img src="/images/programy-top.svg" alt="Separator" className="w-full h-auto" />
+        </div>
+        <OverviewPrograms />
+        <div className="w-full">
+          <img src="/images/discount-top.svg" alt="Separator" className="w-full h-auto" />
+        </div>
+        <Courses />
+        <div className="w-full">
+          <img src="/images/tipy-top.svg" alt="Separator" className="w-full h-auto" />
+        </div>
+        <FreeTemplates />
+        <div className="w-full">
+          <img src="/images/benefity-top.svg" alt="Separator" className="w-full h-auto" />
+        </div>
+        <Discount />
+        <div className="w-full">
+          <img src="/images/benefity-bottom.svg" alt="Separator" className="w-full h-auto" />
+        </div>
+        <News />
+        <Contact />
+        <Footer />
+        <ScrollToTop />
       </div>
-      <OverviewPrograms />
-      <div className="w-full">
-        <img src="/images/discount-top.svg" alt="Separator" className="w-full h-auto" />
-      </div>
-      <Courses />
-      <div className="w-full">
-        <img src="/images/tipy-top.svg" alt="Separator" className="w-full h-auto" />
-      </div>
-      <FreeTemplates />
-      <div className="w-full">
-        <img src="/images/benefity-top.svg" alt="Separator" className="w-full h-auto" />
-      </div>
-      <Discount />
-      <div className="w-full">
-        <img src="/images/benefity-bottom.svg" alt="Separator" className="w-full h-auto" />
-      </div>
-      <News />
-      <Contact />
-      <Footer />
-      <ScrollToTop />
-    </div>
+    </>
   );
 };
 

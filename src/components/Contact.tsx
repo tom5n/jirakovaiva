@@ -132,6 +132,10 @@ const Contact = () => {
                     <Mail className="text-[#21435F] mt-1 mr-4" />
                     <div>
                       <p className="font-medium">Email:</p>
+                      <a href="mailto:info@jirakovaiva.cz" className="text-gray-700 hover:text-[#21435F]">
+                        info@jirakovaiva.cz
+                      </a>
+                      <br />
                       <a href="mailto:jirakovaiva@seznam.cz" className="text-gray-700 hover:text-[#21435F]">
                         jirakovaiva@seznam.cz
                       </a>
