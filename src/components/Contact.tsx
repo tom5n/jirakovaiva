@@ -3,6 +3,7 @@ import { Mail, Phone, Instagram, ArrowRight, Send, Facebook } from "lucide-react
 import InstagramFeed from "./InstagramFeed";
 import { FaTiktok } from "react-icons/fa";
 import { toast } from "sonner";
+import { sendEmail } from "@/api/send";
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,23 +36,12 @@ const Contact = () => {
     const data = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
-      phone: formData.get('phone') as string,
+      subject: formData.get('subject') as string,
       message: formData.get('message') as string,
     };
 
     try {
-      const response = await fetch('/api/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Něco se pokazilo');
-      }
-
+      await sendEmail(data);
       toast.success('Zpráva byla úspěšně odeslána');
       e.currentTarget.reset();
     } catch (error) {
@@ -99,10 +89,10 @@ const Contact = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Telefon *
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+                    Předmět
                   </label>
-                  <input type="tel" id="phone" name="phone" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" required />
+                  <input type="text" id="subject" name="subject" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
