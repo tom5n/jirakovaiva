@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => ({
     watch: {
       usePolling: true,
     },
+    historyApiFallback: true,
   },
   plugins: [
     react(),
