@@ -150,11 +150,13 @@ export default function AdminReservationsCalendar() {
                         : 'hover:bg-[#21435F]/10 text-[#21435F]'}
                   `}
                 >
-                  <span>{dayNum}</span>
-                  {date && daysWithReservations.has(dateStr) && (
-                    <span className={`mt-1 w-1.5 h-1.5 rounded-full block mx-auto
-                      ${selectedDate === dateStr ? 'bg-white' : 'bg-[#21435F]'}`}></span>
-                  )}
+                  <span className="relative w-full flex flex-col items-center">
+                    {dayNum}
+                    {dateStr && daysWithReservations.has(dateStr) && (
+                      <span className={`mt-1 w-1.5 h-1.5 rounded-full block mx-auto
+                        ${selectedDate === dateStr ? 'bg-white' : 'bg-[#21435F]'}`}></span>
+                    )}
+                  </span>
                 </button>
               );
             })}
