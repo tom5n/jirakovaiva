@@ -17,12 +17,13 @@ export default function AuthForm() {
     setError('')
 
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      // Uložit session do cookies
-      document.cookie = "admin_session=1; path=/; max-age=86400" // 24 hodin
+      // Uložit session do cookies s nastavením pro celou doménu
+      document.cookie = "admin_session=1; path=/; max-age=86400; SameSite=Strict"
       setShowToast(true)
+      // Počkat na uložení cookie
       setTimeout(() => {
         window.location.href = '/admin'
-      }, 1500)
+      }, 1000)
     } else {
       setError('Nesprávné uživatelské jméno nebo heslo.')
     }

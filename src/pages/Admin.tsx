@@ -155,17 +155,17 @@ function ApproveReservationsList() {
   );
 }
 
-const Admin = () => {
+export default function Admin() {
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState('news')
   const [templateCount, setTemplateCount] = useState(0)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        navigate('/login')
-      }
-    })
+    // Kontrola přihlášení při načtení stránky
+    const adminSession = document.cookie.includes('admin_session=1');
+    if (!adminSession) {
+      navigate('/login');
+    }
   }, [navigate])
 
   useEffect(() => {
@@ -192,6 +192,11 @@ const Admin = () => {
   const handleLogout = () => {
     localStorage.removeItem('admin_session');
     window.location.href = '/login';
+  }
+
+  // Pokud není přihlášen, nevykresluj nic
+  if (!document.cookie.includes('admin_session=1')) {
+    return null;
   }
 
   return (
@@ -389,6 +394,4 @@ const Admin = () => {
       </nav>
     </div>
   )
-}
-
-export default Admin; 
+} 
