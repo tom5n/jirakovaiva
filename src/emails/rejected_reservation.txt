@@ -1,0 +1,14 @@
+Předmět: Vaše rezervace byla zamítnuta
+
+Dobrý den,
+
+bohužel Vaše rezervace byla zamítnuta.
+
+Důvod zamítnutí: {{duvod}}
+
+Pokud budete mít zájem o jiný termín, neváhejte mě kontaktovat.
+
+Děkuji za pochopení.
+
+S pozdravem,
+Ivana Jiráková 

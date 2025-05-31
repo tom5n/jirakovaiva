@@ -1,0 +1,11 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 80" width="1200" height="80">
+	<title>tilt (11)</title>
+	<defs>
+		<image  width="1200" height="80" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAABQAQMAAAAz5B4dAAAAAXNSR0IB2cksfwAAAANQTFRFKERcZ+y9XAAAAGRJREFUeJztzjEBACAMwDDm3zQG9uSCo1GQOV+a14FdLVFL1BK1RC1RS9QStUQtUUvUErVELVFL1BK1RC1RS9QStUQtUUvUErVELVFL1BK1RC1RS9QStUQtUUvUErVELVFL1BIXprEAUWhqvMAAAAAASUVORK5CYII="/>
+	</defs>
+	<style>
+		.s0 { fill: #ffd1c1 } 
+	</style>
+	<use id="Layer 1" href="#img1" x="0" y="0"/>
+	<path class="s0" d="m1200 80l-1200-69v-11h1200z"/>
+</svg>
