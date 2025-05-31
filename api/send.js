@@ -39,23 +39,26 @@ export default async function handler(req, res) {
                 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; border-radius:16px; box-shadow:0 2px 8px #0001; overflow:hidden; outline:2px solid #21435F; outline-offset:0;">
                   <tr>
                     <td style="background:#FFF5F0; padding:24px 32px 12px 32px; text-align:center;">
-                      <h2 style="color:#21435F; font-family:'Montserrat',Arial,sans-serif; margin:0; font-size:22px; white-space:nowrap;">Nová zpráva z kontaktního formuláře</h2>
+                      <h2 style="color:#21435F; font-family:'Montserrat',Arial,sans-serif; margin:0; font-size:22px; white-space:nowrap; text-transform:uppercase;">Nová zpráva z kontaktního formuláře</h2>
                     </td>
                   </tr>
                   <tr>
                     <td style="background:#fff; padding:24px 32px 32px 32px; color:#333; font-family:Arial,sans-serif; font-size:16px;">
-                      <p style="margin:0 0 16px 0;"><strong>Jméno a příjmení:</strong> ${name}</p>
-                      <p style="margin:0 0 16px 0;"><strong>Email:</strong> ${email}</p>
-                      ${subject ? `<p style='margin:0 0 16px 0;'><strong>Předmět:</strong> ${subject}</p>` : ''}
+                      <p style="margin:0 0 16px 0;"><strong>Jméno a příjmení:</strong> <span style="color:#21435F;">${name}</span></p>
+                      <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
+                      <p style="margin:0 0 16px 0;"><strong>Email:</strong> <span style="color:#21435F;">${email}</span></p>
+                      <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
+                      ${subject ? `<p style='margin:0 0 16px 0;'><strong>Předmět:</strong> <span style=\"color:#21435F;\">${subject}</span></p><hr style='border:none; border-top:1px solid #FFD1C1; margin:12px 0;'>` : ''}
                       <p style="margin:0 0 8px 0;"><strong>Zpráva:</strong></p>
                       <div style="background:#FFE3D6; border-radius:8px; padding:16px; color:#21435F; font-size:16px;">
                         ${message}
                       </div>
+                      <a href="mailto:${email}" style="background:#21435F; color:#fff; text-decoration:none; padding:16px 0; border-radius:8px; font-size:16px; font-family:'Montserrat',Arial,sans-serif; display:block; width:100%; text-align:center; margin:32px 0 0 0; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">Odpovědět na email</a>
                     </td>
                   </tr>
                   <tr>
-                    <td style="background:#FFD1C1; color:#21435F; text-align:center; font-size:13px; padding:12px 32px;">
-                      <em>Tento email byl odeslán z webu www.jirakovaiva.cz</em>
+                    <td style="background:#FFD1C1; color:#21435F; text-align:center; font-size:14px; padding:16px 32px;">
+                      Tato zpráva byla odeslána z kontaktního formuláře na webu www.jirakovaiva.cz
                     </td>
                   </tr>
                 </table>
