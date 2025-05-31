@@ -118,6 +118,7 @@ export default function AdminReservationsCalendar() {
             {getDaysInMonth(currentMonth).map((date, index) => {
               const dayNum = date ? date.getUTCDate() : undefined;
               const dateIso = date?.toISOString();
+              const isToday = date && date.toDateString() === new Date().toDateString();
               return (
                 <button
                   key={index}
@@ -128,6 +129,8 @@ export default function AdminReservationsCalendar() {
                     ${!date ? 'invisible' :
                       selectedDate === dateIso
                         ? 'bg-[#21435F] text-white shadow-md'
+                        : isToday
+                        ? 'outline outline-2 outline-[#21435F] text-[#21435F]'
                         : 'hover:bg-[#21435F]/10 text-[#21435F]'}
                   `}
                 >
