@@ -26,9 +26,9 @@ const Hero = () => {
     <>
       <section
         id="home"
-        className="min-h-[80vh] flex items-center relative bg-[#F3E8E2] py-8 sm:py-12 lg:py-0"
+        className="min-h-[100dvh] min-h-screen flex items-center relative bg-[#F3E8E2] pt-16"
       >
-        <div className="container mx-auto grid md:grid-cols-2 gap-8 sm:gap-12 items-center max-w-full px-4 sm:px-8 lg:px-16 xl:px-24">
+        <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center px-4">
           <div className="order-1 md:order-1 mt-8 sm:mt-16 md:mt-0 hero-content">
             <h2 className="reveal reveal-delay-200 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#21435F] font-['Montserrat'] font-light mb-6 max-w-2xl mx-auto sm:mx-0">
               Proměňte svou vášeň<br />

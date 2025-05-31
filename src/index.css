@@ -217,6 +217,17 @@ html {
   }
 }
 
+@media (max-width: 900px) {
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
 /* Přepis barvy vybraného dne v admin kalendáři */
 .admin-calendar .rdp-day_selected,
 .admin-calendar .rdp-day_selected:focus,
