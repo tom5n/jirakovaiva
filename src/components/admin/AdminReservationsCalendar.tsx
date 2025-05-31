@@ -133,7 +133,7 @@ export default function AdminReservationsCalendar() {
             ))}
             {getDaysInMonth(currentMonth).map((date, index) => {
               const dayNum = date ? date.getDate() : undefined;
-              const dateStr = date ? date.toISOString().slice(0, 10) : '';
+              const dateStr = date ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` : '';
               const isToday = date && date.toDateString() === new Date().toDateString();
               return (
                 <button
