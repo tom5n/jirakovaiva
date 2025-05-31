@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Mail, Phone, Instagram, ArrowRight, Send, Facebook } from "lucide-react";
 import InstagramFeed from "./InstagramFeed";
 import { FaTiktok } from "react-icons/fa";
-import { toast } from "sonner";
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,6 +25,21 @@ const Contact = () => {
       revealElements.forEach((el) => observer.unobserve(el));
     };
   }, []);
+
+  // Pomocná funkce pro browser notifikace
+  const showNotification = (title: string, body: string) => {
+    if ("Notification" in window) {
+      if (Notification.permission === "granted") {
+        new Notification(title, { body });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            new Notification(title, { body });
+          }
+        });
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,14 +65,14 @@ const Contact = () => {
       const result = await response.json();
 
       if (!response.ok || result.error) {
+        showNotification('Chyba', 'Něco se pokazilo, zkuste to prosím znovu');
         throw new Error(result.error || 'Něco se pokazilo');
       }
 
-      toast.success('Zpráva byla úspěšně odeslána');
+      showNotification('Zpráva odeslána', 'Zpráva byla úspěšně odeslána. Děkujeme!');
       e.currentTarget.reset();
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Něco se pokazilo, zkuste to prosím znovu');
+      // showNotification už je volán výše
     } finally {
       setIsSubmitting(false);
     }
