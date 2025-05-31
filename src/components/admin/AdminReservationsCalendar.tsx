@@ -77,8 +77,9 @@ export default function AdminReservationsCalendar() {
     const fetchDays = async () => {
       const year = currentMonth.getFullYear();
       const month = currentMonth.getMonth() + 1;
+      const daysInMonth = new Date(year, month, 0).getDate();
       const from = `${year}-${String(month).padStart(2, '0')}-01`;
-      const to = `${year}-${String(month).padStart(2, '0')}-31`;
+      const to = `${year}-${String(month).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`;
       const { data, error } = await supabase
         .from('reservations')
         .select('date')
@@ -154,17 +155,14 @@ export default function AdminReservationsCalendar() {
                 >
                   <span className="relative w-full flex flex-col items-center">
                     {dayNum}
-                    <span style={{background:'red',color:'white',borderRadius:'50%',width:'18px',height:'18px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'12px',marginTop:'2px',zIndex:1000}}>
-                      T
-                    </span>
-                    <span style={{fontSize:'8px',color:'black'}}>{dateStr}</span>
+                    {dateStr && daysWithReservations.has(dateStr) && (
+                      <span className="mt-1 w-2 h-2 rounded-full block mx-auto bg-[#21435F] z-10"></span>
+                    )}
                   </span>
                 </button>
               );
             })}
           </div>
-          <div style={{fontSize:'12px',color:'black',marginTop:'10px'}}>daysWithReservations: {Array.from(daysWithReservations).join(', ')}</div>
-          <div style={{fontSize:'12px',color:'black',marginTop:'10px'}}>DEBUG Supabase data: {JSON.stringify(debugData)}</div>
           {/* Vysvětlivky */}
           <div className="mt-4 flex flex-wrap gap-4 text-xs text-[#21435F]/80 items-center justify-center text-center">
             <div className="flex items-center gap-2">
