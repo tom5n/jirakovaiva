@@ -26,21 +26,6 @@ const Contact = () => {
     };
   }, []);
 
-  // Pomocná funkce pro browser notifikace
-  const showNotification = (title: string, body: string) => {
-    if ("Notification" in window) {
-      if (Notification.permission === "granted") {
-        new Notification(title, { body });
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then((permission) => {
-          if (permission === "granted") {
-            new Notification(title, { body });
-          }
-        });
-      }
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -65,14 +50,14 @@ const Contact = () => {
       const result = await response.json();
 
       if (!response.ok || result.error) {
-        showNotification('Chyba', 'Něco se pokazilo, zkuste to prosím znovu');
+        alert('Něco se pokazilo, zkuste to prosím znovu');
         throw new Error(result.error || 'Něco se pokazilo');
       }
 
-      showNotification('Zpráva odeslána', 'Zpráva byla úspěšně odeslána. Děkujeme!');
+      alert('Zpráva byla úspěšně odeslána!');
       e.currentTarget.reset();
     } catch (error) {
-      // showNotification už je volán výše
+      // alert už je volán výše
     } finally {
       setIsSubmitting(false);
     }
