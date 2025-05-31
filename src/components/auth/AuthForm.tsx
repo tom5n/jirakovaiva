@@ -17,7 +17,8 @@ export default function AuthForm() {
     setError('')
 
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      localStorage.setItem('admin_session', '1')
+      // Uložit session do cookies
+      document.cookie = "admin_session=1; path=/; max-age=86400" // 24 hodin
       setShowToast(true)
       setTimeout(() => {
         window.location.href = '/admin'
