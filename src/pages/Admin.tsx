@@ -49,7 +49,7 @@ function ApproveReservationsList() {
       // Odeslat potvrzovací email zákazníkovi
       if (reservation) {
         try {
-          await fetch('/api/confirm-reservation', {
+          const response = await fetch('/api/confirm-reservation', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -63,8 +63,13 @@ function ApproveReservationsList() {
               time: reservation.time,
             }),
           });
+          
+          if (!response.ok) {
+            throw new Error('Chyba při odesílání emailu');
+          }
         } catch (e) {
-          // případně logovat chybu
+          console.error('Chyba při odesílání emailu:', e);
+          showToast('Chyba při odesílání potvrzovacího emailu.', 'error');
         }
       }
     } else showToast('Chyba při potvrzení rezervace.', 'error');

@@ -40,7 +40,7 @@ export default async function handler(req, res) {
                   <tr>
                     <td style="background:#FFF5F0; padding:24px 32px 12px 32px; text-align:center;">
                       <h2 style="color:#21435F; font-family:'Montserrat',Arial,sans-serif; margin:0; font-size:22px; white-space:nowrap; text-transform:uppercase;">
-                        Rezervace schůzky byla <span style=\"font-weight:bold;\">POTVRZENA</span>
+                        Rezervace schůzky byla <span style="font-weight:bold;">POTVRZENA</span>
                       </h2>
                     </td>
                   </tr>
