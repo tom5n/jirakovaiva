@@ -143,6 +143,23 @@ export default function AdminReservationsCalendar() {
               );
             })}
           </div>
+          {/* Vysvětlivky */}
+          <div className="mt-4 flex flex-wrap gap-4 text-xs text-[#21435F]/80 items-center justify-center text-center">
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-lg bg-[#21435F] inline-block"></span>
+              <span>Vybraný den</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-lg outline outline-2 outline-[#21435F] inline-block"></span>
+              <span>Dnešní den</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-lg inline-block relative">
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#21435F]"></span>
+              </span>
+              <span>Den s rezervací</span>
+            </div>
+          </div>
         </div>
         {/* Rezervace na den vpravo */}
         <div className="w-full md:w-1/2 bg-white/80 rounded-2xl shadow p-6 min-h-[420px]">
