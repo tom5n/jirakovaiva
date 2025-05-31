@@ -3,7 +3,6 @@ import { Mail, Phone, Instagram, ArrowRight, Send, Facebook } from "lucide-react
 import InstagramFeed from "./InstagramFeed";
 import { FaTiktok } from "react-icons/fa";
 import { toast } from "sonner";
-import { sendEmail } from "@/api/send";
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,7 +40,18 @@ const Contact = () => {
     };
 
     try {
-      await sendEmail(data);
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Něco se pokazilo');
+      }
+
       toast.success('Zpráva byla úspěšně odeslána');
       e.currentTarget.reset();
     } catch (error) {

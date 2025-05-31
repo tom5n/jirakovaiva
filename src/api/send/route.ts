@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const { name, email, subject, message } = await request.json();
 
-    const data = await resend.emails.send({
+    const response = await resend.emails.send({
       from: 'Kontaktní formulář <info@jirakovaiva.cz>',
       to: 'info@jirakovaiva.cz',
       subject: subject ? `Nová zpráva z kontaktního formuláře - ${subject}` : 'Nová zpráva z kontaktního formuláře',
@@ -21,8 +21,12 @@ export async function POST(request: Request) {
       `,
     });
 
-    return NextResponse.json(data);
+    return NextResponse.json(response);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Error sending email:', error);
+    return NextResponse.json(
+      { error: 'Něco se pokazilo při odesílání emailu' },
+      { status: 500 }
+    );
   }
 } 
