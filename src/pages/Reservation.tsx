@@ -80,14 +80,18 @@ export default function Reservation() {
     setIsSubmitting(true)
     const { firstName, lastName, email, phone, date, time } = data
     const dateObj = new Date(date);
-    dateObj.setHours(0, 0, 0, 0);
+    // Uložím datum jako YYYY-MM-DD v lokálním čase
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
     const { error } = await supabase.from('reservations').insert([
       {
         first_name: firstName,
         last_name: lastName,
         email,
         phone: phone.replace(/\s/g, ''),
-        date: dateObj.toISOString().slice(0, 10), // jen yyyy-mm-dd
+        date: dateStr, // přesně YYYY-MM-DD
         time,
         status: 'pending',
       },

@@ -49,9 +49,7 @@ export default function AdminReservationsCalendar() {
     if (!selectedDate) return;
     const fetchReservations = async () => {
       setLoading(true);
-      const dateObj = new Date(selectedDate);
-      dateObj.setHours(0, 0, 0, 0);
-      const dateStr = dateObj.toISOString().slice(0, 10);
+      const dateStr = selectedDate;
       const { data, error } = await supabase
         .from('reservations')
         .select('*')
@@ -120,18 +118,17 @@ export default function AdminReservationsCalendar() {
             ))}
             {getDaysInMonth(currentMonth).map((date, index) => {
               const dayNum = date ? date.getDate() : undefined;
-              const dateIso = date?.toISOString();
-              const dateStr = date ? date.toISOString().slice(0, 10) : '';
+              const dateStr = date ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` : '';
               const isToday = date && date.toDateString() === new Date().toDateString();
               return (
                 <button
                   key={index}
                   type="button"
-                  onClick={() => date && setSelectedDate(dateIso)}
+                  onClick={() => date && setSelectedDate(dateStr)}
                   disabled={!date}
                   className={`w-10 h-10 md:w-12 md:h-12 rounded-lg text-center text-lg font-normal transition-colors flex flex-col items-center justify-center
                     ${!date ? 'invisible' :
-                      selectedDate === dateIso
+                      selectedDate === dateStr
                         ? 'bg-[#21435F] text-white shadow-md'
                         : isToday
                         ? 'outline outline-2 outline-[#21435F] text-[#21435F]'
@@ -141,7 +138,7 @@ export default function AdminReservationsCalendar() {
                   <span>{dayNum}</span>
                   {date && daysWithReservations.has(dateStr) && (
                     <span className={`mt-1 w-1.5 h-1.5 rounded-full block mx-auto
-                      ${selectedDate === dateIso ? 'bg-white' : 'bg-[#21435F]'}`}></span>
+                      ${selectedDate === dateStr ? 'bg-white' : 'bg-[#21435F]'}`}></span>
                   )}
                 </button>
               );
