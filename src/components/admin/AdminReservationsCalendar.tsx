@@ -17,7 +17,7 @@ export default function AdminReservationsCalendar() {
   const [cancelReason, setCancelReason] = useState('');
   const [reservations, setReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [daysWithReservations, setDaysWithReservations] = useState<Set<number>>(new Set());
+  const [daysWithReservations, setDaysWithReservations] = useState<Set<string>>(new Set());
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -79,9 +79,7 @@ export default function AdminReservationsCalendar() {
       if (!error && data) {
         const days = new Set(
           data.map((r: any) => {
-            const d = new Date(r.date);
-            d.setHours(0, 0, 0, 0);
-            return d.getDate();
+            return r.date;
           })
         );
         setDaysWithReservations(days);
@@ -123,6 +121,7 @@ export default function AdminReservationsCalendar() {
             {getDaysInMonth(currentMonth).map((date, index) => {
               const dayNum = date ? date.getDate() : undefined;
               const dateIso = date?.toISOString();
+              const dateStr = date ? date.toISOString().slice(0, 10) : '';
               const isToday = date && date.toDateString() === new Date().toDateString();
               return (
                 <button
@@ -140,7 +139,7 @@ export default function AdminReservationsCalendar() {
                   `}
                 >
                   <span>{dayNum}</span>
-                  {date && daysWithReservations.has(dayNum) && (
+                  {date && daysWithReservations.has(dateStr) && (
                     <span className={`mt-1 w-1.5 h-1.5 rounded-full block mx-auto
                       ${selectedDate === dateIso ? 'bg-white' : 'bg-[#21435F]'}`}></span>
                   )}
