@@ -41,9 +41,33 @@ function ApproveReservationsList() {
   }, []);
 
   const handleApprove = async (id: string) => {
+    // Najdi rezervaci podle id
+    const reservation = reservations.find(r => r.id === id);
     const { error } = await supabase.from('reservations').update({ status: 'confirmed' }).eq('id', id);
-    if (!error) showToast('Rezervace byla potvrzena.');
-    else showToast('Chyba při potvrzení rezervace.', 'error');
+    if (!error) {
+      showToast('Rezervace byla potvrzena.');
+      // Odeslat potvrzovací email zákazníkovi
+      if (reservation) {
+        try {
+          await fetch('/api/confirm-reservation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              firstName: reservation.first_name,
+              lastName: reservation.last_name,
+              email: reservation.email,
+              phone: reservation.phone,
+              date: reservation.date,
+              time: reservation.time,
+            }),
+          });
+        } catch (e) {
+          // případně logovat chybu
+        }
+      }
+    } else showToast('Chyba při potvrzení rezervace.', 'error');
     fetchReservations();
     setSelectedReservation(null);
   };
