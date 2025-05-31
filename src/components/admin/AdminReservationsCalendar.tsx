@@ -151,10 +151,12 @@ export default function AdminReservationsCalendar() {
                   `}
                 >
                   <span className="relative w-full flex flex-col items-center">
+                    {/* DEBUG: {dateStr} | {Array.from(daysWithReservations).join(',')} */}
                     {dayNum}
                     {dateStr && daysWithReservations.has(dateStr) && (
-                      <span className={`mt-1 w-2 h-2 rounded-full block mx-auto z-10
-                        ${selectedDate === dateStr ? 'bg-yellow-400 outline outline-2 outline-[#21435F]' : 'bg-[#21435F] outline outline-2 outline-white'}`}></span>
+                      <span style={{background:'red',color:'white',borderRadius:'50%',width:'18px',height:'18px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'12px',marginTop:'2px',zIndex:1000}}>
+                        T
+                      </span>
                     )}
                   </span>
                 </button>
