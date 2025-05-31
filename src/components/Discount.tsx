@@ -67,7 +67,7 @@ const Discount = () => {
                 </li>
               ))}
             </ul>
-            <div className="reveal reveal-delay-600 flex gap-4 flex-row flex-wrap items-center justify-center md:justify-start md:flex-nowrap">
+            <div className="reveal reveal-delay-600 flex gap-4 flex-row flex-wrap items-center justify-start">
               <a
                 href="https://1url.cz/@eshop_farmasi"
                 target="_blank"
