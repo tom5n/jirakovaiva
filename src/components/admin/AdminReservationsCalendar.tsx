@@ -49,7 +49,9 @@ export default function AdminReservationsCalendar() {
     if (!selectedDate) return;
     const fetchReservations = async () => {
       setLoading(true);
-      const dateStr = new Date(selectedDate).toISOString().slice(0, 10);
+      const dateObj = new Date(selectedDate);
+      dateObj.setHours(0, 0, 0, 0);
+      const dateStr = dateObj.toISOString().slice(0, 10);
       const { data, error } = await supabase
         .from('reservations')
         .select('*')
@@ -78,6 +80,7 @@ export default function AdminReservationsCalendar() {
         const days = new Set(
           data.map((r: any) => {
             const d = new Date(r.date);
+            d.setHours(0, 0, 0, 0);
             return d.getDate();
           })
         );
