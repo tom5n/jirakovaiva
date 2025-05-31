@@ -1,5 +1,11 @@
 import { Resend } from 'resend';
 
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+};
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
@@ -8,7 +14,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, subject, message } = req.body;
+    let body = req.body;
+    if (typeof body === 'string') {
+      body = JSON.parse(body);
+    }
+
+    const { name, email, subject, message } = body;
 
     const response = await resend.emails.send({
       from: 'Kontaktní formulář <info@jirakovaiva.cz>',
