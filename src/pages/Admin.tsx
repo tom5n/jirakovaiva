@@ -18,6 +18,7 @@ function ApproveReservationsList() {
   const [rejectId, setRejectId] = useState<string|null>(null);
   const [rejectReason, setRejectReason] = useState('');
   const [toast, setToast] = useState<{text: string, type: 'success'|'error'}|null>(null);
+  const [selectedReservation, setSelectedReservation] = useState<any|null>(null);
 
   const showToast = (text: string, type: 'success'|'error' = 'success') => {
     setToast({ text, type });
@@ -44,17 +45,22 @@ function ApproveReservationsList() {
     if (!error) showToast('Rezervace byla potvrzena.');
     else showToast('Chyba při potvrzení rezervace.', 'error');
     fetchReservations();
+    setSelectedReservation(null);
   };
+
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('reservations').delete().eq('id', id);
     if (!error) showToast('Rezervace byla smazána.');
     else showToast('Chyba při mazání rezervace.', 'error');
     fetchReservations();
+    setSelectedReservation(null);
   };
+
   const handleReject = (id: string) => {
     setRejectId(id);
     setRejectReason('');
   };
+
   const handleRejectSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (rejectId) {
@@ -64,52 +70,132 @@ function ApproveReservationsList() {
       setRejectId(null);
       setRejectReason('');
       fetchReservations();
+      setSelectedReservation(null);
     }
   };
+
   return (
     <div className="space-y-2">
-      {/* Hlavička gridu */}
-      <div className="hidden md:grid grid-cols-[1.2fr_1.7fr_1.2fr_1fr_0.8fr_0.7fr] gap-x-6 px-3 pb-1 text-sm text-[#21435F] font-semibold uppercase tracking-wide select-none">
-        <span>Jméno</span>
-        <span>Email</span>
-        <span>Telefon</span>
-        <span>Datum</span>
-        <span>Čas</span>
-        <span className="text-right block">Akce</span>
+      {/* Desktop view */}
+      <div className="hidden md:block">
+        {/* Hlavička gridu */}
+        <div className="grid grid-cols-[1.2fr_1.7fr_1.2fr_1fr_0.8fr_0.7fr] gap-x-6 px-3 pb-1 text-sm text-[#21435F] font-semibold uppercase tracking-wide select-none">
+          <span>Jméno</span>
+          <span>Email</span>
+          <span>Telefon</span>
+          <span>Datum</span>
+          <span>Čas</span>
+          <span className="text-right block">Akce</span>
+        </div>
+        {/* Seznam rezervací */}
+        <div className="space-y-2">
+          {reservations.filter(r => r.status === 'pending').length === 0 && (
+            <div className="text-gray-500 text-center py-8">Žádné rezervace ke schválení.</div>
+          )}
+          {reservations.filter(r => r.status === 'pending').map(r => (
+            <div
+              key={r.id}
+              className="grid grid-cols-[1.2fr_1.7fr_1.2fr_1fr_0.8fr_0.7fr] gap-x-6 items-center px-3 py-2 rounded-lg border border-[#21435F]/10 bg-white/70 hover:bg-white transition-all text-sm md:text-base"
+            >
+              <span className="font-semibold text-[#21435F]">{r.first_name} {r.last_name}</span>
+              <span className="text-gray-600">{r.email}</span>
+              <span className="text-gray-600">{r.phone}</span>
+              <span className="text-gray-600 whitespace-nowrap">{new Date(r.date).toLocaleDateString('cs-CZ')}</span>
+              <span className="text-gray-600 whitespace-nowrap">{r.time}</span>
+              <span className="flex gap-1 justify-end">
+                <button onClick={() => handleApprove(r.id)} title="Potvrdit" className="p-2 rounded-full hover:bg-green-100 text-green-700 transition"><Check size={18} /></button>
+                <button onClick={() => handleReject(r.id)} title="Zamítnout" className="p-2 rounded-full hover:bg-red-100 text-red-600 transition"><X size={18} /></button>
+                <button onClick={() => handleDelete(r.id)} title="Smazat" className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition"><Trash2 size={18} /></button>
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
-      {/* Mobilní hlavička */}
-      <div className="md:hidden flex gap-x-4 px-3 pb-1 text-sm text-[#21435F] font-semibold uppercase tracking-wide select-none">
-        <span>Jméno</span>
-        <span>Email</span>
-        <span>Telefon</span>
-        <span>Datum</span>
-        <span>Čas</span>
-        <span className="text-right block">Akce</span>
-      </div>
-      {/* Seznam rezervací */}
-      <div className="space-y-2 overflow-x-auto">
+
+      {/* Mobile view */}
+      <div className="md:hidden space-y-2">
         {reservations.filter(r => r.status === 'pending').length === 0 && (
           <div className="text-gray-500 text-center py-8">Žádné rezervace ke schválení.</div>
         )}
         {reservations.filter(r => r.status === 'pending').map(r => (
-          <div
+          <button
             key={r.id}
-            className="grid grid-cols-[1.2fr_1.7fr_1.2fr_1fr_0.8fr_0.7fr] gap-x-6 items-center px-3 py-2 rounded-lg border border-[#21435F]/10 bg-white/70 hover:bg-white transition-all text-sm md:text-base min-w-[600px]"
-            style={{ minWidth: 600 }}
+            onClick={() => setSelectedReservation(r)}
+            className="w-full p-4 bg-white rounded-xl shadow border border-[#21435F]/10 flex flex-col gap-2 text-left"
           >
-            <span className="font-semibold text-[#21435F]">{r.first_name} {r.last_name}</span>
-            <span className="text-gray-600">{r.email}</span>
-            <span className="text-gray-600">{r.phone}</span>
-            <span className="text-gray-600 whitespace-nowrap">{new Date(r.date).toLocaleDateString('cs-CZ')}</span>
-            <span className="text-gray-600 whitespace-nowrap">{r.time}</span>
-            <span className="flex gap-1">
-              <button onClick={() => handleApprove(r.id)} title="Potvrdit" className="p-2 rounded-full hover:bg-green-100 text-green-700 transition"><Check size={18} /></button>
-              <button onClick={() => handleReject(r.id)} title="Zamítnout" className="p-2 rounded-full hover:bg-red-100 text-red-600 transition"><X size={18} /></button>
-              <button onClick={() => handleDelete(r.id)} title="Smazat" className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition"><Trash2 size={18} /></button>
-            </span>
-          </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-[#21435F]">{r.first_name} {r.last_name}</span>
+              <span className="text-sm text-[#21435F]/70">{r.time}</span>
+            </div>
+            <div className="text-sm text-gray-600">{new Date(r.date).toLocaleDateString('cs-CZ')}</div>
+          </button>
         ))}
       </div>
+
+      {/* Mobile modal */}
+      {selectedReservation && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100]" />
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 z-[101]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-[#21435F]">Detail rezervace</h3>
+              <button
+                onClick={() => setSelectedReservation(null)}
+                className="text-gray-400 hover:text-[#21435F]"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="space-y-3 mb-6">
+              <div>
+                <span className="text-sm text-[#21435F]/70">Jméno</span>
+                <p className="font-medium">{selectedReservation.first_name} {selectedReservation.last_name}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Email</span>
+                <p className="font-medium">{selectedReservation.email}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Telefon</span>
+                <p className="font-medium">{selectedReservation.phone}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Datum</span>
+                <p className="font-medium">{new Date(selectedReservation.date).toLocaleDateString('cs-CZ')}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Čas</span>
+                <p className="font-medium">{selectedReservation.time}</p>
+              </div>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => handleApprove(selectedReservation.id)}
+                className="p-2 rounded-full hover:bg-green-100 text-green-700 transition"
+                title="Potvrdit"
+              >
+                <Check size={24} />
+              </button>
+              <button
+                onClick={() => handleReject(selectedReservation.id)}
+                className="p-2 rounded-full hover:bg-red-100 text-red-600 transition"
+                title="Zamítnout"
+              >
+                <X size={24} />
+              </button>
+              <button
+                onClick={() => handleDelete(selectedReservation.id)}
+                className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition"
+                title="Smazat"
+              >
+                <Trash2 size={24} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject modal */}
       {rejectId !== null && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100]" />
@@ -143,6 +229,7 @@ function ApproveReservationsList() {
           </form>
         </div>
       )}
+
       {/* Toast notifikace */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-[200] px-6 py-3 rounded-2xl shadow-lg font-['Montserrat'] text-base animate-fade-in transition-all
