@@ -217,17 +217,6 @@ html {
   }
 }
 
-@media (max-width: 900px) {
-  .container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    max-width: 100% !important;
-    box-sizing: border-box;
-  }
-}
-
 /* Přepis barvy vybraného dne v admin kalendáři */
 .admin-calendar .rdp-day_selected,
 .admin-calendar .rdp-day_selected:focus,
@@ -235,42 +224,4 @@ html {
   background-color: #21435F !important;
   color: #fff !important;
   border: none !important;
-}
-
-/* Vlastní úpravy pro hero sekci na větších mobilech */
-@media (min-width: 430px) and (max-width: 600px) {
-  .hero-content {
-    max-width: 95vw !important;
-    padding-left: 2rem !important;
-    padding-right: 2rem !important;
-  }
-  .hero-content h2 {
-    font-size: 2.2rem !important;
-  }
-  .hero-content p {
-    font-size: 1.25rem !important;
-  }
-  .hero-content a {
-    font-size: 1.15rem !important;
-    padding-top: 1.1rem !important;
-    padding-bottom: 1.1rem !important;
-  }
-}
-@media (min-width: 600px) and (max-width: 900px) {
-  .hero-content {
-    max-width: 80vw !important;
-    padding-left: 3rem !important;
-    padding-right: 3rem !important;
-  }
-  .hero-content h2 {
-    font-size: 2.5rem !important;
-  }
-  .hero-content p {
-    font-size: 1.35rem !important;
-  }
-  .hero-content a {
-    font-size: 1.2rem !important;
-    padding-top: 1.2rem !important;
-    padding-bottom: 1.2rem !important;
-  }
 }
