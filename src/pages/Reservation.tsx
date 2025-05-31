@@ -79,13 +79,15 @@ export default function Reservation() {
   const onSubmit = async (data: ReservationFormData) => {
     setIsSubmitting(true)
     const { firstName, lastName, email, phone, date, time } = data
+    const dateObj = new Date(date);
+    dateObj.setHours(0, 0, 0, 0);
     const { error } = await supabase.from('reservations').insert([
       {
         first_name: firstName,
         last_name: lastName,
         email,
         phone: phone.replace(/\s/g, ''),
-        date: date.slice(0, 10), // jen yyyy-mm-dd
+        date: dateObj.toISOString().slice(0, 10), // jen yyyy-mm-dd
         time,
         status: 'pending',
       },
@@ -114,7 +116,9 @@ export default function Reservation() {
 
     // Přidání dnů v měsíci
     for (let i = 1; i <= daysInMonth; i++) {
-      days.push(new Date(year, month, i))
+      const d = new Date(year, month, i);
+      d.setHours(0, 0, 0, 0);
+      days.push(d)
     }
 
     return days

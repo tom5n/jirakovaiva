@@ -29,7 +29,9 @@ export default function AdminReservationsCalendar() {
       days.push(null);
     }
     for (let i = 1; i <= daysInMonth; i++) {
-      days.push(new Date(year, month, i));
+      const d = new Date(year, month, i);
+      d.setHours(0, 0, 0, 0);
+      days.push(d);
     }
     return days;
   };
@@ -75,8 +77,8 @@ export default function AdminReservationsCalendar() {
       if (!error && data) {
         const days = new Set(
           data.map((r: any) => {
-            const d = new Date(r.date + 'T00:00:00Z');
-            return d.getUTCDate();
+            const d = new Date(r.date);
+            return d.getDate();
           })
         );
         setDaysWithReservations(days);
@@ -116,7 +118,7 @@ export default function AdminReservationsCalendar() {
               </div>
             ))}
             {getDaysInMonth(currentMonth).map((date, index) => {
-              const dayNum = date ? date.getUTCDate() : undefined;
+              const dayNum = date ? date.getDate() : undefined;
               const dateIso = date?.toISOString();
               const isToday = date && date.toDateString() === new Date().toDateString();
               return (
