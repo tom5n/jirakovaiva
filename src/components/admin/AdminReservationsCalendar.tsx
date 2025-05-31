@@ -87,7 +87,12 @@ export default function AdminReservationsCalendar() {
       if (!error && data) {
         const days = new Set(
           data.map((r: any) => {
-            return r.date;
+            if (typeof r.date === 'string') return r.date;
+            const d = new Date(r.date);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
           })
         );
         setDaysWithReservations(days);
