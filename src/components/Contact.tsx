@@ -48,13 +48,16 @@ const Contact = () => {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        throw new Error('Něco se pokazilo');
+      const result = await response.json();
+
+      if (!response.ok || result.error) {
+        throw new Error(result.error || 'Něco se pokazilo');
       }
 
       toast.success('Zpráva byla úspěšně odeslána');
       e.currentTarget.reset();
     } catch (error) {
+      console.error('Error:', error);
       toast.error('Něco se pokazilo, zkuste to prosím znovu');
     } finally {
       setIsSubmitting(false);
