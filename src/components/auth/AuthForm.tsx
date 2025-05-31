@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { Home } from 'lucide-react'
+
+const ADMIN_USERNAME = "ivajirakova";
+const ADMIN_PASSWORD = "Farmasi8053."; // Změňte toto heslo na něco bezpečnějšího!
 
 export default function AuthForm() {
   const [username, setUsername] = useState('')
@@ -13,22 +15,17 @@ export default function AuthForm() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    // POZOR: v produkci by heslo mělo být hashované!
-    const { data, error: dbError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('username', username)
-      .eq('password', password)
-      .single()
-    if (dbError || !data) {
-      setError('Nesprávné uživatelské jméno nebo heslo.')
-    } else {
+
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       localStorage.setItem('admin_session', '1')
       setShowToast(true)
       setTimeout(() => {
         window.location.href = '/admin'
       }, 1500)
+    } else {
+      setError('Nesprávné uživatelské jméno nebo heslo.')
     }
+    
     setLoading(false)
   }
 
