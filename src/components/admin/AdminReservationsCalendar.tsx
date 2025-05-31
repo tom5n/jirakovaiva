@@ -156,7 +156,8 @@ export default function AdminReservationsCalendar() {
                   <span className="relative w-full flex flex-col items-center">
                     {dayNum}
                     {dateStr && daysWithReservations.has(dateStr) && (
-                      <span className="mt-1 w-2 h-2 rounded-full block mx-auto bg-[#21435F] z-10"></span>
+                      <span className={`mt-1 w-1.5 h-1.5 rounded-full block mx-auto z-10
+                        ${selectedDate === dateStr ? 'bg-white' : 'bg-[#21435F]'}`}></span>
                     )}
                   </span>
                 </button>
