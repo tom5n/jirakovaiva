@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Home } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const ADMIN_USERNAME = "ivajirakova";
 const ADMIN_PASSWORD = "Farmasi8053."; // Změňte toto heslo na něco bezpečnějšího!
@@ -10,6 +11,7 @@ export default function AuthForm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const navigate = useNavigate()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -18,11 +20,11 @@ export default function AuthForm() {
 
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       // Uložit session do cookies s nastavením pro celou doménu
-      document.cookie = "admin_session=1; path=/; max-age=86400; SameSite=Strict"
+      document.cookie = "admin_session=1; path=/; max-age=86400"
       setShowToast(true)
       // Počkat na uložení cookie
       setTimeout(() => {
-        window.location.href = '/admin'
+        navigate('/admin')
       }, 1000)
     } else {
       setError('Nesprávné uživatelské jméno nebo heslo.')
