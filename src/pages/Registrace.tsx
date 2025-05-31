@@ -43,6 +43,41 @@ const Registrace = () => {
   ];
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data = {
+      name: formData.get('name')?.toString() || '',
+      surname: formData.get('surname')?.toString() || '',
+      email: formData.get('email')?.toString() || '',
+      phone: formData.get('phone')?.toString() || '',
+      street: formData.get('street')?.toString() || '',
+      zip: formData.get('zip')?.toString() || '',
+      city: formData.get('city')?.toString() || '',
+      message: formData.get('message')?.toString() || '',
+    };
+    try {
+      const response = await fetch('/api/register-client', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        if (window && window.navigator && window.navigator.vibrate) window.navigator.vibrate(100);
+        window.alert('Registrace byla úspěšně odeslána!');
+        form.reset();
+      } else {
+        window.alert('Něco se pokazilo při odesílání registrace. Zkuste to prosím znovu.');
+      }
+    } catch (err) {
+      window.alert('Něco se pokazilo při odesílání registrace. Zkuste to prosím znovu.');
+    }
+    setIsSubmitting(false);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -62,7 +97,7 @@ const Registrace = () => {
             <div className="rounded-2xl p-8 max-w-6xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
                 <div className="flex flex-col h-full">
-                  <form className="flex flex-col flex-1 justify-between h-full border border-[#21435F] rounded-2xl p-6 bg-[#F3E8E2] max-w-md w-full mx-auto md:max-w-none">
+                  <form onSubmit={handleSubmit} className="flex flex-col flex-1 justify-between h-full border border-[#21435F] rounded-2xl p-6 bg-[#F3E8E2] max-w-md w-full mx-auto md:max-w-none">
                     <h2 className="text-xl font-medium text-[#21435F] mb-6">Vyplňte údaje</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
                       <div>
@@ -169,8 +204,9 @@ const Registrace = () => {
                         <button
                           type="submit"
                           className="w-full bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-8 py-4 text-lg rounded-full font-medium"
+                          disabled={isSubmitting}
                         >
-                          Registrovat se
+                          {isSubmitting ? 'Odesílání...' : 'Registrovat se'}
                         </button>
                       </div>
                     </div>
