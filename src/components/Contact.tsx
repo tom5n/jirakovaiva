@@ -1,9 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Mail, Phone, Instagram, ArrowRight, Send, Facebook } from "lucide-react";
 import InstagramFeed from "./InstagramFeed";
 import { FaTiktok } from "react-icons/fa";
+import { toast } from "sonner";
+import { sendEmail } from "@/api/send";
 
 const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -23,6 +27,29 @@ const Contact = () => {
       revealElements.forEach((el) => observer.unobserve(el));
     };
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string,
+      message: formData.get('message') as string,
+    };
+
+    try {
+      await sendEmail(data);
+      toast.success('Zpráva byla úspěšně odeslána');
+      e.currentTarget.reset();
+    } catch (error) {
+      toast.error('Něco se pokazilo, zkuste to prosím znovu');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -46,35 +73,39 @@ const Contact = () => {
               <h3 className="text-2xl font-medium text-[#21435F] mb-6 font-['Montserrat']">
                 Napište mi
               </h3>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                       Jméno a příjmení *
                     </label>
-                    <input type="text" id="name" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" required />
+                    <input type="text" id="name" name="name" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" required />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                       Email *
                     </label>
-                    <input type="email" id="email" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" required />
+                    <input type="email" id="email" name="email" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" required />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-                    Předmět
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Telefon *
                   </label>
-                  <input type="text" id="subject" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" />
+                  <input type="tel" id="phone" name="phone" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition" required />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                     Zpráva *
                   </label>
-                  <textarea id="message" rows={4} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition resize-none" required></textarea>
+                  <textarea id="message" name="message" rows={4} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-farmasi-pink focus:border-farmasi-pink transition resize-none" required></textarea>
                 </div>
-                <button type="submit" className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 w-full flex justify-center items-center px-8 py-3 rounded-full group">
-                  Odeslat zprávu
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 w-full flex justify-center items-center px-8 py-3 rounded-full group disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Odesílám...' : 'Odeslat zprávu'}
                   <Send size={18} className="ml-2 transition-transform duration-300 group-hover:-rotate-12" />
                 </button>
               </form>
