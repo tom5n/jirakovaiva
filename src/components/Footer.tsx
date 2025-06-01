@@ -1,5 +1,6 @@
 import React from "react";
-import { Facebook, Instagram, Mail } from "lucide-react";
+import { Instagram, Mail } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
   // Zjistím aktuální cestu
@@ -22,24 +23,27 @@ const Footer = () => {
               </p>
               <div className="flex items-center space-x-4 hidden md:flex">
                 <a
-                  href="https://www.facebook.com/ivana.jirakova.5"
+                  href="https://www.instagram.com/jirakova_iva/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:opacity-80 transition-opacity"
-                >
-                  <Facebook size={24} />
-                </a>
-                <a
-                  href="https://www.instagram.com/ivana_jirakova_farmasi/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-80 transition-opacity"
+                  aria-label="Instagram"
                 >
                   <Instagram size={24} />
                 </a>
                 <a
-                  href="mailto:ivana.jirakova@farmasi.com"
+                  href="https://www.tiktok.com/@jirakova_iva"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:opacity-80 transition-opacity"
+                  aria-label="TikTok"
+                >
+                  <FaTiktok size={24} />
+                </a>
+                <a
+                  href="mailto:info@jirakovaiva.cz"
+                  className="hover:opacity-80 transition-opacity"
+                  aria-label="Email"
                 >
                   <Mail size={24} />
                 </a>
@@ -83,20 +87,20 @@ export const FooterNews = () => (
             </p>
             <div className="flex items-center space-x-4 hidden md:flex">
               <a
-                href="https://www.facebook.com/ivana.jirakova.5"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:opacity-80 transition-opacity"
-              >
-                <Facebook size={24} />
-              </a>
-              <a
                 href="https://www.instagram.com/ivana_jirakova_farmasi/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
               >
                 <Instagram size={24} />
+              </a>
+              <a
+                href="https://www.tiktok.com/@jirakova_iva"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity"
+              >
+                <FaTiktok size={24} />
               </a>
               <a
                 href="mailto:ivana.jirakova@farmasi.com"

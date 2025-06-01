@@ -8,7 +8,7 @@ const programs = [
     description:
       "Intenzivní online workshop zaměřený na konkrétní téma (například prodej, sociální sítě nebo osobní rozvoj). Vhodné pro všechny, kdo chtějí rychle získat nové dovednosti a inspiraci. Probíhá online, s možností dotazů a sdílení zkušeností.",
     cta: "Zobrazit více",
-    href: "#contact",
+    href: "#news",
     ctaIcon: <MessageSquare size={18} className="ml-2 transition-transform duration-300 group-hover:scale-110" />
   },
   {
@@ -17,7 +17,7 @@ const programs = [
     description:
       "Komplexní vzdělávací program pro ty, kdo chtějí podnikat dlouhodobě a růst. Obsahuje sérii lekcí, praktických úkolů a podporu komunity. Ideální pro ženy, které chtějí budovat stabilní podnikání a posouvat se krok za krokem.",
     cta: "Chci se přihlásit",
-    href: "#contact",
+    href: "#discount",
     ctaIcon: <Calendar size={18} className="ml-2 transition-transform duration-300 group-hover:rotate-12" />
   },
   {
@@ -26,7 +26,7 @@ const programs = [
     description:
       "Individuální spolupráce přímo s Ivanou. Osobní vedení, zpětná vazba a podpora na míru vašim potřebám. Vhodné pro ty, kdo chtějí maximální pozornost a rychlý posun vpřed.",
     cta: "Rezervovat místo",
-    href: "#contact",
+    href: "/rezervace",
     ctaIcon: <Send size={18} className="ml-2 transition-transform duration-300 group-hover:-rotate-12" />
   },
 ];
