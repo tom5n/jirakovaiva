@@ -12,7 +12,7 @@ export default function SeoHead({
   title = 'Ivana Jiráková | Podnikatelka & Mentorka',
   description = 'Jmenuji se Ivana Jiráková – jsem podnikatelka, mentorka a průvodkyně na cestě k finanční svobodě. Podnikám v oblasti přímého prodeje, kde působím jako TOP 1.',
   url = 'https://www.jirakovaiva.cz/',
-  image = 'https://www.jirakovaiva.cz/og-image.jpg',
+  image = 'https://www.jirakovaiva.cz/images/heroimg.webp',
   children,
 }: SeoHeadProps) {
   return (
@@ -57,8 +57,8 @@ export default function SeoHead({
           "@type": "Person",
           "name": "Ivana Jiráková",
           "url": "https://www.jirakovaiva.cz/",
-          "logo": "https://www.jirakovaiva.cz/logo.png",
-          "image": "https://www.jirakovaiva.cz/og-image.jpg",
+          "logo": "https://www.jirakovaiva.cz/images/logojirakova2.png",
+          "image": "https://www.jirakovaiva.cz/images/heroimg.webp",
           "jobTitle": "Podnikatelka & Mentorka",
           "description": "Jmenuji se Ivana Jiráková – jsem podnikatelka, mentorka a průvodkyně na cestě k finanční svobodě. Podnikám v oblasti přímého prodeje, kde působím jako TOP 1.",
           "address": {
