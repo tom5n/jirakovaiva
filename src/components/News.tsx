@@ -145,14 +145,16 @@ const News = () => {
                       </div>
                       <h3 className="truncate text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-3 font-['Montserrat']">{item.title}</h3>
                       <p className="text-xs sm:text-sm md:text-base text-gray-700 mb-4 font-['Montserrat'] line-clamp-3">{item.description}</p>
-                      <DialogTrigger asChild>
-                        <button
-                          className="inline-flex items-center bg-[#F3E8E2] text-gray-800 hover:bg-[#F3E8E2]/90 transition-colors duration-300 px-6 py-3 rounded-full font-medium group w-fit"
-                        >
-                          Více informací
-                          <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-                        </button>
-                      </DialogTrigger>
+                      <div className="mt-auto">
+                        <DialogTrigger asChild>
+                          <button
+                            className="inline-flex items-center bg-[#F3E8E2] text-gray-800 hover:bg-[#F3E8E2]/90 transition-colors duration-300 px-6 py-3 rounded-full font-medium group w-fit mt-auto"
+                          >
+                            Více informací
+                            <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                          </button>
+                        </DialogTrigger>
+                      </div>
                     </div>
                   </div>
                   <DialogContent hideCloseButton className="z-50">
