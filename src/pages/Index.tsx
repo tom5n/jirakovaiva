@@ -35,16 +35,11 @@ const Index = () => {
     };
   }, []);
 
-  // Update document title
-  useEffect(() => {
-    document.title = "Ivana Jiráková | FARMASI Ambasadorka";
-  }, []);
-
   return (
     <>
       <SeoHead
-        title="Ivana Jiráková – Kosmetika, FARMASI, rezervace a registrace"
-        description="Objednejte se na kosmetiku, registrujte se do FARMASI nebo mě kontaktujte. Moderní salon, osobní přístup a exkluzivní benefity."
+        title="Ivana Jiráková | Podnikatelka & Mentorka"
+        description="Průvodkyně na cestě k finanční svobodě. Pomáhám ženám budovat úspěšné podnikání a dosáhnout finanční nezávislosti."
         url="https://www.jirakovaiva.cz/"
       />
       <div className="min-h-screen">
