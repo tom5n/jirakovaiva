@@ -23,7 +23,7 @@ export default async function handler(req, res) {
 
     const response = await resend.emails.send({
       from: 'Rezervace <info@jirakovaiva.cz>',
-      to: 'info@jirakovaiva.cz',
+      to: 'jirakovaiva@seznam.cz',
       subject: 'Nová rezervace schůzky čeká na schválení',
       html: `
         <!DOCTYPE html>
