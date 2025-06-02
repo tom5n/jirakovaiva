@@ -47,6 +47,8 @@ type EditTemplateModalProps = {
 
 export default function EditTemplateModal({ template, onClose, onUpdate }: EditTemplateModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadPhase, setUploadPhase] = useState<'uploading' | 'processing' | 'saving'>('uploading')
   const [selectedIcon, setSelectedIcon] = useState<string>(template.icon)
   const [isIconMenuOpen, setIsIconMenuOpen] = useState(false)
   const [inputType, setInputType] = useState<'link' | 'file'>(template.href ? 'link' : 'file')
@@ -79,34 +81,54 @@ export default function EditTemplateModal({ template, onClose, onUpdate }: EditT
 
   const onSubmit = async (data: TemplateFormData) => {
     setIsSubmitting(true)
+    setUploadProgress(0)
+    setUploadPhase('uploading')
+    
+    // Simulace progress baru
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(progressInterval)
+          return prev
+        }
+        return prev + 1
+      })
+    }, 100)
+
     try {
-      console.log('Form data:', data)
-      console.log('Selected file:', selectedFile)
-      console.log('Input type:', inputType)
-      
       let fileUrl = template.href
       
       if (selectedFile) {
-        console.log('Uploading file...')
-        const fileExt = selectedFile.name.split('.').pop()
-        const fileName = `${Math.random()}.${fileExt}`
-        const { error: uploadError, data: uploadData } = await supabase.storage
-          .from('templates')
-          .upload(fileName, selectedFile)
+        try {
+          const fileExt = selectedFile.name.split('.').pop()
+          const fileName = `${Math.random()}.${fileExt}`
+          
+          setUploadPhase('uploading')
+          const { error: uploadError, data: uploadData } = await supabase.storage
+            .from('templates')
+            .upload(fileName, selectedFile, {
+              cacheControl: '3600',
+              upsert: false
+            } as any)
 
-        if (uploadError) {
-          console.error('Upload error:', uploadError)
-          throw uploadError
+          if (uploadError) {
+            console.error('Upload error:', uploadError)
+            throw new Error('Nepodařilo se nahrát soubor. Zkuste to prosím znovu.')
+          }
+
+          setUploadPhase('processing')
+          const { data: { publicUrl } } = supabase.storage
+            .from('templates')
+            .getPublicUrl(fileName)
+
+          fileUrl = publicUrl
+        } catch (error) {
+          console.error('File upload error:', error)
+          throw new Error('Nepodařilo se nahrát soubor. Zkuste to prosím znovu.')
         }
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('templates')
-          .getPublicUrl(fileName)
-
-        fileUrl = publicUrl
-        console.log('File uploaded, URL:', fileUrl)
       }
 
+      setUploadPhase('saving')
       const { file, ...templateDataWithoutFile } = data
 
       const templateData = {
@@ -114,24 +136,27 @@ export default function EditTemplateModal({ template, onClose, onUpdate }: EditT
         href: inputType === 'link' ? data.href : fileUrl,
         icon: selectedIcon,
       }
-      console.log('Updating template:', templateData)
 
-      const { error } = await supabase
+      const { error: updateError } = await supabase
         .from('templates')
         .update(templateData)
         .eq('id', template.id)
 
-      if (error) {
-        console.error('Database error:', error)
-        throw error
+      if (updateError) {
+        console.error('Database error:', updateError)
+        throw new Error('Nepodařilo se uložit změny. Zkuste to prosím znovu.')
       }
 
-      console.log('Template updated successfully')
-      onUpdate()
-      onClose()
+      setUploadProgress(100)
+      setTimeout(() => {
+        onUpdate()
+        onClose()
+      }, 500) // Malé zpoždění, aby uživatel viděl 100%
     } catch (error) {
       console.error('Error in onSubmit:', error)
+      alert(error instanceof Error ? error.message : 'Něco se pokazilo. Zkuste to prosím znovu.')
     } finally {
+      clearInterval(progressInterval)
       setIsSubmitting(false)
     }
   }
@@ -351,11 +376,30 @@ export default function EditTemplateModal({ template, onClose, onUpdate }: EditT
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-[#21435F] text-white hover:bg-[#21435F]/90 rounded-lg transition-colors disabled:opacity-50"
+              className={`w-full px-4 py-2 rounded-xl bg-[#21435F] text-white font-medium transition ${
+                isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#21435F]/90'
+              }`}
             >
               {isSubmitting ? 'Ukládání...' : 'Uložit změny'}
             </button>
           </div>
+
+          {isSubmitting && selectedFile && (
+            <div className="mt-4">
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div 
+                  className="bg-[#21435F] h-2.5 rounded-full transition-all duration-300" 
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+              <p className="text-sm text-gray-600 mt-2 text-center">
+                {uploadPhase === 'uploading' && 'Nahrávání souboru...'}
+                {uploadPhase === 'processing' && 'Zpracování souboru...'}
+                {uploadPhase === 'saving' && 'Ukládání změn...'}
+                {' '}{uploadProgress}%
+              </p>
+            </div>
+          )}
         </form>
       </div>
     </div>

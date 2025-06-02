@@ -53,11 +53,43 @@ export default function TemplatesList() {
 
   const deleteTemplate = async (id: string) => {
     try {
-      const { error } = await supabase.from('templates').delete().eq('id', id)
-      if (error) throw error
-      fetchTemplates()
+      // Nejprve získáme informace o šabloně, abychom věděli, jaký soubor mazat
+      const { data: template, error: fetchError } = await supabase
+        .from('templates')
+        .select('href')
+        .eq('id', id)
+        .single()
+
+      if (fetchError) throw fetchError
+
+      // Pokud šablona obsahuje soubor, smažeme ho ze storage
+      if (template?.href) {
+        const fileName = template.href.split('/').pop()
+        if (fileName) {
+          const { error: deleteFileError } = await supabase.storage
+            .from('templates')
+            .remove([fileName])
+
+          if (deleteFileError) {
+            console.error('Error deleting file:', deleteFileError)
+            // Pokračujeme i když se nepodaří smazat soubor
+          }
+        }
+      }
+
+      // Smažeme záznam z databáze
+      const { error: deleteError } = await supabase
+        .from('templates')
+        .delete()
+        .eq('id', id)
+
+      if (deleteError) throw deleteError
+
+      // Aktualizujeme seznam
+      await fetchTemplates()
     } catch (error) {
       console.error('Error:', error)
+      alert('Nepodařilo se smazat šablonu. Zkuste to prosím znovu.')
     }
   }
 
