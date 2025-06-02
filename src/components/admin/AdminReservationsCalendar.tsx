@@ -113,8 +113,7 @@ export default function AdminReservationsCalendar() {
         .from('reservations')
         .update({ 
           status: 'cancelled',
-          cancel_reason: cancelReason,
-          cancelled_at: new Date().toISOString()
+          reject_reason: cancelReason
         })
         .eq('id', selectedReservation.id);
 
@@ -136,7 +135,7 @@ export default function AdminReservationsCalendar() {
         .replace('{{last_name}}', selectedReservation.last_name)
         .replace('{{date}}', new Date(selectedReservation.date).toLocaleDateString('cs-CZ'))
         .replace('{{time}}', selectedReservation.time)
-        .replace('{{reason}}', cancelReason);
+        .replace('{{duvod}}', cancelReason);
 
       // Odeslání emailu
       const { error: emailError } = await supabase.functions.invoke('send-email', {
