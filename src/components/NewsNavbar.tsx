@@ -7,6 +7,7 @@ export default function NewsNavbar() {
   const navigate = useNavigate();
 
   const isReservationPage = typeof window !== 'undefined' && window.location.pathname === '/rezervace';
+  const isHomePage = typeof window !== 'undefined' && window.location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +30,7 @@ export default function NewsNavbar() {
   return (
     <>
       {/* Progress bar (desktop only) */}
-      {!isReservationPage && (
+      {isHomePage && (
         <div className="fixed top-0 left-0 w-full h-1 bg-[#21435F]/20 z-50 hidden md:block">
           <div className="h-full bg-[#21435F] transition-all duration-150 ease-out" style={{ width: '0%' }} />
         </div>

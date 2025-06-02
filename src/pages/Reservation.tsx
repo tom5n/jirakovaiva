@@ -270,7 +270,7 @@ export default function Reservation() {
         <main>
           <section className="py-16 md:py-24 bg-[#F3E8E2]">
             <div className="container mx-auto px-4">
-              <div className="text-center mb-8">
+              <div className="text-center mb-8 pt-8 sm:pt-0">
                 <h2 className="section-title inline-block text-[#21435F] font-['Dancing_Script'] text-4xl md:text-5xl mb-4 animate-fade-in">
                   Rezervace schůzky
                 </h2>
