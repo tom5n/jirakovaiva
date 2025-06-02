@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
-import { ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Info, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 const weekDays = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
@@ -103,6 +103,74 @@ export default function AdminReservationsCalendar() {
     };
     fetchDays();
   }, [currentMonth]);
+
+  const handleCancelReservation = async () => {
+    if (!selectedReservation || !cancelReason) return;
+
+    try {
+      // Aktualizace stavu rezervace v databázi
+      const { error: updateError } = await supabase
+        .from('reservations')
+        .update({ 
+          status: 'cancelled',
+          cancel_reason: cancelReason,
+          cancelled_at: new Date().toISOString()
+        })
+        .eq('id', selectedReservation.id);
+
+      if (updateError) throw updateError;
+
+      // Načtení email šablony
+      const { data: templateData, error: templateError } = await supabase
+        .storage
+        .from('email-templates')
+        .download('rejected_reservation.txt');
+
+      if (templateError) throw templateError;
+
+      const template = await templateData.text();
+      
+      // Nahrazení placeholderů v šabloně
+      const emailContent = template
+        .replace('{{first_name}}', selectedReservation.first_name)
+        .replace('{{last_name}}', selectedReservation.last_name)
+        .replace('{{date}}', new Date(selectedReservation.date).toLocaleDateString('cs-CZ'))
+        .replace('{{time}}', selectedReservation.time)
+        .replace('{{reason}}', cancelReason);
+
+      // Odeslání emailu
+      const { error: emailError } = await supabase.functions.invoke('send-email', {
+        body: {
+          to: selectedReservation.email,
+          subject: 'Zrušení rezervace',
+          text: emailContent
+        }
+      });
+
+      if (emailError) throw emailError;
+
+      // Aktualizace seznamu rezervací
+      setReservations(prev => prev.filter(r => r.id !== selectedReservation.id));
+      setSelectedReservation(null);
+      setShowCancelForm(false);
+      setCancelReason('');
+      
+      // Aktualizace dnů s rezervacemi
+      const dateStr = selectedReservation.date;
+      setDaysWithReservations(prev => {
+        const newSet = new Set(prev);
+        const remainingReservations = reservations.filter(r => r.id !== selectedReservation.id);
+        if (remainingReservations.length === 0) {
+          newSet.delete(dateStr);
+        }
+        return newSet;
+      });
+
+    } catch (error) {
+      console.error('Error cancelling reservation:', error);
+      alert('Nepodařilo se zrušit rezervaci. Zkuste to prosím znovu.');
+    }
+  };
 
   return (
     <>
@@ -240,7 +308,16 @@ export default function AdminReservationsCalendar() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100]" />
           <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto z-[101] relative">
-            <button onClick={() => { setSelectedReservation(null); setShowCancelForm(false); setCancelReason(''); }} className="absolute top-4 right-4 text-gray-400 hover:text-[#21435F] text-2xl font-bold">×</button>
+            <button 
+              onClick={() => { 
+                setSelectedReservation(null); 
+                setShowCancelForm(false); 
+                setCancelReason(''); 
+              }} 
+              className="absolute top-4 right-4 text-gray-400 hover:text-[#21435F] text-2xl font-bold"
+            >
+              <X size={24} />
+            </button>
             {!showCancelForm ? (
               <>
                 <h3 className="text-2xl font-bold text-[#21435F] mb-6 text-center">Detail klienta</h3>
@@ -258,54 +335,69 @@ export default function AdminReservationsCalendar() {
                     <span className="text-lg">{selectedReservation.phone}</span>
                   </div>
                   <div className="py-3 flex justify-between items-center">
+                    <span className="font-medium text-[#21435F]">Datum:</span>
+                    <span className="text-lg">{new Date(selectedReservation.date).toLocaleDateString('cs-CZ')}</span>
+                  </div>
+                  <div className="py-3 flex justify-between items-center">
                     <span className="font-medium text-[#21435F]">Čas:</span>
                     <span className="text-lg">{selectedReservation.time}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
-                    <span className="font-medium text-[#21435F]">Datum:</span>
-                    <span className="text-lg">{selectedDate && new Date(selectedDate).toLocaleDateString('cs-CZ')}</span>
-                  </div>
+                  {selectedReservation.note && (
+                    <div className="py-3 flex justify-between items-center">
+                      <span className="font-medium text-[#21435F]">Poznámka:</span>
+                      <span className="text-lg">{selectedReservation.note}</span>
+                    </div>
+                  )}
                 </div>
-                <div className="flex justify-end mt-8">
+                <div className="mt-6 flex justify-end">
                   <button
-                    className="bg-red-600 text-white px-6 py-2 rounded-xl font-medium shadow hover:bg-red-700 transition-colors"
                     onClick={() => setShowCancelForm(true)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                   >
                     Zrušit rezervaci
                   </button>
                 </div>
               </>
             ) : (
-              <form
-                className="flex flex-col gap-6 mt-2"
-                onSubmit={e => { e.preventDefault(); /* zde bude logika pro odeslání */ }}
-              >
-                <h3 className="text-2xl font-bold text-[#21435F] mb-2 text-center">Zamítnout rezervaci</h3>
-                <label className="block text-base font-medium text-[#21435F] mb-1" htmlFor="cancel-reason">Důvod zamítnutí</label>
-                <textarea
-                  id="cancel-reason"
-                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base min-h-[80px]"
-                  placeholder="Zadejte důvod zamítnutí..."
-                  value={cancelReason}
-                  onChange={e => setCancelReason(e.target.value)}
-                  required
-                />
-                <div className="flex gap-4 justify-end">
-                  <button
-                    type="button"
-                    className="px-4 py-2 rounded-xl bg-gray-200 text-[#21435F] font-medium hover:bg-gray-300 transition"
-                    onClick={() => { setShowCancelForm(false); setCancelReason(''); }}
-                  >
-                    Zpět
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 transition"
-                  >
-                    Odeslat
-                  </button>
+              <>
+                <h3 className="text-2xl font-bold text-[#21435F] mb-6 text-center">Zrušení rezervace</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Důvod zrušení
+                    </label>
+                    <textarea
+                      value={cancelReason}
+                      onChange={(e) => setCancelReason(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#21435F] focus:border-[#21435F]"
+                      rows={4}
+                      placeholder="Zadejte důvod zrušení rezervace..."
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-3">
+                    <button
+                      onClick={() => {
+                        setShowCancelForm(false);
+                        setCancelReason('');
+                      }}
+                      className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      Zpět
+                    </button>
+                    <button
+                      onClick={handleCancelReservation}
+                      disabled={!cancelReason.trim()}
+                      className={`px-4 py-2 rounded-lg transition-colors ${
+                        !cancelReason.trim()
+                          ? 'bg-gray-300 cursor-not-allowed'
+                          : 'bg-red-600 text-white hover:bg-red-700'
+                      }`}
+                    >
+                      Potvrdit zrušení
+                    </button>
+                  </div>
                 </div>
-              </form>
+              </>
             )}
           </div>
         </div>
