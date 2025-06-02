@@ -32,7 +32,7 @@ const Footer = () => {
                   <Instagram size={24} />
                 </a>
                 <a
-                  href="https://www.tiktok.com/@jirakova_iva"
+                  href="https://www.tiktok.com/@ivanajirakova"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:opacity-80 transition-opacity"
@@ -95,7 +95,7 @@ export const FooterNews = () => (
                 <Instagram size={24} />
               </a>
               <a
-                href="https://www.tiktok.com/@jirakova_iva"
+                href="https://www.tiktok.com/@ivanajirakova"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"

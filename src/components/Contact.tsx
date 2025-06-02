@@ -193,7 +193,7 @@ const Contact = () => {
                     <Facebook />
                   </a>
                   <a
-                    href="https://www.tiktok.com/@jirakova_iva"
+                    href="https://www.tiktok.com/@ivanajirakova"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-[#21435F] hover:bg-[#21435F]/90 transition-colors duration-300 flex items-center justify-center w-14 h-14 rounded-full text-white text-2xl shadow-md"
