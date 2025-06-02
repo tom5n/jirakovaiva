@@ -119,34 +119,21 @@ export default function AdminReservationsCalendar() {
 
       if (updateError) throw updateError;
 
-      // Načtení email šablony
-      const { data: templateData, error: templateError } = await supabase
-        .storage
-        .from('email-templates')
-        .download('rejected_reservation.txt');
-
-      if (templateError) throw templateError;
-
-      const template = await templateData.text();
-      
-      // Nahrazení placeholderů v šabloně
-      const emailContent = template
-        .replace('{{first_name}}', selectedReservation.first_name)
-        .replace('{{last_name}}', selectedReservation.last_name)
-        .replace('{{date}}', new Date(selectedReservation.date).toLocaleDateString('cs-CZ'))
-        .replace('{{time}}', selectedReservation.time)
-        .replace('{{duvod}}', cancelReason);
-
-      // Odeslání emailu
-      const { error: emailError } = await supabase.functions.invoke('send-email', {
-        body: {
-          to: selectedReservation.email,
-          subject: 'Zrušení rezervace',
-          text: emailContent
-        }
+      // Odeslání emailu přes vlastní API endpoint
+      const response = await fetch('/api/reject-reservation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: selectedReservation.first_name,
+          lastName: selectedReservation.last_name,
+          email: selectedReservation.email,
+          phone: selectedReservation.phone,
+          date: new Date(selectedReservation.date).toLocaleDateString('cs-CZ'),
+          time: selectedReservation.time,
+          rejectReason: cancelReason,
+        }),
       });
-
-      if (emailError) throw emailError;
+      if (!response.ok) throw new Error('Nepodařilo se odeslat email o zrušení rezervace.');
 
       // Aktualizace seznamu rezervací
       setReservations(prev => prev.filter(r => r.id !== selectedReservation.id));
