@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     // Odeslání emailu
     await resend.emails.send({
       from: 'Registrace <info@jirakovaiva.cz>',
-      to: 'info@jirakovaiva.cz',
+      to: 'jirakovaiva@seznam.cz',
       subject: 'Nová registrace klienta',
       html: `
         <!DOCTYPE html>
