@@ -4,7 +4,7 @@ import { FooterNews } from "../components/Footer";
 import { Tag, Bell, ShoppingCart, Star, Info, ChevronDown } from "lucide-react";
 import SeoHead from '../components/SeoHead';
 
-const Registrace = () => {
+const Beautybox = () => {
   const discountBenefits = [
     {
       text: "Okamžitá sleva 23% na všechny produkty FARMASI",
@@ -83,9 +83,9 @@ const Registrace = () => {
   return (
     <>
       <SeoHead
-        title="Registrace do FARMASI | Ivana Jiráková"
-        description="Registrujte se do FARMASI a získejte exkluzivní benefity. Registrace je zdarma a nezavazuje vás k žádným povinnostem."
-        url="https://www.jirakovaiva.cz/registrace"
+        title="Beautybox | Nakupujte FARMASI levněji | Ivana Jiráková"
+        description="Získejte exkluzivní benefity a nakupujte FARMASI levněji díky Beautyboxu. Registrace je zdarma a nezavazuje vás k žádným povinnostem."
+        url="https://www.jirakovaiva.cz/beautybox"
       />
       <div className="min-h-screen bg-white">
         <NewsNavbar />
@@ -94,7 +94,7 @@ const Registrace = () => {
             <div className="container mx-auto">
               <div className="text-center mb-12">
                 <h1 className="section-title text-[#21435F] animate-fade-in">
-                  Registrace do FARMASI
+                  Nakupujte FARMASI levněji
                 </h1>
                 <p className="text-lg text-gray-700 max-w-3xl mx-auto animate-fade-in">
                   Staňte se součástí komunity FARMASI a získejte exkluzivní benefity. Registrace je zdarma a nezavazuje vás k žádným povinnostem.
@@ -213,7 +213,7 @@ const Registrace = () => {
                             className="w-full bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-8 py-4 text-lg rounded-full font-medium"
                             disabled={isSubmitting}
                           >
-                            {isSubmitting ? 'Odesílání...' : 'Registrovat se'}
+                            {isSubmitting ? 'Odesílání...' : 'Odeslat'}
                           </button>
                         </div>
                       </div>
@@ -246,4 +246,4 @@ const Registrace = () => {
   );
 };
 
-export default Registrace; 
+export default Beautybox; 

@@ -77,13 +77,6 @@ const Discount = () => {
                 Získat slevu
                 <Gift size={18} className="ml-2 transition-transform duration-300 group-hover:scale-125" />
               </a>
-              <a
-                href="/registrace"
-                className="bg-[#F3E8E2] text-gray-800 hover:bg-[#F3E8E2]/90 transition-colors duration-300 flex items-center justify-center px-8 py-4 text-lg rounded-full group font-medium"
-              >
-                Registrovat se
-                <UserPlus size={18} className="ml-2 transition-transform duration-300 group-hover:scale-125" />
-              </a>
             </div>
           </div>
           <div className="relative reveal">

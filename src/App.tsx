@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import AllNews from "./pages/AllNews";
 import Reservation from "./pages/Reservation";
-import Registrace from "./pages/Registrace";
+import Beautybox from "./pages/Beautybox";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -68,7 +68,7 @@ const App = () => (
           <Route path="/admin" element={<React.Suspense fallback={<>Načítání...</>}><Admin /></React.Suspense>} />
           <Route path="/novinky" element={<React.Suspense fallback={<>Načítání...</>}><AllNews /></React.Suspense>} />
           <Route path="/rezervace" element={<React.Suspense fallback={<>Načítání...</>}><Reservation /></React.Suspense>} />
-          <Route path="/registrace" element={<React.Suspense fallback={<>Načítání...</>}><Registrace /></React.Suspense>} />
+          <Route path="/beautybox" element={<React.Suspense fallback={<>Načítání...</>}><Beautybox /></React.Suspense>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
