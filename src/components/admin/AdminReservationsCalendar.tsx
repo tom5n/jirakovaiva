@@ -329,10 +329,10 @@ export default function AdminReservationsCalendar() {
                     <span className="text-lg">{selectedReservation.time}</span>
                   </div>
                   {selectedReservation.note && (
-                    <div className="py-3 flex justify-between items-center">
+                  <div className="py-3 flex justify-between items-center">
                       <span className="font-medium text-[#21435F]">Poznámka:</span>
                       <span className="text-lg">{selectedReservation.note}</span>
-                    </div>
+                  </div>
                   )}
                 </div>
                 <div className="mt-6 flex justify-end">
@@ -352,25 +352,25 @@ export default function AdminReservationsCalendar() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Důvod zrušení
                     </label>
-                    <textarea
-                      value={cancelReason}
+                <textarea
+                  value={cancelReason}
                       onChange={(e) => setCancelReason(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#21435F] focus:border-[#21435F]"
                       rows={4}
                       placeholder="Zadejte důvod zrušení rezervace..."
-                    />
+                />
                   </div>
                   <div className="flex justify-end space-x-3">
-                    <button
+                  <button
                       onClick={() => {
                         setShowCancelForm(false);
                         setCancelReason('');
                       }}
                       className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      Zpět
-                    </button>
-                    <button
+                  >
+                    Zpět
+                  </button>
+                  <button
                       onClick={handleCancelReservation}
                       disabled={!cancelReason.trim()}
                       className={`px-4 py-2 rounded-lg transition-colors ${
@@ -378,9 +378,9 @@ export default function AdminReservationsCalendar() {
                           ? 'bg-gray-300 cursor-not-allowed'
                           : 'bg-red-600 text-white hover:bg-red-700'
                       }`}
-                    >
+                  >
                       Potvrdit zrušení
-                    </button>
+                  </button>
                   </div>
                 </div>
               </>

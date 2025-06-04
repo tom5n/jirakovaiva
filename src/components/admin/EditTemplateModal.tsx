@@ -100,28 +100,28 @@ export default function EditTemplateModal({ template, onClose, onUpdate }: EditT
       
       if (selectedFile) {
         try {
-          const fileExt = selectedFile.name.split('.').pop()
-          const fileName = `${Math.random()}.${fileExt}`
+        const fileExt = selectedFile.name.split('.').pop()
+        const fileName = `${Math.random()}.${fileExt}`
           
           setUploadPhase('uploading')
-          const { error: uploadError, data: uploadData } = await supabase.storage
-            .from('templates')
+        const { error: uploadError, data: uploadData } = await supabase.storage
+          .from('templates')
             .upload(fileName, selectedFile, {
               cacheControl: '3600',
               upsert: false
             } as any)
 
-          if (uploadError) {
-            console.error('Upload error:', uploadError)
+        if (uploadError) {
+          console.error('Upload error:', uploadError)
             throw new Error('Nepodařilo se nahrát soubor. Zkuste to prosím znovu.')
-          }
+        }
 
           setUploadPhase('processing')
-          const { data: { publicUrl } } = supabase.storage
-            .from('templates')
-            .getPublicUrl(fileName)
+        const { data: { publicUrl } } = supabase.storage
+          .from('templates')
+          .getPublicUrl(fileName)
 
-          fileUrl = publicUrl
+        fileUrl = publicUrl
         } catch (error) {
           console.error('File upload error:', error)
           throw new Error('Nepodařilo se nahrát soubor. Zkuste to prosím znovu.')
@@ -149,8 +149,8 @@ export default function EditTemplateModal({ template, onClose, onUpdate }: EditT
 
       setUploadProgress(100)
       setTimeout(() => {
-        onUpdate()
-        onClose()
+      onUpdate()
+      onClose()
       }, 500) // Malé zpoždění, aby uživatel viděl 100%
     } catch (error) {
       console.error('Error in onSubmit:', error)

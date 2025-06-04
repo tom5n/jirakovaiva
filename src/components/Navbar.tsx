@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -91,13 +92,17 @@ const Navbar = () => {
                   Programy
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#21435F] transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a href="#" onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' });
-                }} className="text-gray-800 hover:text-[#21435F] transition-colors relative group">
-                  Kurzy a školení
+                <Link
+                  to="/kurzy"
+                  className="text-gray-800 hover:text-[#21435F] transition-colors relative group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection('courses');
+                  }}
+                >
+                  Koučink a mentoring
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#21435F] transition-all duration-300 group-hover:w-full"></span>
-                </a>
+                </Link>
                 <a href="#" onClick={(e) => {
                   e.preventDefault();
                   document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' });
@@ -212,12 +217,16 @@ const Navbar = () => {
               </button>
             </li>
             <li>
-              <button
-                onClick={() => scrollToSection('courses')}
+              <Link
+                to="/kurzy"
                 className="text-xl text-gray-800 w-full text-left"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection('courses');
+                }}
               >
-                Kurzy a školení
-              </button>
+                Koučink a mentoring
+              </Link>
             </li>
             <li>
               <button

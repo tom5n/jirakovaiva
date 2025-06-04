@@ -19,7 +19,7 @@ export default function SeoHead({
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content="Ivana Jiráková, Jiráková, podnikatelka, mentorka, finanční svoboda, přímý prodej, TOP 1, osobní rozvoj, podnikání, finanční nezávislost, osobní růst, business mentor, podnikatelské poradenství, FARMASI, FARMASI podnikání, FARMASI business, FARMASI mentoring, FARMASI poradenství, FARMASI registrace, FARMASI ambasadorka, přímý prodej poradenství" />
+      <meta name="keywords" content="Ivana Jiráková, Jiráková, podnikatelka, mentorka, finanční svoboda, přímý prodej, TOP 1, osobní rozvoj, podnikání, finanční nezávislost, osobní růst, business mentor, podnikatelské poradenství, FARMASI, FARMASI podnikání, FARMASI business, FARMASI mentoring, FARMASI poradenství, FARMASI registrace, přímý prodej poradenství" />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       

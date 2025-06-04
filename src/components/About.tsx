@@ -56,6 +56,9 @@ const About = () => {
             <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-600">
               Mým posláním je inspirovat ostatní, že i bez předchozích zkušeností mohou začít podnikat, tvořit si pasivní příjem a stát se finančně nezávislými. Pokud toužíš po změně a chceš být součástí komunity, která tě podpoří na cestě k úspěchu, jsem tady právě pro tebe.
             </p>
+            <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-600">
+              Nabízím také možnost individuálního i skupinového koučinku a mentoringu – a to jak online, tak offline – podle tvých potřeb a možností.
+            </p>
           </div>
         </div>
       </div>
