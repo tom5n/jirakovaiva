@@ -85,7 +85,6 @@ export default function SeoHead({
           "award": "TOP 1 v přímém prodeji"
         }
       `}</script>
-      <meta name="google-site-verification" content="TVUJ_GOOGLE_OVEROVACI_KOD" />
       {children}
     </Helmet>
   );
