@@ -222,7 +222,7 @@ const Beautybox = () => {
 
                   <div className="flex flex-col h-full lg:pl-8">
                     <div className="border border-[#21435F] rounded-2xl py-6 px-6 bg-[#F3E8E2]">
-                      <h2 className="text-xl font-medium text-[#21435F] mb-6">Co získáte registrací?</h2>
+                      <h2 className="text-xl font-medium text-[#21435F] mb-6">Co získáte?</h2>
                       <ul className="space-y-4 mb-0">
                         {discountBenefits.map((benefit, index) => (
                           <li key={index} className="flex items-center">
