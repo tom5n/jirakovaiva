@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     const { name, surname, email, phone, street, zip, city, message } = body;
 
-    // Odeslání emailu
+    // Odeslání emailu administrátorovi
     await resend.emails.send({
       from: 'Registrace <info@jirakovaiva.cz>',
       to: 'jirakovaiva@seznam.cz',
@@ -73,6 +73,47 @@ export default async function handler(req, res) {
                   <tr>
                     <td style="background:#FFD1C1; color:#21435F; text-align:center; font-size:14px; padding:16px 32px;">
                       Tato registrace byla odeslána z webu www.jirakovaiva.cz
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `,
+    });
+
+    // Odeslání emailu zákazníkovi
+    await resend.emails.send({
+      from: 'Ivana Jiráková <info@jirakovaiva.cz>',
+      to: email,
+      subject: 'Váš Beauty Box už je téměř připraven!',
+      html: `
+        <!DOCTYPE html>
+        <html lang="cs">
+        <head>
+          <meta charset="UTF-8">
+          <title>Váš Beauty Box už je téměř připraven!</title>
+        </head>
+        <body style="margin:0; padding:0;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+            <tr>
+              <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; border-radius:16px; box-shadow:0 2px 8px #0001; overflow:hidden; outline:2px solid #21435F; outline-offset:0;">
+                  <tr>
+                    <td style="background:#FFF5F0; padding:24px 32px 32px 32px; color:#333; font-family:Arial,sans-serif; font-size:16px;">
+                      <p style="margin:0 0 16px 0;">Dobrý den,</p>
+                      <p style="margin:0 0 16px 0;">děkuji za Váš zájem o exkluzivní Beauty Box!</p>
+                      <p style="margin:0 0 16px 0;">V tuto chvíli jsem Vám osobně rezervovala jeden z posledních boxů z aktuální limitované edice.</p>
+                      <p style="margin:0 0 16px 0;">Zájem je obrovský, proto se Vám ozvu co nejdřív na WhatsApp – jen prosím o chvilku strpení, vše vyřizuji postupně. Společně pak doladíme poslední detaily.</p>
+                      <p style="margin:0 0 16px 0;">Těším se, že Vám uděláme radost!</p>
+                      <p style="margin:0 0 16px 0;">S pozdravem,<br>Ivana Jiráková</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="background:#FFD1C1; color:#21435F; text-align:center; font-size:14px; padding:16px 32px;">
+                      Tento email byl odeslán z webu www.jirakovaiva.cz
                     </td>
                   </tr>
                 </table>
