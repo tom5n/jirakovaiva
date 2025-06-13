@@ -106,7 +106,7 @@ export default async function handler(req, res) {
                       <p style="margin:0 0 16px 0;">Dobrý den,</p>
                       <p style="margin:0 0 16px 0;">děkuji za Váš zájem o exkluzivní Beauty Box!</p>
                       <p style="margin:0 0 16px 0;">V tuto chvíli jsem Vám osobně rezervovala jeden z posledních boxů z aktuální limitované edice.</p>
-                      <p style="margin:0 0 16px 0;">Zájem je obrovský, proto se Vám ozvu co nejdřív na WhatsApp – jen prosím o chvilku strpení, vše vyřizuji postupně. Společně pak doladíme poslední detaily.</p>
+                      <p style="margin:0 0 16px 0;">Zájem je obrovský, proto se Vám ozvu co nejdříve - jen prosím o chvilku strpení, vše vyřizuji postupně. Společně pak doladíme poslední detaily.</p>
                       <p style="margin:0 0 16px 0;">Těším se, že Vám uděláme radost!</p>
                       <p style="margin:0 0 16px 0;">S pozdravem,<br>Ivana Jiráková</p>
                     </td>
