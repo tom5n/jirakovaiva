@@ -10,12 +10,9 @@ import Admin from "./pages/Admin";
 import AllNews from "./pages/AllNews";
 import Reservation from "./pages/Reservation";
 import Beautybox from "./pages/Beautybox";
-<<<<<<< HEAD
 import Zasady from "./pages/Zasady";
 import Cookies from "./pages/Cookies";
 import CookieConsentBar from "./components/CookieConsentBar";
-=======
->>>>>>> 587eb6d235cc0cdba5904c2628d0dd87b82c977a
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,7 +60,6 @@ class ErrorBoundary extends React.Component<
 }
 
 const App = () => (
-<<<<<<< HEAD
   <>
     <ErrorBoundary>
       <HelmetProvider>
@@ -88,27 +84,6 @@ const App = () => (
     </ErrorBoundary>
     <CookieConsentBar />
   </>
-=======
-  <ErrorBoundary>
-    <HelmetProvider>
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<React.Suspense fallback={<>Načítání...</>}><Login /></React.Suspense>} />
-          <Route path="/admin" element={<React.Suspense fallback={<>Načítání...</>}><Admin /></React.Suspense>} />
-          <Route path="/novinky" element={<React.Suspense fallback={<>Načítání...</>}><AllNews /></React.Suspense>} />
-          <Route path="/rezervace" element={<React.Suspense fallback={<>Načítání...</>}><Reservation /></React.Suspense>} />
-          <Route path="/beautybox" element={<React.Suspense fallback={<>Načítání...</>}><Beautybox /></React.Suspense>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-    </HelmetProvider>
-  </ErrorBoundary>
->>>>>>> 587eb6d235cc0cdba5904c2628d0dd87b82c977a
 );
 
 export default App;
