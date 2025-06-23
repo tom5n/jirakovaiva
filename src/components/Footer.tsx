@@ -14,6 +14,7 @@ const Footer = () => {
       <footer className="bg-[#21435F] text-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-center space-y-4 py-6">
+<<<<<<< HEAD
             <div className="flex flex-col md:flex-row justify-between items-center w-full space-y-2 md:space-y-0">
               <span className="font-['Dancing_Script'] text-2xl text-white hidden md:block">
                 Ivana Jiráková
@@ -29,6 +30,15 @@ const Footer = () => {
                   <a href="/cookies" className="underline hover:text-[#FFD1C1] transition-colors">Cookies</a>
                 </div>
               </div>
+=======
+            <div className="flex flex-col md:flex-row justify-between items-center w-full">
+              <span className="font-['Dancing_Script'] text-2xl text-white hidden md:block">
+                Ivana Jiráková
+              </span>
+              <p className="text-sm text-center md:text-left">
+                © {new Date().getFullYear()} Ivana Jiráková. Všechna práva vyhrazena.
+              </p>
+>>>>>>> 587eb6d235cc0cdba5904c2628d0dd87b82c977a
               <div className="flex items-center space-x-4 hidden md:flex">
                 <a
                   href="https://www.instagram.com/jirakova_iva/"
@@ -86,6 +96,7 @@ export const FooterNews = () => (
     <footer className="bg-[#21435F] text-white">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center justify-center space-y-4 py-6">
+<<<<<<< HEAD
           <div className="flex flex-col md:flex-row justify-between items-center w-full space-y-2 md:space-y-0">
             <span className="font-['Dancing_Script'] text-2xl text-white hidden md:block">
               Ivana Jiráková
@@ -101,6 +112,15 @@ export const FooterNews = () => (
                 <a href="/cookies" className="underline hover:text-[#FFD1C1] transition-colors">Cookies</a>
               </div>
             </div>
+=======
+          <div className="flex flex-col md:flex-row justify-between items-center w-full">
+            <span className="font-['Dancing_Script'] text-2xl text-white hidden md:block">
+              Ivana Jiráková
+            </span>
+            <p className="text-sm text-center md:text-left">
+              © {new Date().getFullYear()} Ivana Jiráková. Všechna práva vyhrazena.
+            </p>
+>>>>>>> 587eb6d235cc0cdba5904c2628d0dd87b82c977a
             <div className="flex items-center space-x-4 hidden md:flex">
               <a
                 href="https://www.instagram.com/ivana_jirakova_farmasi/"
