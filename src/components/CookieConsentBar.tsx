@@ -122,8 +122,32 @@ const CookieConsentBar = () => {
       const script = document.createElement("script");
       script.innerHTML = `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '1537688336748642');fbq('track', 'PageView');`;
       document.head.appendChild(script);
+      
+      // Počkáme na načtení scriptu a pak pošleme PageView
+      script.onload = () => {
+        if (window.fbq) {
+          window.fbq('track', 'PageView');
+        }
+      };
+    } else {
+      // Pokud už je fbq načtený, pošleme PageView
+      window.fbq('track', 'PageView');
     }
   }
+
+  // Funkce pro sledování událostí - můžeš je volat z jiných komponent
+  const trackEvent = (eventName: string, parameters?: any) => {
+    if (window.fbq && settings.marketing) {
+      window.fbq('track', eventName, parameters);
+    }
+  };
+
+  // Exponujeme funkci do window objektu pro použití v jiných komponentách
+  useEffect(() => {
+    if (settings.marketing) {
+      (window as any).trackFacebookEvent = trackEvent;
+    }
+  }, [settings.marketing]);
 
   if (!initialized) return null;
 
@@ -192,6 +216,13 @@ const CookieConsentBar = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Meta Pixel noscript fallback */}
+      {settings.marketing && (
+        <noscript>
+          <img height="1" width="1" style={{display: 'none'}} src="https://www.facebook.com/tr?id=1537688336748642&ev=PageView&noscript=1"/>
+        </noscript>
       )}
     </>
   );
