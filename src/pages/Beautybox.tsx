@@ -77,6 +77,17 @@ const Beautybox = () => {
       if (response.ok) {
         if (window && window.navigator && window.navigator.vibrate) window.navigator.vibrate(100);
         window.alert('Registrace byla úspěšně odeslána!');
+        
+        // Sledování Lead události pro Meta Pixel
+        if ((window as any).trackFacebookEvent) {
+          (window as any).trackFacebookEvent('Lead', {
+            content_name: 'Beautybox Registration',
+            content_category: 'Registration',
+            value: 0,
+            currency: 'CZK'
+          });
+        }
+        
         form.reset();
         setAcceptedTerms(false);
       } else {
