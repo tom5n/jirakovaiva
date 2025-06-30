@@ -45,9 +45,16 @@ const Beautybox = () => {
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (!acceptedTerms) {
+      window.alert('Musíte souhlasit se zpracováním osobních údajů.');
+      return;
+    }
+    
     setIsSubmitting(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -71,6 +78,7 @@ const Beautybox = () => {
         if (window && window.navigator && window.navigator.vibrate) window.navigator.vibrate(100);
         window.alert('Registrace byla úspěšně odeslána!');
         form.reset();
+        setAcceptedTerms(false);
       } else {
         window.alert('Něco se pokazilo při odesílání registrace. Zkuste to prosím znovu.');
       }
@@ -207,11 +215,31 @@ const Beautybox = () => {
                           />
                         </div>
 
+                        <div className="md:col-span-2">
+                          <div className="flex items-start space-x-3">
+                            <input
+                              type="checkbox"
+                              id="terms"
+                              checked={acceptedTerms}
+                              onChange={(e) => setAcceptedTerms(e.target.checked)}
+                              className="mt-1 h-4 w-4 text-[#21435F] focus:ring-[#21435F] border-gray-300 rounded"
+                              required
+                            />
+                            <label htmlFor="terms" className="text-sm text-gray-700">
+                              Souhlasím se{" "}
+                              <a href="/zasady" target="_blank" className="text-[#21435F] hover:underline">
+                                zpracováním osobních údajů
+                              </a>{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                          </div>
+                        </div>
+
                         <div className="md:col-span-2 pt-4 flex items-end">
                           <button
                             type="submit"
-                            className="w-full bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-8 py-4 text-lg rounded-full font-medium"
-                            disabled={isSubmitting}
+                            className="w-full bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-8 py-4 text-lg rounded-full font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={isSubmitting || !acceptedTerms}
                           >
                             {isSubmitting ? 'Odesílání...' : 'Odeslat'}
                           </button>
