@@ -4,10 +4,11 @@ import TemplatesForm from '@/components/admin/TemplatesForm'
 import TemplatesList from '@/components/admin/TemplatesList'
 import AdminReservationsCalendar from '@/components/admin/AdminReservationsCalendar'
 import WorkingHours from '@/components/admin/WorkingHours'
+import BeautyboxRegistrations from '@/components/admin/BeautyboxRegistrations'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Newspaper, FileText, Calendar, CheckSquare, Check, X, Trash2 } from 'lucide-react'
+import { LogOut, Newspaper, FileText, Calendar, CheckSquare, Check, X, Trash2, Users } from 'lucide-react'
 
 // Přidání Google fontu Dancing Script pouze pro tento soubor
 const dancingFontUrl = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap';
@@ -304,6 +305,7 @@ export default function Admin() {
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState('news')
   const [templateCount, setTemplateCount] = useState(0)
+  const [beautyboxCount, setBeautyboxCount] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     // Kontrola přihlášení při načtení stránky
@@ -321,6 +323,16 @@ export default function Admin() {
       setTemplateCount(count || 0)
     }
     fetchTemplateCount()
+  }, [activeSection])
+
+  useEffect(() => {
+    const fetchBeautyboxCount = async () => {
+      const { count } = await supabase
+        .from('beautybox_registrations')
+        .select('*', { count: 'exact', head: true })
+      setBeautyboxCount(count || 0)
+    }
+    fetchBeautyboxCount()
   }, [activeSection])
 
   useEffect(() => {
@@ -415,6 +427,17 @@ export default function Admin() {
             <Calendar size={20} />
             <span>Pracovní doba</span>
           </button>
+          <button
+            onClick={() => setActiveSection('beautybox')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'beautybox' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <Users size={20} />
+            <span>Beautybox</span>
+          </button>
         </nav>
       </div>
 
@@ -464,6 +487,11 @@ export default function Admin() {
           {activeSection === 'working_hours' && (
             <div className="bg-white/80 rounded-2xl shadow p-6">
               <WorkingHours />
+            </div>
+          )}
+          {activeSection === 'beautybox' && (
+            <div className="bg-white/80 rounded-2xl shadow p-6">
+              <BeautyboxRegistrations count={beautyboxCount || 0} />
             </div>
           )}
         </div>
@@ -529,6 +557,16 @@ export default function Admin() {
           )}
           <Calendar size={22} />
           <span className="text-xs mt-1">Prac. doba</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('beautybox')}
+          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'beautybox' ? 'text-[#21435F]' : 'text-gray-500'}`}
+        >
+          {activeSection === 'beautybox' && (
+            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
+          )}
+          <Users size={22} />
+          <span className="text-xs mt-1">Beautybox</span>
         </button>
         <button
           onClick={handleLogout}
