@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { createClient } from '@supabase/supabase-js';
 
 export const config = {
   api: {
@@ -7,6 +8,11 @@ export const config = {
 };
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Inicializace Supabase klienta
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -20,6 +26,28 @@ export default async function handler(req, res) {
     }
 
     const { name, surname, email, phone, street, zip, city, message } = body;
+
+    // Uložení do databáze
+    const { data: dbData, error: dbError } = await supabase
+      .from('beautybox_registrations')
+      .insert([
+        {
+          name,
+          surname,
+          email,
+          phone,
+          street: street || null,
+          zip: zip || null,
+          city: city || null,
+          message: message || null,
+        }
+      ])
+      .select();
+
+    if (dbError) {
+      console.error('Database error:', dbError);
+      return res.status(500).json({ error: 'Nepodařilo se uložit registraci do databáze' });
+    }
 
     // Odeslání emailu administrátorovi
     await resend.emails.send({
@@ -58,21 +86,23 @@ export default async function handler(req, res) {
                       <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
                       <p style="margin:0 0 16px 0;"><strong>Telefon:</strong> <span style="color:#21435F;">${phone}</span></p>
                       <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
-                      <p style="margin:0 0 16px 0;"><strong>Ulice:</strong> <span style="color:#21435F;">${street}</span></p>
+                      <p style="margin:0 0 16px 0;"><strong>Ulice:</strong> <span style="color:#21435F;">${street || 'Nevyplněno'}</span></p>
                       <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
-                      <p style="margin:0 0 16px 0;"><strong>PSČ:</strong> <span style="color:#21435F;">${zip}</span></p>
+                      <p style="margin:0 0 16px 0;"><strong>PSČ:</strong> <span style="color:#21435F;">${zip || 'Nevyplněno'}</span></p>
                       <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
-                      <p style="margin:0 0 16px 0;"><strong>Město:</strong> <span style="color:#21435F;">${city}</span></p>
+                      <p style="margin:0 0 16px 0;"><strong>Město:</strong> <span style="color:#21435F;">${city || 'Nevyplněno'}</span></p>
                       <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
                       <p style="margin:0 0 8px 0;"><strong>Zpráva:</strong></p>
                       <div style="background:#FFE3D6; border-radius:8px; padding:16px; color:#21435F; font-size:16px;">
-                        ${message || ''}
+                        ${message || 'Žádná zpráva'}
                       </div>
+                      <hr style="border:none; border-top:1px solid #FFD1C1; margin:12px 0;">
+                      <p style="margin:0 0 8px 0;"><strong>ID registrace:</strong> <span style="color:#21435F;">${dbData[0].id}</span></p>
                     </td>
                   </tr>
                   <tr>
                     <td style="background:#FFD1C1; color:#21435F; text-align:center; font-size:14px; padding:16px 32px;">
-                      Tato registrace byla odeslána z webu www.jirakovaiva.cz
+                      Tato registrace byla odeslána z webu www.jirakovaiva.cz a uložena do databáze
                     </td>
                   </tr>
                 </table>
@@ -125,7 +155,11 @@ export default async function handler(req, res) {
       `,
     });
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ 
+      ok: true, 
+      registrationId: dbData[0].id,
+      message: 'Registrace byla úspěšně uložena a odeslána'
+    });
   } catch (error) {
     console.error('Error:', error);
     return res.status(500).json({ error: 'Něco se pokazilo při zpracování registrace' });
