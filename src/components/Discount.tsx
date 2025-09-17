@@ -41,6 +41,10 @@ const Discount = () => {
       icon: <Star size={16} />
     },
     {
+      text: "60% sleva na Beauty box plný produktů",
+      icon: <Gift size={16} />
+    },
+    {
       text: "Pravidelné informace o akcích a slevách",
       icon: <Info size={16} />
     },
@@ -103,7 +107,7 @@ const Discount = () => {
                 </div>
               </div>
               <div className="absolute -top-6 -right-6 bg-[#21435F] text-white rounded-full w-24 h-24 flex items-center justify-center text-2xl font-bold shadow-lg transform rotate-12">
-                -50%
+                -60%
               </div>
             </a>
           </div>
