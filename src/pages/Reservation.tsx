@@ -43,6 +43,7 @@ export default function Reservation() {
   const [workingHour, setWorkingHour] = useState<WorkingHour | null>(null)
   const [workingHoursAll, setWorkingHoursAll] = useState<WorkingHour[]>([])
   const [phoneInput, setPhoneInput] = useState('');
+  const [isRezitHovered, setIsRezitHovered] = useState(false);
 
   const {
     register,
@@ -466,6 +467,39 @@ export default function Reservation() {
                   </div>
                 </div>
               </form>
+              
+              {/* Rezit Logo */}
+              <div className="mt-8 flex justify-center animate-fade-in">
+                <a
+                  href="https://rezit.cz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block transition-opacity hover:opacity-90 cursor-pointer"
+                  onMouseEnter={() => setIsRezitHovered(true)}
+                  onMouseLeave={() => setIsRezitHovered(false)}
+                >
+                  <div className="bg-white/80 backdrop-blur-sm border border-[#478df6]/25 hover:border-[#478df6]/50 rounded-full px-4 py-2 flex items-center gap-3 transition-colors duration-300">
+                    <div className="relative">
+                      <img
+                        src="/images/rezit/rezitdark1.webp"
+                        alt="Rezit - Rezervační systémy"
+                        className={`rezit-logo h-auto max-w-[42px] md:max-w-[50px] transition-opacity duration-500 ${
+                          isRezitHovered ? 'opacity-0' : 'opacity-100'
+                        }`}
+                      />
+                      <img
+                        src="/images/rezit/rezitdark2.webp"
+                        alt="Rezit - Rezervační systémy"
+                        className={`rezit-logo absolute top-0 left-0 h-auto max-w-[42px] md:max-w-[50px] transition-opacity duration-500 ${
+                          isRezitHovered ? 'opacity-100' : 'opacity-0'
+                        }`}
+                      />
+                    </div>
+                    <span className="text-xs md:text-sm text-[#21435F]/70 font-outfit font-light">|</span>
+                    <span className="text-xs md:text-sm text-[#21435F]/70 font-outfit font-light">Rezervační systém bez měsíčních poplatků</span>
+                  </div>
+                </a>
+              </div>
             </div>
           </section>
         </main>
