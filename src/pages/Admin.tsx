@@ -1,0 +1,587 @@
+import NewsForm from '@/components/admin/NewsForm'
+import NewsList from '@/components/admin/NewsList'
+import TemplatesForm from '@/components/admin/TemplatesForm'
+import TemplatesList from '@/components/admin/TemplatesList'
+import AdminReservationsCalendar from '@/components/admin/AdminReservationsCalendar'
+import WorkingHours from '@/components/admin/WorkingHours'
+import BeautyboxRegistrations from '@/components/admin/BeautyboxRegistrations'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useNavigate } from 'react-router-dom'
+import { LogOut, Newspaper, FileText, Calendar, CheckSquare, Check, X, Trash2, Users } from 'lucide-react'
+
+// Přidání Google fontu Dancing Script pouze pro tento soubor
+const dancingFontUrl = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap';
+
+function ApproveReservationsList() {
+  const [reservations, setReservations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [rejectId, setRejectId] = useState<string|null>(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [toast, setToast] = useState<{text: string, type: 'success'|'error'}|null>(null);
+  const [selectedReservation, setSelectedReservation] = useState<any|null>(null);
+
+  const showToast = (text: string, type: 'success'|'error' = 'success') => {
+    setToast({ text, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const fetchReservations = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('reservations')
+      .select('*')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true });
+    if (!error) setReservations(data || []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchReservations();
+  }, []);
+
+  const handleApprove = async (id: string) => {
+    // Najdi rezervaci podle id
+    const reservation = reservations.find(r => r.id === id);
+    const { error } = await supabase.from('reservations').update({ status: 'confirmed' }).eq('id', id);
+    if (!error) {
+      showToast('Rezervace byla potvrzena.');
+      // Odeslat potvrzovací email zákazníkovi
+      if (reservation) {
+        try {
+          const response = await fetch('/api/confirm-reservation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              firstName: reservation.first_name,
+              lastName: reservation.last_name,
+              email: reservation.email,
+              phone: reservation.phone,
+              date: reservation.date,
+              time: reservation.time,
+            }),
+          });
+          
+          if (!response.ok) {
+            throw new Error('Chyba při odesílání emailu');
+          }
+        } catch (e) {
+          console.error('Chyba při odesílání emailu:', e);
+          showToast('Chyba při odesílání potvrzovacího emailu.', 'error');
+        }
+      }
+    } else showToast('Chyba při potvrzení rezervace.', 'error');
+    fetchReservations();
+    setSelectedReservation(null);
+  };
+
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from('reservations').delete().eq('id', id);
+    if (!error) showToast('Rezervace byla smazána.');
+    else showToast('Chyba při mazání rezervace.', 'error');
+    fetchReservations();
+    setSelectedReservation(null);
+  };
+
+  const handleReject = (id: string) => {
+    setRejectId(id);
+    setRejectReason('');
+  };
+
+  const handleRejectSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (rejectId) {
+      const reservation = reservations.find(r => r.id === rejectId);
+      const { error } = await supabase.from('reservations').update({ status: 'cancelled', reject_reason: rejectReason }).eq('id', rejectId);
+      if (!error) {
+        showToast('Rezervace byla zamítnuta.');
+        // Odeslat email o zamítnutí
+        if (reservation) {
+          try {
+            const response = await fetch('/api/reject-reservation', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                firstName: reservation.first_name,
+                lastName: reservation.last_name,
+                email: reservation.email,
+                phone: reservation.phone,
+                date: reservation.date,
+                time: reservation.time,
+                rejectReason,
+              }),
+            });
+            
+            if (!response.ok) {
+              throw new Error('Chyba při odesílání emailu');
+            }
+          } catch (e) {
+            console.error('Chyba při odesílání emailu:', e);
+            showToast('Chyba při odesílání emailu o zamítnutí.', 'error');
+          }
+        }
+      } else showToast('Chyba při zamítnutí rezervace.', 'error');
+      setRejectId(null);
+      setRejectReason('');
+      fetchReservations();
+      setSelectedReservation(null);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      {/* Desktop view */}
+      <div className="hidden md:block">
+        {/* Hlavička gridu */}
+        <div className="grid grid-cols-[1.2fr_1.5fr_1fr_1fr_0.8fr_1fr_0.7fr] gap-x-6 px-3 pb-1 text-sm text-[#21435F] font-semibold uppercase tracking-wide select-none">
+          <span>Jméno</span>
+          <span>Email</span>
+          <span>Telefon</span>
+          <span>Datum</span>
+          <span>Čas</span>
+          <span>Program</span>
+          <span className="text-right block">Akce</span>
+        </div>
+        {/* Seznam rezervací */}
+        <div className="space-y-2">
+          {reservations.filter(r => r.status === 'pending').length === 0 && (
+            <div className="text-gray-500 text-center py-8">Žádné rezervace ke schválení.</div>
+          )}
+          {reservations.filter(r => r.status === 'pending').map(r => (
+            <div
+              key={r.id}
+              className="grid grid-cols-[1.2fr_1.5fr_1fr_1fr_0.8fr_1fr_0.7fr] gap-x-6 items-center px-3 py-2 rounded-lg border border-[#21435F]/10 bg-white/70 hover:bg-white transition-all text-sm md:text-base"
+            >
+              <span className="font-semibold text-[#21435F]">{r.first_name} {r.last_name}</span>
+              <span className="text-gray-600">{r.email}</span>
+              <span className="text-gray-600">{r.phone}</span>
+              <span className="text-gray-600 whitespace-nowrap">{new Date(r.date).toLocaleDateString('cs-CZ')}</span>
+              <span className="text-gray-600 whitespace-nowrap">{r.time}</span>
+              <span className="text-gray-600">{r.program || '-'}</span>
+              <span className="flex gap-1 justify-end">
+                <button onClick={() => handleApprove(r.id)} title="Potvrdit" className="p-2 rounded-full hover:bg-green-100 text-green-700 transition"><Check size={18} /></button>
+                <button onClick={() => handleReject(r.id)} title="Zamítnout" className="p-2 rounded-full hover:bg-red-100 text-red-600 transition"><X size={18} /></button>
+                <button onClick={() => handleDelete(r.id)} title="Smazat" className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition"><Trash2 size={18} /></button>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile view */}
+      <div className="md:hidden space-y-2">
+        {reservations.filter(r => r.status === 'pending').length === 0 && (
+          <div className="text-gray-500 text-center py-8">Žádné rezervace ke schválení.</div>
+        )}
+        {reservations.filter(r => r.status === 'pending').map(r => (
+          <button
+            key={r.id}
+            onClick={() => setSelectedReservation(r)}
+            className="w-full p-4 bg-white rounded-xl shadow border border-[#21435F]/10 flex flex-col gap-2 text-left"
+          >
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-[#21435F]">{r.first_name} {r.last_name}</span>
+              <span className="text-sm text-[#21435F]/70">{r.time}</span>
+            </div>
+            <div className="text-sm text-gray-600">{new Date(r.date).toLocaleDateString('cs-CZ')}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* Mobile modal */}
+      {selectedReservation && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100]" />
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 z-[101]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-[#21435F]">Detail rezervace</h3>
+              <button
+                onClick={() => setSelectedReservation(null)}
+                className="text-gray-400 hover:text-[#21435F]"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="space-y-3 mb-6">
+              <div>
+                <span className="text-sm text-[#21435F]/70">Jméno</span>
+                <p className="font-medium">{selectedReservation.first_name} {selectedReservation.last_name}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Email</span>
+                <p className="font-medium">{selectedReservation.email}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Telefon</span>
+                <p className="font-medium">{selectedReservation.phone}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Datum</span>
+                <p className="font-medium">{new Date(selectedReservation.date).toLocaleDateString('cs-CZ')}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Čas</span>
+                <p className="font-medium">{selectedReservation.time}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Program</span>
+                <p className="font-medium">{selectedReservation.program || '-'}</p>
+              </div>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => handleApprove(selectedReservation.id)}
+                className="p-2 rounded-full hover:bg-green-100 text-green-700 transition"
+                title="Potvrdit"
+              >
+                <Check size={24} />
+              </button>
+              <button
+                onClick={() => handleReject(selectedReservation.id)}
+                className="p-2 rounded-full hover:bg-red-100 text-red-600 transition"
+                title="Zamítnout"
+              >
+                <X size={24} />
+              </button>
+              <button
+                onClick={() => handleDelete(selectedReservation.id)}
+                className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition"
+                title="Smazat"
+              >
+                <Trash2 size={24} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject modal */}
+      {rejectId !== null && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100]" />
+          <form onSubmit={handleRejectSubmit} className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 z-[101] relative flex flex-col gap-4">
+            <button type="button" onClick={() => { setRejectId(null); setRejectReason(''); }} className="absolute top-4 right-4 text-gray-400 hover:text-[#21435F] text-2xl font-bold">×</button>
+            <h3 className="text-xl font-bold text-[#21435F] mb-2 text-center">Zamítnout rezervaci</h3>
+            <label className="block text-base font-medium text-[#21435F] mb-1" htmlFor="reject-reason">Důvod zamítnutí</label>
+            <textarea
+              id="reject-reason"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-[#21435F] focus:border-[#21435F] transition bg-white text-base min-h-[80px]"
+              placeholder="Zadejte důvod zamítnutí..."
+              value={rejectReason}
+              onChange={e => setRejectReason(e.target.value)}
+              required
+            />
+            <div className="flex gap-4 justify-end">
+              <button
+                type="button"
+                className="px-4 py-2 rounded-xl bg-gray-200 text-[#21435F] font-medium hover:bg-gray-300 transition"
+                onClick={() => { setRejectId(null); setRejectReason(''); }}
+              >
+                Zpět
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 transition"
+              >
+                Odeslat
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Toast notifikace */}
+      {toast && (
+        <div className={`fixed bottom-6 right-6 z-[200] px-6 py-3 rounded-2xl shadow-lg font-['Montserrat'] text-base animate-fade-in transition-all
+          ${toast.type === 'success' ? 'bg-[#21435F] text-white' : 'bg-red-600 text-white'}`}
+        >
+          {toast.text}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Admin() {
+  const navigate = useNavigate()
+  const [activeSection, setActiveSection] = useState('news')
+  const [templateCount, setTemplateCount] = useState(0)
+  const [beautyboxCount, setBeautyboxCount] = useState<number | undefined>(undefined)
+
+  useEffect(() => {
+    // Kontrola přihlášení při načtení stránky
+    const adminSession = document.cookie.includes('admin_session=1');
+    if (!adminSession) {
+      navigate('/login');
+    }
+  }, [navigate])
+
+  useEffect(() => {
+    const fetchTemplateCount = async () => {
+      const { count } = await supabase
+        .from('templates')
+        .select('*', { count: 'exact', head: true })
+      setTemplateCount(count || 0)
+    }
+    fetchTemplateCount()
+  }, [activeSection])
+
+  useEffect(() => {
+    const fetchBeautyboxCount = async () => {
+      const { count } = await supabase
+        .from('beautybox_registrations')
+        .select('*', { count: 'exact', head: true })
+      setBeautyboxCount(count || 0)
+    }
+    fetchBeautyboxCount()
+  }, [activeSection])
+
+  useEffect(() => {
+    // Dynamicky přidat font do hlavičky dokumentu
+    const link = document.createElement('link');
+    link.href = dancingFontUrl;
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    // Odstranit cookie při odhlášení
+    document.cookie = "admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    window.location.href = '/login';
+  }
+
+  // Pokud není přihlášen, nevykresluj nic
+  if (!document.cookie.includes('admin_session=1')) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen flex" style={{
+      backgroundImage: 'url(/images/dashboardBG.webp)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }}>
+      {/* Sidebar */}
+      <div className="w-64 bg-white/20 backdrop-blur-xl border-r border-white/30 h-screen fixed left-0 top-0 p-6 hidden sm:block">
+        <div 
+          className="text-3xl mb-12 text-center"
+          style={{ fontFamily: '"Dancing Script", cursive', color: '#21435F', fontWeight: 700 }}
+        >
+          Ivana Jiráková
+        </div>
+        <nav className="space-y-2">
+          <button
+            onClick={() => setActiveSection('news')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'news' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <Newspaper size={20} />
+            <span>Novinky a události</span>
+          </button>
+          <button
+            onClick={() => setActiveSection('templates')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'templates' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <FileText size={20} />
+            <span>Šablony</span>
+          </button>
+          <button
+            onClick={() => setActiveSection('reservations')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'reservations' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <Calendar size={20} />
+            <span>Rezervace</span>
+          </button>
+          <button
+            onClick={() => setActiveSection('approve')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'approve' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <CheckSquare size={20} />
+            <span>Ke schválení</span>
+          </button>
+          <button
+            onClick={() => setActiveSection('working_hours')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'working_hours' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <Calendar size={20} />
+            <span>Pracovní doba</span>
+          </button>
+          <button
+            onClick={() => setActiveSection('beautybox')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'beautybox' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <Users size={20} />
+            <span>Beautybox</span>
+          </button>
+        </nav>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 sm:ml-64 flex items-center justify-center min-h-screen p-8 pb-24 sm:pb-8">
+        <div className="max-w-7xl w-full">
+          {activeSection === 'news' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+              <div className="bg-white/80 rounded-2xl shadow p-6">
+                <h2 className="truncate text-2xl section-title font-semibold text-[#21435F] tracking-tight mb-4">Přidat novinku / událost</h2>
+                <NewsForm />
+              </div>
+              <div className="bg-white/80 rounded-2xl shadow p-6">
+                <h2 className="truncate text-2xl section-title font-semibold text-[#21435F] tracking-tight mb-4">Seznam novinek a událostí</h2>
+                <div className="max-h-[420px] overflow-y-auto pr-2">
+                  <NewsList />
+                </div>
+              </div>
+            </div>
+          )}
+          {activeSection === 'templates' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+              <div className="bg-white/80 rounded-2xl shadow p-6 h-full flex flex-col">
+                <h2 className="truncate text-2xl section-title font-semibold text-[#21435F] tracking-tight mb-4">Přidat šablonu</h2>
+                <TemplatesForm templateCount={templateCount} />
+              </div>
+              <div className="bg-white/80 rounded-2xl shadow p-6">
+                <h2 className="truncate text-2xl section-title font-semibold text-[#21435F] tracking-tight mb-4">Seznam šablon</h2>
+                <div className="pr-2">
+                  <TemplatesList />
+                </div>
+              </div>
+            </div>
+          )}
+          {activeSection === 'reservations' && (
+            <div className="bg-white/80 rounded-2xl shadow p-6">
+              <h2 className="text-3xl font-bold text-[#21435F] mb-2 font-['Dancing_Script']">Kalendář rezervací</h2>
+              <AdminReservationsCalendar />
+            </div>
+          )}
+          {activeSection === 'approve' && (
+            <div className="bg-white/80 rounded-2xl shadow p-6">
+              <h2 className="truncate text-3xl section-title font-bold font-['Dancing_Script'] text-[#21435F] tracking-tight mb-4">Rezervace ke schválení</h2>
+              <ApproveReservationsList />
+            </div>
+          )}
+          {activeSection === 'working_hours' && (
+            <div className="bg-white/80 rounded-2xl shadow p-6">
+              <WorkingHours />
+            </div>
+          )}
+          {activeSection === 'beautybox' && (
+            <div className="bg-white/80 rounded-2xl shadow p-6">
+              <BeautyboxRegistrations count={beautyboxCount || 0} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Logout Button desktop */}
+      <button
+        onClick={handleLogout}
+        className="fixed bottom-6 left-6 z-50 bg-[#21435F] text-white p-3 rounded-full shadow-lg hover:bg-[#18324a] transition flex items-center justify-center hidden sm:flex"
+        title="Odhlásit se"
+      >
+        <LogOut size={22} />
+      </button>
+
+      {/* Bottom navbar mobile */}
+      <nav className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50 flex sm:hidden">
+        <button
+          onClick={() => setActiveSection('news')}
+          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'news' ? 'text-[#21435F]' : 'text-gray-500'}`}
+        >
+          {activeSection === 'news' && (
+            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
+          )}
+          <Newspaper size={22} />
+          <span className="text-xs mt-1">Novinky</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('templates')}
+          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'templates' ? 'text-[#21435F]' : 'text-gray-500'}`}
+        >
+          {activeSection === 'templates' && (
+            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
+          )}
+          <FileText size={22} />
+          <span className="text-xs mt-1">Šablony</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('reservations')}
+          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'reservations' ? 'text-[#21435F]' : 'text-gray-500'}`}
+        >
+          {activeSection === 'reservations' && (
+            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
+          )}
+          <Calendar size={22} />
+          <span className="text-xs mt-1">Rezervace</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('approve')}
+          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'approve' ? 'text-[#21435F]' : 'text-gray-500'}`}
+        >
+          {activeSection === 'approve' && (
+            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
+          )}
+          <CheckSquare size={22} />
+          <span className="text-xs mt-1">Ke schválení</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('working_hours')}
+          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'working_hours' ? 'text-[#21435F]' : 'text-gray-500'}`}
+        >
+          {activeSection === 'working_hours' && (
+            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
+          )}
+          <Calendar size={22} />
+          <span className="text-xs mt-1">Prac. doba</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('beautybox')}
+          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'beautybox' ? 'text-[#21435F]' : 'text-gray-500'}`}
+        >
+          {activeSection === 'beautybox' && (
+            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
+          )}
+          <Users size={22} />
+          <span className="text-xs mt-1">Beautybox</span>
+        </button>
+        <button
+          onClick={handleLogout}
+          className="flex-1 flex flex-col items-center justify-center py-2 text-gray-500"
+        >
+          <LogOut size={22} />
+          <span className="text-xs mt-1">Odhlásit</span>
+        </button>
+      </nav>
+    </div>
+  )
+} 
