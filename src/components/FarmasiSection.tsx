@@ -33,13 +33,9 @@ const FarmasiSection = () => {
             <div className="relative">
               <div className="relative w-full aspect-square rounded-2xl overflow-hidden reveal group">
                 <img
-                  src="/images/farmasi-section.webp"
+                  src="/images/farmasisekce.jpg"
                   alt="Podnikej s FARMASI"
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700"
-                  onError={(e) => {
-                    // Fallback na jiný obrázek, pokud farmasi-section.webp neexistuje
-                    (e.target as HTMLImageElement).src = "/images/course1.webp";
-                  }}
                 />
               </div>
             </div>
@@ -49,7 +45,7 @@ const FarmasiSection = () => {
               Podnikej s FARMASI
             </h2>
             <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-200">
-              FARMASI je mezinárodní kosmetická společnost s více než 30letou tradicí, která nabízí širokou škálu prémiových kosmetických produktů. Jako TOP 1. ředitelka pro Centrální Evropu vám mohu pomoci začít podnikat s FARMASI a vybudovat si vlastní úspěšné podnikání.
+              FARMASI je mezinárodní kosmetická společnost s více než 30letou tradicí, která nabízí širokou škálu prémiových kosmetických produktů. Jako TOP 1. ředitelka pro Českou republiku Vám mohu pomoci začít podnikat s FARMASI a vybudovat si vlastní úspěšné podnikání.
             </p>
             <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-400">
               Společně můžeme vytvořit plán, jak začít, jak budovat svůj tým a jak dosáhnout finanční nezávislosti. Nabízím kompletní podporu, školení a mentoring pro všechny, kteří chtějí začít podnikat s FARMASI.

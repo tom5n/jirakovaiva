@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Check, ArrowLeft, Circle } from "lucide-react";
+import { ArrowRight, Check, Circle } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SeoHead from '../components/SeoHead';
 
-const KoucinkLeadership = () => {
+const KoucinkFiremni = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,27 +30,27 @@ const KoucinkLeadership = () => {
   }, []);
 
   const features = [
-    "jasné podnikatelské strategie",
-    "odstranění strachu z prvních kroků",
-    "zvýšení sebejistoty",
-    "konkrétních výsledků a růstu",
-    "dlouhodobě udržitelného podnikání",
+    "vyšší výkonnosti a efektivity",
+    "jistoty v roli lídra",
+    "lepší komunikace a práce s týmem",
+    "stabilnější firemní kultury",
+    "lepší výsledky firmy i zaměstnanců",
   ];
 
   const whatIsIncluded = [
-    "Analýzu nápadu, silných stránek a možností",
-    "Nastavení vize, cíle a podnikatelské strategie",
-    "Podporu mindsetu (práce se strachem, tlakem, nejistotou)",
-    "Plán konkrétních kroků",
-    "Pravidelný mentoring v praxi",
+    "Koučink pro manažery (1:1)",
+    "Mentoring leadership dovedností",
+    "Podporu při řízení lidí, delegování, motivaci a komunikaci",
+    "Analýzu firemních situací",
+    "Doporučení pro efektivní vedení týmů",
   ];
 
   return (
     <>
       <SeoHead
-        title="Koučink pro začínající podnikatele | Ivana Jiráková"
-        description="Pomáhám lidem, kteří se chtějí pustit do vlastního podnikání, najít směr, strategii i sebejistotu."
-        url="https://www.jirakovaiva.cz/koucink/podnikatele"
+        title="Leadership koučink a firemní mentoring | Ivana Jiráková"
+        description="Práce s lídry, manažery a týmy na zvyšování výkonu, sebevědomí, komunikace a firemní kultury."
+        url="https://www.jirakovaiva.cz/koucink/firemni"
       />
       <div className="min-h-screen bg-[#F3E8E2]">
         <Navbar />
@@ -59,19 +59,19 @@ const KoucinkLeadership = () => {
           <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div className="order-1 md:order-1">
                <h2 className="reveal reveal-delay-200 text-4xl md:text-5xl lg:text-6xl text-[#21435F] font-['Montserrat'] font-light mb-6">
-                 Koučink pro začínající <strong className="font-medium">podnikatele</strong>
+                 Leadership koučink & <strong className="font-medium">firemní mentoring</strong>
                </h2>
               <p className="reveal reveal-delay-400 text-xl md:text-2xl text-gray-700 mb-8 max-w-lg">
-                Praktický koučink, který pomáhá najít směr, jasnou strategii a sebejistotu v podnikání.
+                Profesní růst pro lídry, manažery a týmy, kteří chtějí vést efektivněji a sebevědoměji.
               </p>
               <div className="reveal reveal-delay-600 mb-8">
                 <span className="text-3xl font-bold text-[#21435F] font-['Montserrat']">
-                  od 3 200 Kč / hod
+                  od 4 500 Kč / hod
                 </span>
               </div>
               <div className="reveal reveal-delay-600">
                 <button
-                  onClick={() => navigate('/rezervace', { state: { program: 'Koučink pro začínající podnikatele' } })}
+                  onClick={() => navigate('/rezervace', { state: { program: 'Leadership koučink a firemní mentoring' } })}
                   className="inline-flex items-center justify-center bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-10 py-5 text-xl rounded-full font-medium font-['Montserrat'] group"
                 >
                   Rezervovat
@@ -109,7 +109,7 @@ const KoucinkLeadership = () => {
         <section className="section-padding bg-white">
           <div className="container mx-auto">
              <div className="grid md:grid-cols-2 gap-8 items-start">
-               {/* Co tím získáte */}
+               {/* Co tím klient dosáhne */}
                <div className="group relative bg-white rounded-2xl shadow-lg overflow-hidden border border-[#21435F] reveal transition-all duration-300 hover:shadow-xl z-10 flex flex-col self-start">
                  <div className="absolute top-0 left-0 w-full h-1 bg-[#21435F] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
                  <div className="p-8 flex flex-col">
@@ -140,16 +140,16 @@ const KoucinkLeadership = () => {
                     Jak to funguje
                   </h2>
                 <p className="text-lg text-gray-700 font-['Montserrat'] leading-relaxed mb-6">
-                  Krok za krokem stavíme podnikání tak, aby bylo udržitelné. Každé sezení přináší jasné úkoly a konkrétní výsledky.
+                  Koučink probíhá individuálně nebo ve firmě, podle potřeb vedení. Pracujeme s reálnými situacemi a hledáme praktická řešení.
                 </p>
                 <div className="mt-4 space-y-2">
-                  <p className="text-base text-gray-700 font-['Montserrat']">- 1 hodina: 3 200 Kč</p>
-                  <p className="text-base text-gray-700 font-['Montserrat']">- 3 hodiny: 7 900 Kč</p>
-                  <p className="text-base text-gray-700 font-['Montserrat']">- 5 hodin: 12 900 Kč</p>
-                  <p className="text-base text-gray-700 font-['Montserrat']">- Dlouhodobá spolupráce (10 sezení): 29 000 Kč</p>
+                  <p className="text-base text-gray-700 font-['Montserrat']">- 1 hodina: 4 500 Kč</p>
+                  <p className="text-base text-gray-700 font-['Montserrat']">- 3 hodiny: 10 900 Kč</p>
+                  <p className="text-base text-gray-700 font-['Montserrat']">- 5 hodin: 17 900 Kč</p>
+                  <p className="text-base text-gray-700 font-['Montserrat']">- Dlouhodobá spolupráce (měsíční program): od 29 000 Kč</p>
                 </div>
-                </div>
-              </div>
+                 </div>
+               </div>
              </div>
           </div>
         </section>
@@ -162,5 +162,5 @@ const KoucinkLeadership = () => {
   );
 };
 
-export default KoucinkLeadership;
+export default KoucinkFiremni;
 

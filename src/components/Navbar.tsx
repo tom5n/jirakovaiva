@@ -13,10 +13,13 @@ const Navbar = () => {
   const isHomePage = typeof window !== 'undefined' && window.location.pathname === '/';
   const isFarmasiPage = typeof window !== 'undefined' && window.location.pathname === '/farmasi';
   const isKoucinkPage = typeof window !== 'undefined' && window.location.pathname === '/koucink';
-  const isKoucinkOsobniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/osobni';
-  const isKoucinkTymovyPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/tymovy';
-  const isKoucinkLeadershipPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/leadership';
-  const isVIPPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/vip';
+  const isKoucinkOsobniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/individualni';
+  const isKoucinkTymovyPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/rodiny';
+  const isKoucinkLeadershipPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/podnikatele';
+  const isKoucinkFiremniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/firemni';
+  const isKoucinkTymovyRozvojPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/tymovy-rozvoj';
+  const isKoucinkPremiumPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/premium';
+  const isVIPPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/zeny-maminky';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,13 +82,13 @@ const Navbar = () => {
         }`}
       >
         <div className="container mx-auto flex justify-center">
-          <div className={`${isHomePage || isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage ? 'w-full max-w-7xl' : 'inline-flex'} rounded-full shadow-lg px-10 py-4 transition-all duration-300 ${
+          <div className={`${isHomePage || isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage ? 'w-full max-w-7xl' : 'inline-flex'} rounded-full shadow-lg px-10 py-4 transition-all duration-300 ${
             isScrolled 
               ? "bg-white/80 backdrop-blur-md shadow-md" 
               : "bg-transparent shadow-none"
           }`}>
-            <div className={`${isHomePage || isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage ? 'flex items-center justify-between w-full' : 'inline-flex items-center gap-16'}`}>
-              {isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage ? (
+            <div className={`${isHomePage || isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage ? 'flex items-center justify-between w-full' : 'inline-flex items-center gap-16'}`}>
+              {isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage ? (
                 <Link to="/" className="flex items-center flex-shrink-0">
                   <span className="font-['Dancing_Script'] text-3xl md:text-4xl text-[#21435F] hover:text-[#21435F]/90 transition-colors duration-300">
                     Ivana Jiráková
@@ -186,7 +189,7 @@ const Navbar = () => {
                       Zpět na hlavní stránku
                     </button>
                   </>
-                ) : isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage ? (
+                ) : isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage ? (
                   <>
                     <button
                       onClick={handleBackToKoucink}
@@ -302,7 +305,7 @@ const Navbar = () => {
         isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-200' : 'bg-transparent'
       }`}>
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          {isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage ? (
+          {isFarmasiPage || isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isVIPPage ? (
             <Link to="/" className="font-['Dancing_Script'] text-3xl text-[#21435F] hover:text-[#21435F]/90 transition-colors duration-300">
               Ivana Jiráková
             </Link>
@@ -314,7 +317,7 @@ const Navbar = () => {
             Ivana Jiráková
           </a>
           )}
-          {isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage ? (
+          {isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isVIPPage ? (
             <Link
               to="/koucink"
               className="inline-flex items-center text-[#21435F] border border-[#21435F] bg-transparent hover:bg-[#21435F]/10 hover:text-[#21435F] px-4 py-2 rounded-full font-medium transition-colors duration-300 shadow-none group"
@@ -462,7 +465,7 @@ const Navbar = () => {
                           </button>
                         </li>
                       </>
-                    ) : isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage ? (
+                    ) : isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage ? (
                       <>
                         <li>
                           <button

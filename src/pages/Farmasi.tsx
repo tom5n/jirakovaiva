@@ -71,7 +71,7 @@ const Farmasi = () => {
                 <div className="relative">
                   <div className="relative w-full aspect-square rounded-2xl overflow-hidden reveal group">
                     <img
-                      src="/images/about.webp"
+                      src="/images/farmasihero.jpg"
                       alt="FARMASI podnikání"
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700"
                     />

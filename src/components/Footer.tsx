@@ -7,13 +7,16 @@ const Footer = () => {
   const isAllNewsPage = typeof window !== 'undefined' && window.location.pathname === '/novinky';
   const isReservationPage = typeof window !== 'undefined' && window.location.pathname === '/rezervace';
   const isKoucinkPage = typeof window !== 'undefined' && window.location.pathname === '/koucink';
-  const isKoucinkOsobniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/osobni';
-  const isKoucinkTymovyPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/tymovy';
-  const isKoucinkLeadershipPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/leadership';
-  const isVIPPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/vip';
+  const isKoucinkOsobniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/individualni';
+  const isKoucinkTymovyPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/rodiny';
+  const isKoucinkLeadershipPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/podnikatele';
+  const isKoucinkFiremniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/firemni';
+  const isKoucinkTymovyRozvojPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/tymovy-rozvoj';
+  const isKoucinkPremiumPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/premium';
+  const isVIPPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/zeny-maminky';
   const isFarmasiPage = typeof window !== 'undefined' && window.location.pathname === '/farmasi';
   const isHomePage = typeof window !== 'undefined' && window.location.pathname === '/';
-  const shouldHideDivider = isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isVIPPage || isFarmasiPage || isHomePage;
+  const shouldHideDivider = isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage || isFarmasiPage || isHomePage;
   return (
     <>
       {!shouldHideDivider && (

@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import React, { useEffect } from "react";
+import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
   const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -16,10 +14,10 @@ const Courses = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '0px 0px -50px 0px' }
     );
 
-    const revealElements = document.querySelectorAll(".reveal");
+    const revealElements = document.querySelectorAll("#courses .reveal");
     revealElements.forEach((el) => observer.observe(el));
 
     return () => {
@@ -27,135 +25,49 @@ const Courses = () => {
     };
   }, []);
 
-  // Automatické promítání slidů
-  useEffect(() => {
-    if (isHovered) return;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 3);
-    }, 5000); // Změna každých 5 sekund
-
-    return () => clearInterval(interval);
-  }, [isHovered]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % 3);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + 3) % 3);
-  };
-
-  const slides = [
-    {
-      image: "/images/course1.webp",
-      alt: "Kurz líčení a podnikání"
-    },
-    {
-      image: "/images/course2.webp",
-      alt: "Skupinové školení"
-    },
-    {
-      image: "/images/course3.webp",
-      alt: "Individuální mentoring"
-    }
-  ];
-
 
   return (
     <section id="courses" className="section-padding bg-[#FFD1C1]">
       <div className="container mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 reveal">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-['Dancing_Script'] text-[#21435F]">
+          <div className="space-y-6">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-['Dancing_Script'] text-[#21435F] reveal">
               Koučink a mentoring
             </h2>
-            <p className="text-lg text-gray-700">
-              Už od roku 2019 pořádám kurzy, školení i individuální mentoring zaměřený na rozvoj podnikatelského myšlení, osobní růst a praktické školení pro ženy (ale i muže), kteří chtějí začít podnikat, vydělávat online a stát se nezávislými.
+            <p className="text-lg text-gray-700 reveal reveal-delay-100">
+              Už mnoho let předávám zkušenosti, vedení lidí a podporu jejich růstu. Mentoring i koučink jsem intuitivně využívala v různých rolích během svého života a postupně jsem zjistila, že právě tato práce s lidským potenciálem je mi nejbližší.
             </p>
-            <p className="text-lg text-gray-700">
-              V rámci lektorské činnosti nabízím školení pro jednotlivce i skupiny – od prvních kroků v podnikání, přes time management, až po konkrétní strategie v přímém prodeji a online světě. Zároveň pořádám tematické kurzy líčení, kde propojuji krásu, sebevědomí a podnikání do jednoho celku.
+            <p className="text-lg text-gray-700 reveal reveal-delay-200">
+              Proto jsem se rozhodla posunout své dovednosti na profesionální úroveň a úspěšně jsem absolvovala certifikaci akreditovanou Ministerstvem školství, mládeže a tělovýchovy. Dnes jsem také členkou Asociace koučů České republiky, součástí globální ICF (International Coaching Federation) a zároveň členkou Hospodářské komory ČR. Tyto kroky pro mě představují nejen odborné zázemí, ale i závazek pracovat podle nejvyšších profesních a etických standardů.
             </p>
-            <p className="text-lg text-gray-700">
-              Pokud hledáš zkušenou mentorku, která tě podpoří na tvé cestě, předá ti praktické know-how a pomůže ti rozvíjet vlastní potenciál, neváhej mě oslovit. Ráda s tebou proberu možnosti spolupráce, ať už individuálně nebo v rámci skupinových kurzů.
+            <p className="text-lg text-gray-700 reveal reveal-delay-300">
+              Své zkušenosti nyní předávám ještě intenzivněji – v rámci osobního i profesního koučinku, leadership rozvoje i mentoringu, a to jak online, tak offline.
+            </p>
+            <p className="text-lg text-gray-700 reveal reveal-delay-400">
+              Jednotlivé formy spolupráce najdete v samostatných sekcích webu, kde si můžete vybrat přístup, který nejlépe odpovídá vašim potřebám nebo potřebám vaší organizace.
             </p>
 
-            <button
-              onClick={() => {
-                navigate('/koucink');
-                setTimeout(() => window.scrollTo(0, 0), 0);
-              }}
-              className="inline-flex items-center bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-8 py-4 text-lg rounded-full group mt-8"
-            >
-              Zjistit více
-              <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:rotate-45" />
-            </button>
+            <div className="reveal reveal-delay-500 mt-8">
+              <button
+                onClick={() => {
+                  navigate('/koucink');
+                  setTimeout(() => window.scrollTo(0, 0), 0);
+                }}
+                className="inline-flex items-center bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-8 py-4 text-lg rounded-full group"
+              >
+                Zjistit více
+                <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:rotate-45" />
+              </button>
+            </div>
           </div>
 
-          {/* SPOLEČNÝ BOX: slideshow + akordeon */}
-          <div className="reveal reveal-delay-200 max-w-[650px] w-full mx-auto flex flex-col items-center">
-            {/* Slideshow */}
-            <div className="w-full mb-6">
-              <div className="relative">
-                <div 
-                  className="overflow-hidden rounded-2xl"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                >
-                  <div 
-                    className="transition-all duration-700 ease-in-out flex"
-                    style={{
-                      transform: `translateX(-${currentSlide * 100}%)`,
-                    }}
-                  >
-                    {slides.map((slide, index) => (
-                      <div 
-                        key={index}
-                        className="w-full flex-shrink-0"
-                      >
-                        <div className="relative w-full aspect-square">
-                          <img
-                            src={slide.image}
-                            alt={slide.alt}
-                            className="w-full h-full object-cover rounded-2xl"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {/* Overlay navigace */}
-                <div className="absolute inset-0 flex items-center justify-between px-4 z-10">
-                  <button
-                    onClick={prevSlide}
-                    className="p-2 rounded-full bg-white/80 hover:bg-white shadow-md text-[#21435F] transition-all"
-                    aria-label="Předchozí"
-                  >
-                    <ChevronLeft size={24} />
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    className="p-2 rounded-full bg-white/80 hover:bg-white shadow-md text-[#21435F] transition-all"
-                    aria-label="Další"
-                  >
-                    <ChevronRight size={24} />
-                  </button>
-                </div>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 z-10">
-                  {slides.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentSlide(index)}
-                      className={`w-2 h-2 rounded-full border-2 border-white transition-all duration-300 ${
-                        currentSlide === index 
-                          ? 'bg-[#21435F]' 
-                          : 'bg-white/60'
-                      }`}
-                      aria-label={`Slide ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
+          <div className="reveal reveal-delay-200 max-w-[650px] w-full mx-auto">
+            <div className="relative w-full aspect-square rounded-2xl overflow-hidden">
+              <img
+                src="/images/koucinksekce.jpg"
+                alt="Koučink a mentoring"
+                className="w-full h-full object-cover rounded-2xl"
+              />
             </div>
           </div>
         </div>

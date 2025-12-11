@@ -72,14 +72,20 @@ const Hero = ({ showDivider = true }: HeroProps) => {
             ) : (
               <>
                 <h2 className="reveal reveal-delay-200 text-4xl md:text-5xl lg:text-6xl text-[#21435F] font-['Montserrat'] font-light mb-6">
-                  Proměňte svou vášeň<br />
-                  v <strong className="font-medium">úspěšné podnikání.</strong><br />
+                  <strong className="font-medium">Pomáhám</strong> lidem <strong className="font-medium">růst</strong> v životě i v podnikání.
                 </h2>
                 <p className="reveal reveal-delay-400 text-xl md:text-2xl text-gray-700 mb-8 max-w-lg">
-                Pomáhám ženám vydělávat online odkudkoliv. Vybudujte si kariéru z pohodlí domova.
+                  Jsem koučka & mentorka pro jednotlivce i firmy. Podporuji osobní rozvoj a leadership. Pomáhám také ženám vybudovat úspěšné online podnikání a dosáhnout finanční nezávislosti.
                 </p>
                 <div className="reveal reveal-delay-600 flex flex-col sm:flex-row gap-4">
-                  <a href="#collaboration" className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 flex items-center justify-center px-10 py-5 text-xl rounded-full group">
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 flex items-center justify-center px-10 py-5 text-xl rounded-full group"
+                  >
                     Chci vědět víc
                     <ArrowRight size={22} className="ml-2 transition-transform duration-300 group-hover:rotate-45" />
                   </a>
@@ -94,7 +100,7 @@ const Hero = ({ showDivider = true }: HeroProps) => {
             <div className="relative">
               <div className={`relative w-full aspect-square ${isKoucinkPage ? 'rounded-2xl' : 'rounded-full'} overflow-hidden reveal group`}>
                 <img
-                  src={isKoucinkPage ? "/images/course1.webp" : "/images/heroimg.webp"}
+                  src={isKoucinkPage ? "/images/koucinkhero.jpg" : "/images/hlavnihero.jpg"}
                   alt={isKoucinkPage ? "Koučink a mentoring" : "Ivana Jiráková"}
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700"
                 />

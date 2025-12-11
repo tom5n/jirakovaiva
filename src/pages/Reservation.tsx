@@ -36,27 +36,45 @@ const weekDays = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
 
 const packages = [
   {
-    title: "Osobní koučink",
-    price: "od 2 500 Kč",
-    description: "Individuální koučink zaměřený na Váš osobní růst a dosažení Vašich cílů.",
+    title: "Individuální koučink & mentoring",
+    price: "od 2 500 Kč / hod",
+    description: "Osobní, profesní a mindset coaching vedený online i offline s naprosto individuálním přístupem.",
     icon: User,
   },
   {
-    title: "Týmový koučink",
-    price: "od 5 000 Kč",
-    description: "Koučink pro malé týmy a skupiny zaměřený na budování silného týmu.",
+    title: "Koučink pro rodiny a rodiče s dětmi",
+    price: "od 2 900 Kč / hod",
+    description: "Podporuji rodiče, kteří hledají cestu k lepší komunikaci se svými dětmi, řeší krizové situace, rodinné napětí nebo hledají společný jazyk v náročných obdobích. Koučink pomáhá posílit vztahy, pochopení i vzájemnou důvěru.",
     icon: Users,
   },
   {
-    title: "Pro firmy - Leadership",
-    price: "na dotaz",
-    description: "Komplexní leadership program pro firmy a organizace.",
+    title: "Koučink pro začínající podnikatele",
+    price: "od 3 200 Kč / hod",
+    description: "Pomáhám lidem, kteří se chtějí pustit do vlastního podnikání, najít směr, strategii i sebejistotu. Společně nastavíme kroky, mindset i jasný plán, aby podnikání bylo udržitelné a dávalo smysl.",
     icon: Briefcase,
   },
   {
-    title: "VIP spolupráce",
-    price: "na dotaz",
-    description: "Exkluzivní VIP program s maximální podporou a individuálním přístupem.",
+    title: "Coaching pro ženy a maminky po mateřské",
+    price: "od 2 400 Kč / hod",
+    description: "Podpora při návratu do práce, při změně kariéry nebo v období, kdy ženy často ztrácí sebevědomí, jistotu a orientaci v pracovním prostředí. Pomáhám jim znovu najít své místo, rytmus a sílu.",
+    icon: Crown,
+  },
+  {
+    title: "Leadership koučink a firemní mentoring",
+    price: "od 4 500 Kč / hod",
+    description: "Práce s lídry, manažery a týmy na zvyšování výkonu, sebevědomí, komunikace a firemní kultury. Podpora při řízení lidí, motivaci a práci s tlakem i zodpovědností.",
+    icon: Briefcase,
+  },
+  {
+    title: "Týmový rozvoj a facilitace",
+    price: "od 6 900 Kč / hod",
+    description: "Rozvojové workshopy, podpora týmů v komunikaci, spolupráci, řešení konfliktů a budování společné strategie. Posiluji důvěru, respekt i efektivitu ve skupinách.",
+    icon: Users,
+  },
+  {
+    title: "Exkluzivní Premium Balíček",
+    price: "75 000 Kč",
+    description: "Tento 3měsíční transformační program je určen pro ty, kteří chtějí udělat zásadní životní nebo profesní změnu a potřebují jasný směr, podporu a vedení.",
     icon: Crown,
   },
 ];

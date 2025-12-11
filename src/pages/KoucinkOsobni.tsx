@@ -30,29 +30,26 @@ const KoucinkOsobni = () => {
   }, []);
 
   const features = [
-    "Individuální přístup přizpůsobený Vašim potřebám",
-    "Flexibilní termíny schůzek",
-    "Osobní podpora a vedení",
-    "Pomoc s definováním a dosažením cílů",
-    "Techniky osobního rozvoje",
-    "Pravidelné konzultace a zpětná vazba",
+    "větší jistoty, sebevědomí a klidu",
+    "jasnosti v rozhodování",
+    "úlevy od chaosu a tlaku",
+    "posunu v životě nebo kariéře, který byl dlouho odkládaný",
+    "hlubšího pochopení sebe a svých potřeb",
   ];
 
   const whatIsIncluded = [
-    "Úvodní konzultace a analýza potřeb",
-    "Individuální koučovací sezení",
-    "Akční plány a strategie",
-    "Materiály a zdroje pro osobní rozvoj",
-    "Emailová podpora mezi sezeními",
-    "Pravidelné hodnotící schůzky",
+    "1:1 koučinková setkání (online nebo offline)",
+    "Kombinaci koučinku a mentoringu podle potřeb klienta",
+    "Práci s mindsetem, cíli, hodnotami a překážkami",
+    "Úkoly, doporučení, zpětnou vazbu a podporu mezi sezeními (volitelné)",
   ];
 
   return (
     <>
       <SeoHead
-        title="Osobní koučink | Ivana Jiráková"
+        title="Individuální koučink & mentoring | Ivana Jiráková"
         description="Individuální koučink zaměřený na Váš osobní růst a dosažení Vašich cílů. Flexibilní termíny a osobní přístup."
-        url="https://www.jirakovaiva.cz/koucink/osobni"
+        url="https://www.jirakovaiva.cz/koucink/individualni"
       />
       <div className="min-h-screen bg-[#F3E8E2]">
         <Navbar />
@@ -61,19 +58,19 @@ const KoucinkOsobni = () => {
           <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div className="order-1 md:order-1">
                <h2 className="reveal reveal-delay-200 text-4xl md:text-5xl lg:text-6xl text-[#21435F] font-['Montserrat'] font-light mb-6">
-                 <strong className="font-medium">Osobní</strong> koučink
+                 <strong className="font-medium">Individuální</strong> koučink & mentoring
                </h2>
               <p className="reveal reveal-delay-400 text-xl md:text-2xl text-gray-700 mb-8 max-w-lg">
-                Individuální koučink zaměřený na Váš osobní růst a dosažení Vašich cílů
+                Individuální podpora zaměřená na životní změnu, osobní růst, sebevědomí a vědomé rozhodování.
               </p>
               <div className="reveal reveal-delay-600 mb-8">
                 <span className="text-3xl font-bold text-[#21435F] font-['Montserrat']">
-                  od 2 500 Kč
+                  od 2 500 Kč / hod
                 </span>
               </div>
               <div className="reveal reveal-delay-600">
                 <button
-                  onClick={() => navigate('/rezervace', { state: { program: 'Osobní koučink' } })}
+                  onClick={() => navigate('/rezervace', { state: { program: 'Individuální koučink & mentoring' } })}
                   className="inline-flex items-center justify-center bg-[#21435F] text-white hover:bg-[#21435F]/90 transition-colors duration-300 px-10 py-5 text-xl rounded-full font-medium font-['Montserrat'] group"
                 >
                   Rezervovat
@@ -111,17 +108,13 @@ const KoucinkOsobni = () => {
         <section className="section-padding bg-white">
           <div className="container mx-auto">
              <div className="grid md:grid-cols-2 gap-8 items-start">
-               {/* Co nabízíme */}
+               {/* Co tím klient dosáhne */}
                <div className="group relative bg-white rounded-2xl shadow-lg overflow-hidden border border-[#21435F] reveal transition-all duration-300 hover:shadow-xl z-10 flex flex-col self-start">
                  <div className="absolute top-0 left-0 w-full h-1 bg-[#21435F] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
                  <div className="p-8 flex flex-col">
                    <h2 className="text-2xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">
-                     Co Vám nabízím
+                     Co tím získáte?
                    </h2>
-                   <p className="text-lg text-gray-700 mb-6 font-['Montserrat'] leading-relaxed">
-                     Osobní koučink je individuální proces, který Vám pomůže najít Vaši cestu, překonat překážky a dosáhnout Vašich cílů. 
-                     Společně projdeme každým krokem Vašeho rozvoje a vytvoříme strategii, která Vám bude vyhovovat.
-                   </p>
                    <ul className="space-y-3">
                      {features.map((feature, index) => (
                        <li key={index} className="flex items-start gap-3">
@@ -138,67 +131,22 @@ const KoucinkOsobni = () => {
                  </div>
                </div>
 
-               {/* Jak to funguje */}
-               <div className="group relative bg-white rounded-2xl shadow-lg overflow-hidden border border-[#21435F] reveal reveal-delay-200 transition-all duration-300 hover:shadow-xl z-10 flex flex-col h-full">
-                 <div className="absolute top-0 left-0 w-full h-1 bg-[#21435F] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                 <div className="p-8 flex flex-col flex-1">
-                   <h2 className="text-2xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">
-                     Jak to funguje
-                   </h2>
-                   <div className="space-y-6">
-                     <div className="flex gap-4">
-                       <div className="flex-shrink-0 w-10 h-10 bg-[#21435F] text-white rounded-full flex items-center justify-center font-bold font-['Montserrat'] text-base">
-                         1
-                       </div>
-                       <div>
-                         <h3 className="text-lg font-medium text-[#21435F] mb-2 font-['Montserrat']">
-                           Úvodní konzultace
-                         </h3>
-                         <p className="text-base text-gray-700 font-['Montserrat'] leading-relaxed">
-                           Společně probereme Vaše cíle, očekávání a aktuální situaci. Tato konzultace nám pomůže vytvořit individuální plán.
-                         </p>
-                       </div>
-                     </div>
-                     <div className="flex gap-4">
-                       <div className="flex-shrink-0 w-10 h-10 bg-[#21435F] text-white rounded-full flex items-center justify-center font-bold font-['Montserrat'] text-base">
-                         2
-                       </div>
-                       <div>
-                         <h3 className="text-lg font-medium text-[#21435F] mb-2 font-['Montserrat']">
-                           Individuální sezení
-                         </h3>
-                         <p className="text-base text-gray-700 font-['Montserrat'] leading-relaxed">
-                           Pravidelná koučovací sezení zaměřená na Vaše konkrétní potřeby a cíle. Každé sezení je přizpůsobeno Vašemu tempu.
-                         </p>
-                       </div>
-                     </div>
-                     <div className="flex gap-4">
-                       <div className="flex-shrink-0 w-10 h-10 bg-[#21435F] text-white rounded-full flex items-center justify-center font-bold font-['Montserrat'] text-base">
-                         3
-                       </div>
-                       <div>
-                         <h3 className="text-lg font-medium text-[#21435F] mb-2 font-['Montserrat']">
-                           Průběžná podpora
-                         </h3>
-                         <p className="text-base text-gray-700 font-['Montserrat'] leading-relaxed">
-                           Mezi sezeními Vám poskytnu podporu a materiály, které Vám pomohou pokračovat v práci na Vašich cílech.
-                         </p>
-                       </div>
-                     </div>
-                     <div className="flex gap-4">
-                       <div className="flex-shrink-0 w-10 h-10 bg-[#21435F] text-white rounded-full flex items-center justify-center font-bold font-['Montserrat'] text-base">
-                         4
-                       </div>
-                       <div>
-                         <h3 className="text-lg font-medium text-[#21435F] mb-2 font-['Montserrat']">
-                           Hodnocení a úpravy
-                         </h3>
-                         <p className="text-base text-gray-700 font-['Montserrat'] leading-relaxed">
-                           Pravidelně hodnotíme pokrok a upravujeme strategii podle Vašich potřeb a výsledků.
-                         </p>
-                       </div>
-                     </div>
-                   </div>
+              {/* Jak to funguje */}
+              <div className="group relative bg-white rounded-2xl shadow-lg overflow-hidden border border-[#21435F] reveal reveal-delay-200 transition-all duration-300 hover:shadow-xl z-10 flex flex-col self-start">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#21435F] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                <div className="p-8 flex flex-col">
+                  <h2 className="text-2xl font-semibold text-[#21435F] mb-6 font-['Montserrat']">
+                    Jak to funguje
+                  </h2>
+                  <p className="text-lg text-gray-700 font-['Montserrat'] leading-relaxed mb-6">
+                    Setkáváme se pravidelně – týdně nebo jednou za 14 dní. Na každém sezení otevíráme témata, která vás posunou kupředu, hledáme řešení a nastavujeme konkrétní kroky.
+                  </p>
+                  <div className="mt-4 space-y-2">
+                    <p className="text-base text-gray-700 font-['Montserrat']">- 1 hodina: 2 500 Kč</p>
+                    <p className="text-base text-gray-700 font-['Montserrat']">- 3 hodiny: 6 500 Kč</p>
+                    <p className="text-base text-gray-700 font-['Montserrat']">- 5 hodin (balíček): 10 900 Kč</p>
+                    <p className="text-base text-gray-700 font-['Montserrat']">- Dlouhodobá spolupráce (10 hodin): 22 000 Kč</p>
+                  </div>
                  </div>
                </div>
              </div>

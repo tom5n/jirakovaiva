@@ -16,6 +16,9 @@ import Koucink from "./pages/Koucink";
 import KoucinkOsobni from "./pages/KoucinkOsobni";
 import KoucinkTymovy from "./pages/KoucinkTymovy";
 import KoucinkLeadership from "./pages/KoucinkLeadership";
+import KoucinkFiremni from "./pages/KoucinkFiremni";
+import KoucinkTymovyRozvoj from "./pages/KoucinkTymovyRozvoj";
+import KoucinkPremium from "./pages/KoucinkPremium";
 import VIP from "./pages/VIP";
 import Farmasi from "./pages/Farmasi";
 import CookieConsentBar from "./components/CookieConsentBar";
@@ -80,10 +83,13 @@ const App = () => (
                 <Route path="/rezervace" element={<React.Suspense fallback={<>Načítání...</>}><Reservation /></React.Suspense>} />
                 <Route path="/beautybox" element={<React.Suspense fallback={<>Načítání...</>}><Beautybox /></React.Suspense>} />
                 <Route path="/koucink" element={<React.Suspense fallback={<>Načítání...</>}><Koucink /></React.Suspense>} />
-                <Route path="/koucink/osobni" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkOsobni /></React.Suspense>} />
-                <Route path="/koucink/tymovy" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkTymovy /></React.Suspense>} />
-                <Route path="/koucink/leadership" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkLeadership /></React.Suspense>} />
-                <Route path="/koucink/vip" element={<React.Suspense fallback={<>Načítání...</>}><VIP /></React.Suspense>} />
+                <Route path="/koucink/individualni" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkOsobni /></React.Suspense>} />
+                <Route path="/koucink/rodiny" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkTymovy /></React.Suspense>} />
+                <Route path="/koucink/podnikatele" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkLeadership /></React.Suspense>} />
+                <Route path="/koucink/firemni" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkFiremni /></React.Suspense>} />
+                <Route path="/koucink/tymovy-rozvoj" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkTymovyRozvoj /></React.Suspense>} />
+                <Route path="/koucink/premium" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkPremium /></React.Suspense>} />
+                <Route path="/koucink/zeny-maminky" element={<React.Suspense fallback={<>Načítání...</>}><VIP /></React.Suspense>} />
                 <Route path="/farmasi" element={<React.Suspense fallback={<>Načítání...</>}><Farmasi /></React.Suspense>} />
                 <Route path="/zasady" element={<React.Suspense fallback={<>Načítání...</>}><Zasady /></React.Suspense>} />
                 <Route path="/cookies" element={<React.Suspense fallback={<>Načítání...</>}><Cookies /></React.Suspense>} />

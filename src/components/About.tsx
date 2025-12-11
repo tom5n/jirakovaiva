@@ -10,10 +10,10 @@ const About = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '0px 0px -50px 0px' }
     );
 
-    const revealElements = document.querySelectorAll(".reveal");
+    const revealElements = document.querySelectorAll("#about .reveal");
     revealElements.forEach((el) => observer.observe(el));
 
     return () => {
@@ -44,20 +44,35 @@ const About = () => {
             </div>
           </div>
           <div className="order-1 md:order-2">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-['Dancing_Script'] mb-8 text-[#21435F] reveal">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-['Dancing_Script'] mb-4 text-[#21435F] reveal">
               O mně
             </h2>
-            <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-200">
-              Jmenuji se Ivana Jiráková – jsem podnikatelka, mentorka a průvodkyně na cestě k finanční svobodě. Podnikám v oblasti přímého prodeje, kde působím jako TOP 1. ředitelka Farmasi pro Centrální Evropu. Věnuji se vedení vlastního týmu a předávám dál ověřené zkušenosti, jak si vybudovat stabilní a smysluplný příjem z pohodlí domova. Moje práce je mojí vášní, neboť mi umožňuje podporovat lidé v tom, aby převzali zodpovědnost za svůj život a finanční budoucnost.
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-100">
+              Jmenuji se Ivana Jiráková – jsem certifikovaná koučka, mentorka a průvodkyně osobním i profesním růstem.
             </p>
-            <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-400">
-              Pomáhám ženám – a nejen jim – objevovat jejich potenciál, rozvíjet se, růst a najít rovnováhu mezi osobním a pracovním životem. Díky individuálnímu přístupu, mentoringu a sdílení osvědčených strategií v oblasti online podnikání mohou mí klienti dosahovat výsledků, o kterých dříve jen snili.
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-200">
+              Jsem držitelkou akreditace Ministerstva školství, mládeže a tělovýchovy, členkou Asociace koučů České republiky a zároveň členkou Hospodářské komory ČR.
             </p>
-            <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-600">
-              Mým posláním je inspirovat ostatní, že i bez předchozích zkušeností mohou začít podnikat, tvořit si pasivní příjem a stát se finančně nezávislými. Pokud toužíš po změně a chceš být součástí komunity, která tě podpoří na cestě k úspěchu, jsem tady právě pro tebe.
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-300">
+              Věnuji se individuálnímu koučinku, leadership koučinku, týmovému rozvoji i mentoringu. Pomáhám lidem odemykat jejich skutečný potenciál, posilovat sebevědomí, růst v osobním životě i kariéře a nacházet cestu k výsledkům, které jsou dlouhodobě udržitelné.
             </p>
-            <p className="text-lg text-gray-700 mb-6 reveal reveal-delay-600">
-              Nabízím také možnost individuálního i skupinového koučinku a mentoringu – a to jak online, tak offline – podle tvých potřeb a možností.
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-400">
+              Pracuji osobně i online, podle potřeb a možností mých klientů.
+            </p>
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-500">
+              Moje práce stojí na respektu, bezpečném prostředí a víře, že každý člověk v sobě má mnohem víc, než si často připouští – a mým posláním je pomoci tento potenciál probudit a rozvíjet.
+            </p>
+            <h3 className="text-2xl md:text-3xl font-['Montserrat'] font-medium mb-0 text-[#21435F] reveal reveal-delay-600 mt-8">
+              Podnikání a vedení týmů
+            </h3>
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-700">
+              Kromě koučinku působím také jako podnikatelka v oblasti přímého prodeje, kde pracuji jako TOP 1. ředitelka Farmasi pro Českou republiku.
+            </p>
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-800">
+              Vedu vlastní tým a předávám dál ověřené strategie, jak si vybudovat stabilní příjem z domova, rozvíjet dovednosti, pracovat s mindsetem a stát se finančně nezávislým.
+            </p>
+            <p className="text-lg text-gray-700 mb-0 reveal reveal-delay-900">
+              Pomáhám lidem – zejména ženám – objevit nové příležitosti, posílit jejich sebevědomí a najít cestu k životu, kde mohou převzít zodpovědnost za svou budoucnost.
             </p>
           </div>
         </div>
