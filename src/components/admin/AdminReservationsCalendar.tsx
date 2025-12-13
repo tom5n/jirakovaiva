@@ -252,41 +252,57 @@ export default function AdminReservationsCalendar() {
             <div className="text-gray-500">Žádné rezervace na tento den.</div>
           )}
           {selectedDate && !loading && reservations.length > 0 && (
-            <ul className="space-y-2">
-              {reservations.map((r, i) => (
-                <li
-                  key={r.id}
-                  className="p-3 bg-gray-100 rounded-lg flex flex-row items-center gap-2 sm:grid sm:grid-cols-4 sm:gap-2"
-                >
-                  <span className="font-medium text-[#21435F] text-left text-sm sm:text-base min-w-[48px] sm:min-w-0 whitespace-nowrap">
-                    {r.time}
-                  </span>
-                  <span
-                    className="flex-1 text-center truncate text-sm sm:text-base px-1"
-                    title={`${r.first_name} ${r.last_name}`}
+            <div className="space-y-2">
+              {/* Desktop hlavička */}
+              <div className="hidden sm:grid sm:grid-cols-[80px_1.5fr_100px_1.5fr_50px] gap-4 px-4 py-2 text-xs font-semibold text-[#21435F]/70 uppercase tracking-wide border-b border-[#21435F]/20">
+                <span>Čas</span>
+                <span>Jméno</span>
+                <span>Typ</span>
+                <span>Program</span>
+                <span></span>
+              </div>
+              {/* Seznam rezervací */}
+              <ul className="space-y-2">
+                {reservations.map((r, i) => (
+                  <li
+                    key={r.id}
+                    className="p-3 bg-gray-100 rounded-lg flex flex-row items-center justify-between gap-2 sm:grid sm:grid-cols-[80px_1.5fr_100px_1.5fr_50px] sm:gap-4 sm:px-4 sm:py-3 sm:bg-white sm:border sm:border-[#21435F]/10 sm:hover:bg-gray-50 transition-colors"
                   >
-                    <span className="sm:hidden">
-                      {(() => {
-                        const parts = `${r.first_name} ${r.last_name}`.split(' ');
-                        if (parts.length > 1) {
-                          return `${parts[0][0]}. ${parts.slice(1).join(' ')}`;
-                        }
-                        return `${r.first_name} ${r.last_name}`;
-                      })()}
+                    <div className="flex items-center gap-2 sm:contents">
+                      <span className="font-medium text-[#21435F] text-left text-sm sm:text-base whitespace-nowrap">
+                        {r.time}
+                      </span>
+                      <span
+                        className="flex-1 text-left text-sm sm:text-base"
+                        title={`${r.first_name} ${r.last_name}`}
+                      >
+                        <span className="sm:hidden">
+                          {(() => {
+                            const parts = `${r.first_name} ${r.last_name}`.split(' ');
+                            if (parts.length > 1) {
+                              return `${parts[0][0]}. ${parts.slice(1).join(' ')}`;
+                            }
+                            return `${r.first_name} ${r.last_name}`;
+                          })()}
+                        </span>
+                        <span className="hidden sm:inline font-medium text-[#21435F]">{r.first_name} {r.last_name}</span>
+                      </span>
+                    </div>
+                    <span className="text-sm sm:text-base text-gray-600 hidden sm:block">
+                      {r.meeting_type === 'online' ? 'Online' : r.meeting_type === 'offline' ? 'Offline' : '-'}
                     </span>
-                    <span className="hidden sm:inline">{r.first_name} {r.last_name}</span>
-                  </span>
-                  <span className="text-sm sm:text-base text-gray-600 truncate px-1 hidden sm:block">
-                    {r.program || '-'}
-                  </span>
-                  <span className="text-right flex items-center justify-end gap-1 sm:gap-2 min-w-0">
-                    <button type="button" onClick={() => setSelectedReservation(r)} className="ml-2 text-[#21435F] hover:text-[#18324a]" title="Zobrazit detail">
-                      <Info size={18} />
-                    </button>
-                  </span>
-                </li>
-              ))}
-            </ul>
+                    <span className="text-sm sm:text-base text-gray-600 hidden sm:block truncate" title={r.program || '-'}>
+                      {r.program || '-'}
+                    </span>
+                    <span className="text-right flex items-center justify-end min-w-0">
+                      <button type="button" onClick={() => setSelectedReservation(r)} className="text-[#21435F] hover:text-[#18324a] transition-colors" title="Zobrazit detail">
+                        <Info size={18} />
+                      </button>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
           {!selectedDate && (
             <div className="text-gray-500">Zvolte den pro zobrazení rezervací.</div>
@@ -334,6 +350,13 @@ export default function AdminReservationsCalendar() {
                   <div className="py-3 flex justify-between items-center">
                     <span className="font-medium text-[#21435F]">Program:</span>
                     <span className="text-lg">{selectedReservation.program || '-'}</span>
+                  </div>
+                  <div className="py-3 flex justify-between items-center">
+                    <span className="font-medium text-[#21435F]">Typ schůzky:</span>
+                    <span className="text-lg">
+                      {selectedReservation.meeting_type === 'online' ? 'Online (Videohovor)' : 
+                       selectedReservation.meeting_type === 'offline' ? 'Offline (Osobně)' : '-'}
+                    </span>
                   </div>
                   {selectedReservation.note && (
                   <div className="py-3 flex justify-between items-center">

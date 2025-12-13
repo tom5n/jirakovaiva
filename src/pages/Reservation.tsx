@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { ArrowLeft, ChevronLeft, ChevronRight, User, Users, Briefcase, Crown, Check, ArrowRight, ChevronRight as ChevronRightIcon, Calendar, Mail, Phone } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight, User, Users, Briefcase, Crown, Check, ArrowRight, ChevronRight as ChevronRightIcon, Calendar, Mail, Phone, Monitor, MapPin } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -24,6 +24,9 @@ const reservationSchema = z.object({
   date: z.string().min(1, 'Datum je povinné'),
   time: z.string().min(1, 'Čas je povinný'),
   program: z.string().min(1, 'Program je povinný'),
+  meetingType: z.enum(['online', 'offline'], {
+    required_error: 'Vyberte typ setkání',
+  }),
 })
 
 type ReservationFormData = z.infer<typeof reservationSchema>
@@ -92,6 +95,7 @@ export default function Reservation() {
   const [phoneInput, setPhoneInput] = useState('');
   const [isRezitHovered, setIsRezitHovered] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<string>('');
+  const [selectedMeetingType, setSelectedMeetingType] = useState<'online' | 'offline' | ''>('');
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const {
@@ -122,6 +126,11 @@ export default function Reservation() {
     setValue('program', program)
   }
 
+  const handleMeetingTypeSelect = (type: 'online' | 'offline') => {
+    setSelectedMeetingType(type)
+    setValue('meetingType', type)
+  }
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ''); // jen čísla
     if (value.length > 9) value = value.slice(0, 9);
@@ -143,7 +152,7 @@ export default function Reservation() {
     }
 
     setIsSubmitting(true)
-    const { firstName, lastName, email, phone, date, time, program } = data
+    const { firstName, lastName, email, phone, date, time, program, meetingType } = data
     const dateObj = new Date(date);
     // Uložím datum jako YYYY-MM-DD v lokálním čase
     const year = dateObj.getFullYear();
@@ -176,6 +185,7 @@ export default function Reservation() {
         date: dateStr, // přesně YYYY-MM-DD
         time,
         program: program || null,
+        meeting_type: meetingType,
         status: 'pending',
       },
     ])
@@ -199,6 +209,7 @@ export default function Reservation() {
             date: dateStr,
             time,
             program,
+            meetingType,
           }),
         });
       } catch (e) {
@@ -210,6 +221,7 @@ export default function Reservation() {
       setSelectedProgram('');
       setSelectedDate('');
       setSelectedTime('');
+      setSelectedMeetingType('');
       setPhoneInput('');
       setCurrentStep(1);
       setIsSubmitting(false);
@@ -572,6 +584,58 @@ export default function Reservation() {
         </div>
       </div>
 
+      {/* Výběr typu setkání */}
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold text-[#21435F] mb-4 font-['Montserrat']">Typ setkání</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            type="button"
+            onClick={() => handleMeetingTypeSelect('online')}
+            className={`p-4 rounded-xl border-2 transition-all duration-300 font-['Montserrat'] ${
+              selectedMeetingType === 'online'
+                ? 'border-[#21435F] bg-[#21435F]/5 shadow-md'
+                : 'border-[#21435F]/20 bg-white hover:border-[#21435F]/40 hover:shadow-sm'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                selectedMeetingType === 'online' ? 'bg-[#21435F] text-white' : 'bg-[#21435F]/10 text-[#21435F]'
+              }`}>
+                <Monitor size={20} />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold text-[#21435F] text-base">Online</p>
+                <p className="text-sm text-gray-600">Videohovor</p>
+              </div>
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleMeetingTypeSelect('offline')}
+            className={`p-4 rounded-xl border-2 transition-all duration-300 font-['Montserrat'] ${
+              selectedMeetingType === 'offline'
+                ? 'border-[#21435F] bg-[#21435F]/5 shadow-md'
+                : 'border-[#21435F]/20 bg-white hover:border-[#21435F]/40 hover:shadow-sm'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                selectedMeetingType === 'offline' ? 'bg-[#21435F] text-white' : 'bg-[#21435F]/10 text-[#21435F]'
+              }`}>
+                <MapPin size={20} />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold text-[#21435F] text-base">Offline</p>
+                <p className="text-sm text-gray-600">Osobně</p>
+              </div>
+            </div>
+          </button>
+        </div>
+        {errors.meetingType && (
+          <p className="mt-2 text-sm text-red-600 font-['Montserrat']">{errors.meetingType.message}</p>
+        )}
+      </div>
+
       <div className="flex justify-between mt-8">
         <button
           type="button"
@@ -588,9 +652,9 @@ export default function Reservation() {
               setCurrentStep(3);
             }
           }}
-          disabled={!selectedDate || !selectedTime}
+          disabled={!selectedDate || !selectedTime || !selectedMeetingType}
           className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300 font-['Montserrat'] ${
-            selectedDate && selectedTime
+            selectedDate && selectedTime && selectedMeetingType
               ? 'bg-[#21435F] text-white hover:bg-[#21435F]/90 shadow-md hover:shadow-lg'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
@@ -686,13 +750,13 @@ export default function Reservation() {
           type="button"
           onClick={() => {
             // Validace formuláře
-            if (selectedProgram && selectedDate && selectedTime) {
+            if (selectedProgram && selectedDate && selectedTime && selectedMeetingType) {
               setCurrentStep(4);
             }
           }}
-          disabled={!selectedProgram || !selectedDate || !selectedTime}
+          disabled={!selectedProgram || !selectedDate || !selectedTime || !selectedMeetingType}
           className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300 font-['Montserrat'] ${
-            selectedProgram && selectedDate && selectedTime
+            selectedProgram && selectedDate && selectedTime && selectedMeetingType
               ? 'bg-[#21435F] text-white hover:bg-[#21435F]/90 shadow-md hover:shadow-lg'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
@@ -761,6 +825,11 @@ export default function Reservation() {
                   <h3 className="text-lg font-semibold text-[#21435F] mb-1 font-['Montserrat']">Datum a čas</h3>
                   <p className="text-base text-gray-700 font-['Montserrat']">{formatDate(selectedDate)}</p>
                   <p className="text-base text-gray-700 font-['Montserrat']">{selectedTime}</p>
+                  {selectedMeetingType && (
+                    <p className="text-base text-gray-700 font-['Montserrat'] mt-1">
+                      Typ: {selectedMeetingType === 'online' ? 'Online (Videohovor)' : 'Offline (Osobně)'}
+                    </p>
+                  )}
                 </div>
               </div>
             )}

@@ -47,7 +47,7 @@ function ApproveReservationsList() {
     const { error } = await supabase.from('reservations').update({ status: 'confirmed' }).eq('id', id);
     if (!error) {
       showToast('Rezervace byla potvrzena.');
-      // Odeslat potvrzovací email zákazníkovi
+      // Odeslat potvrzovací email zákazníkovi (pokud API existuje)
       if (reservation) {
         try {
           const response = await fetch('/api/confirm-reservation', {
@@ -66,11 +66,12 @@ function ApproveReservationsList() {
           });
           
           if (!response.ok) {
-            throw new Error('Chyba při odesílání emailu');
+            // Email se nepodařilo odeslat, ale rezervace je potvrzena
+            console.warn('Nepodařilo se odeslat potvrzovací email, ale rezervace byla potvrzena.');
           }
         } catch (e) {
-          console.error('Chyba při odesílání emailu:', e);
-          showToast('Chyba při odesílání potvrzovacího emailu.', 'error');
+          // Email se nepodařilo odeslat, ale rezervace je potvrzena
+          console.warn('Nepodařilo se odeslat potvrzovací email, ale rezervace byla potvrzena:', e);
         }
       }
     } else showToast('Chyba při potvrzení rezervace.', 'error');
@@ -138,12 +139,13 @@ function ApproveReservationsList() {
       {/* Desktop view */}
       <div className="hidden md:block">
         {/* Hlavička gridu */}
-        <div className="grid grid-cols-[1.2fr_1.5fr_1fr_1fr_0.8fr_1fr_0.7fr] gap-x-6 px-3 pb-1 text-sm text-[#21435F] font-semibold uppercase tracking-wide select-none">
+        <div className="grid grid-cols-[1.2fr_1.5fr_1fr_1fr_0.8fr_0.8fr_1fr_0.7fr] gap-x-6 px-3 pb-1 text-sm text-[#21435F] font-semibold uppercase tracking-wide select-none">
           <span>Jméno</span>
           <span>Email</span>
           <span>Telefon</span>
           <span>Datum</span>
           <span>Čas</span>
+          <span>Typ</span>
           <span>Program</span>
           <span className="text-right block">Akce</span>
         </div>
@@ -155,13 +157,16 @@ function ApproveReservationsList() {
           {reservations.filter(r => r.status === 'pending').map(r => (
             <div
               key={r.id}
-              className="grid grid-cols-[1.2fr_1.5fr_1fr_1fr_0.8fr_1fr_0.7fr] gap-x-6 items-center px-3 py-2 rounded-lg border border-[#21435F]/10 bg-white/70 hover:bg-white transition-all text-sm md:text-base"
+              className="grid grid-cols-[1.2fr_1.5fr_1fr_1fr_0.8fr_0.8fr_1fr_0.7fr] gap-x-6 items-center px-3 py-2 rounded-lg border border-[#21435F]/10 bg-white/70 hover:bg-white transition-all text-sm md:text-base"
             >
               <span className="font-semibold text-[#21435F]">{r.first_name} {r.last_name}</span>
               <span className="text-gray-600">{r.email}</span>
               <span className="text-gray-600">{r.phone}</span>
               <span className="text-gray-600 whitespace-nowrap">{new Date(r.date).toLocaleDateString('cs-CZ')}</span>
               <span className="text-gray-600 whitespace-nowrap">{r.time}</span>
+              <span className="text-gray-600">
+                {r.meeting_type === 'online' ? 'Online' : r.meeting_type === 'offline' ? 'Offline' : '-'}
+              </span>
               <span className="text-gray-600">{r.program || '-'}</span>
               <span className="flex gap-1 justify-end">
                 <button onClick={() => handleApprove(r.id)} title="Potvrdit" className="p-2 rounded-full hover:bg-green-100 text-green-700 transition"><Check size={18} /></button>
@@ -188,7 +193,12 @@ function ApproveReservationsList() {
               <span className="font-medium text-[#21435F]">{r.first_name} {r.last_name}</span>
               <span className="text-sm text-[#21435F]/70">{r.time}</span>
             </div>
-            <div className="text-sm text-gray-600">{new Date(r.date).toLocaleDateString('cs-CZ')}</div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">{new Date(r.date).toLocaleDateString('cs-CZ')}</span>
+              <span className="text-sm text-[#21435F]/70">
+                {r.meeting_type === 'online' ? 'Online' : r.meeting_type === 'offline' ? 'Offline' : '-'}
+              </span>
+            </div>
           </button>
         ))}
       </div>
@@ -231,6 +241,13 @@ function ApproveReservationsList() {
               <div>
                 <span className="text-sm text-[#21435F]/70">Program</span>
                 <p className="font-medium">{selectedReservation.program || '-'}</p>
+              </div>
+              <div>
+                <span className="text-sm text-[#21435F]/70">Typ schůzky</span>
+                <p className="font-medium">
+                  {selectedReservation.meeting_type === 'online' ? 'Online (Videohovor)' : 
+                   selectedReservation.meeting_type === 'offline' ? 'Offline (Osobně)' : '-'}
+                </p>
               </div>
             </div>
             <div className="flex gap-2 justify-end">
@@ -312,6 +329,7 @@ export default function Admin() {
   const [activeSection, setActiveSection] = useState('news')
   const [templateCount, setTemplateCount] = useState(0)
   const [beautyboxCount, setBeautyboxCount] = useState<number | undefined>(undefined)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     // Kontrola přihlášení při načtení stránky
@@ -364,11 +382,142 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen flex" style={{
+    <div className="min-h-screen flex flex-col" style={{
       backgroundImage: 'url(/images/dashboardBG.webp)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     }}>
+      {/* Mobile Header */}
+      <nav className="sm:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <a 
+            href="#" 
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="font-['Dancing_Script'] text-3xl text-[#21435F] hover:text-[#21435F]/90 transition-colors duration-300"
+          >
+            Ivana Jiráková
+          </a>
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="text-[#21435F] p-2 rounded-lg transition-colors"
+            aria-label="Menu"
+          >
+            <div className="relative w-6 h-6">
+              <span className={`absolute w-6 h-0.5 bg-current transform transition-all duration-300 ${
+                isMobileMenuOpen ? 'rotate-45 top-3' : 'top-1'
+              }`} />
+              <span className={`absolute w-6 h-0.5 bg-current top-3 transform transition-all duration-300 ${
+                isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+              }`} />
+              <span className={`absolute w-6 h-0.5 bg-current transform transition-all duration-300 ${
+                isMobileMenuOpen ? '-rotate-45 top-3' : 'top-5'
+              }`} />
+            </div>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 sm:hidden transition-opacity duration-300"
+          style={{ top: '64px' }}
+          onClick={() => setIsMobileMenuOpen(false)} 
+        />
+      )}
+
+      {/* Mobile menu */}
+      <div 
+        className={`fixed inset-x-0 top-16 bottom-0 bg-white/80 backdrop-blur-md z-40 transform transition-all duration-300 ease-in-out sm:hidden ${
+          isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
+        }`}
+      >
+        <nav className="h-full flex flex-col px-6 py-8">
+          <ul className="space-y-8 flex-1">
+            <li>
+              <button
+                onClick={() => {
+                  setActiveSection('news');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xl text-gray-800 w-full text-left"
+              >
+                Novinky a události
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  setActiveSection('templates');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xl text-gray-800 w-full text-left"
+              >
+                Šablony
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  setActiveSection('reservations');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xl text-gray-800 w-full text-left"
+              >
+                Rezervace
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  setActiveSection('approve');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xl text-gray-800 w-full text-left"
+              >
+                Ke schválení
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  setActiveSection('working_hours');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xl text-gray-800 w-full text-left"
+              >
+                Pracovní doba
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  setActiveSection('beautybox');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xl text-gray-800 w-full text-left"
+              >
+                Beautybox
+              </button>
+            </li>
+          </ul>
+          <div className="pt-8 border-t border-gray-200">
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsMobileMenuOpen(false);
+              }}
+              className="text-xl text-red-600 w-full text-left"
+            >
+              Odhlásit se
+            </button>
+          </div>
+        </nav>
+      </div>
+
       {/* Sidebar */}
       <div className="w-64 bg-white/20 backdrop-blur-xl border-r border-white/30 h-screen fixed left-0 top-0 p-6 hidden sm:block">
         <div 
@@ -448,7 +597,7 @@ export default function Admin() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 sm:ml-64 flex items-center justify-center min-h-screen p-8 pb-24 sm:pb-8">
+      <div className="flex-1 sm:ml-64 flex items-center justify-center min-h-screen p-8 pt-24 sm:pt-8 pb-8">
         <div className="max-w-7xl w-full">
           {activeSection === 'news' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -512,76 +661,6 @@ export default function Admin() {
         <LogOut size={22} />
       </button>
 
-      {/* Bottom navbar mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50 flex sm:hidden">
-        <button
-          onClick={() => setActiveSection('news')}
-          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'news' ? 'text-[#21435F]' : 'text-gray-500'}`}
-        >
-          {activeSection === 'news' && (
-            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
-          )}
-          <Newspaper size={22} />
-          <span className="text-xs mt-1">Novinky</span>
-        </button>
-        <button
-          onClick={() => setActiveSection('templates')}
-          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'templates' ? 'text-[#21435F]' : 'text-gray-500'}`}
-        >
-          {activeSection === 'templates' && (
-            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
-          )}
-          <FileText size={22} />
-          <span className="text-xs mt-1">Šablony</span>
-        </button>
-        <button
-          onClick={() => setActiveSection('reservations')}
-          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'reservations' ? 'text-[#21435F]' : 'text-gray-500'}`}
-        >
-          {activeSection === 'reservations' && (
-            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
-          )}
-          <Calendar size={22} />
-          <span className="text-xs mt-1">Rezervace</span>
-        </button>
-        <button
-          onClick={() => setActiveSection('approve')}
-          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'approve' ? 'text-[#21435F]' : 'text-gray-500'}`}
-        >
-          {activeSection === 'approve' && (
-            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
-          )}
-          <CheckSquare size={22} />
-          <span className="text-xs mt-1">Ke schválení</span>
-        </button>
-        <button
-          onClick={() => setActiveSection('working_hours')}
-          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'working_hours' ? 'text-[#21435F]' : 'text-gray-500'}`}
-        >
-          {activeSection === 'working_hours' && (
-            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
-          )}
-          <Calendar size={22} />
-          <span className="text-xs mt-1">Prac. doba</span>
-        </button>
-        <button
-          onClick={() => setActiveSection('beautybox')}
-          className={`flex-1 flex flex-col items-center justify-center py-2 ${activeSection === 'beautybox' ? 'text-[#21435F]' : 'text-gray-500'}`}
-        >
-          {activeSection === 'beautybox' && (
-            <div className="mb-1 w-6 h-1 rounded-full bg-[#21435F]" />
-          )}
-          <Users size={22} />
-          <span className="text-xs mt-1">Beautybox</span>
-        </button>
-        <button
-          onClick={handleLogout}
-          className="flex-1 flex flex-col items-center justify-center py-2 text-gray-500"
-        >
-          <LogOut size={22} />
-          <span className="text-xs mt-1">Odhlásit</span>
-        </button>
-      </nav>
     </div>
   )
 } 
