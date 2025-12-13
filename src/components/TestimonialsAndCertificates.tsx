@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
-import { Star, ExternalLink } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Star, ExternalLink, X } from "lucide-react";
 
 const TestimonialsAndCertificates = () => {
+  const [selectedCertificate, setSelectedCertificate] = useState<number | null>(null);
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -21,6 +23,26 @@ const TestimonialsAndCertificates = () => {
       revealElements.forEach((el) => observer.unobserve(el));
     };
   }, []);
+
+  // Zavření modálního okna pomocí klávesy Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedCertificate !== null) {
+        setSelectedCertificate(null);
+      }
+    };
+
+    if (selectedCertificate !== null) {
+      document.addEventListener("keydown", handleEscape);
+      // Zablokování scrollování na pozadí
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedCertificate]);
 
   const testimonials = [
     {
@@ -185,7 +207,8 @@ const TestimonialsAndCertificates = () => {
             {certificates.map((cert, index) => (
               <div
                 key={index}
-                className="relative group reveal overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+                onClick={() => setSelectedCertificate(index)}
+                className="relative group reveal overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer"
                 style={{ 
                   width: index === 1 ? "320px" : "280px", 
                   height: index === 1 ? "240px" : "200px" 
@@ -208,6 +231,42 @@ const TestimonialsAndCertificates = () => {
           </div>
         </div>
       </div>
+
+      {/* Modální okno pro zvětšený obrázek certifikátu */}
+      {selectedCertificate !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 animate-fadein"
+          onClick={() => setSelectedCertificate(null)}
+        >
+          <div
+            className="relative max-w-2xl w-full animate-fadein"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative bg-white rounded-2xl overflow-hidden shadow-2xl">
+              <button
+                onClick={() => setSelectedCertificate(null)}
+                className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+                aria-label="Zavřít"
+              >
+                <X size={20} className="text-[#21435F] group-hover:text-[#FFD1C1] transition-colors duration-300" />
+              </button>
+              <img
+                src={certificates[selectedCertificate].image}
+                alt={certificates[selectedCertificate].alt}
+                className="w-full h-auto block"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/about.webp";
+                }}
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                <p className="text-white text-lg font-medium font-['Montserrat']">
+                  {certificates[selectedCertificate].alt}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

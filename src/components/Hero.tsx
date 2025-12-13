@@ -89,7 +89,14 @@ const Hero = ({ showDivider = true }: HeroProps) => {
                     Chci vědět víc
                     <ArrowRight size={22} className="ml-2 transition-transform duration-300 group-hover:rotate-45" />
                   </a>
-                  <a href="#contact" className="bg-white text-gray-800 hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center px-10 py-5 text-xl rounded-full">
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="bg-white text-gray-800 hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center px-10 py-5 text-xl rounded-full"
+                  >
                     Kontaktujte mě
                   </a>
                 </div>
