@@ -35,7 +35,7 @@ const Index = () => {
   return (
     <>
       <SeoHead
-        title="Ivana Jiráková | Podnikatelka & Mentorka"
+        title="Ivana Jiráková | Koučka & Mentorka"
         description="Průvodkyně na cestě k finanční svobodě. Pomáhám ženám budovat úspěšné podnikání a dosáhnout finanční nezávislosti."
         url="https://www.jirakovaiva.cz/"
       />

@@ -9,17 +9,17 @@ interface SeoHeadProps {
 }
 
 export default function SeoHead({
-  title = 'Ivana Jiráková | Podnikatelka & Mentorka',
-  description = 'Jmenuji se Ivana Jiráková – jsem podnikatelka, mentorka a průvodkyně na cestě k finanční svobodě. Podnikám v oblasti přímého prodeje, kde působím jako TOP 1.',
+  title = 'Ivana Jiráková | Koučka & Mentorka',
+  description = 'Jmenuji se Ivana Jiráková – jsem koučka, mentorka a průvodkyně na cestě k finanční svobodě. Podnikám v oblasti přímého prodeje, kde působím jako TOP 1.',
   url = 'https://www.jirakovaiva.cz/',
-  image = 'https://www.jirakovaiva.cz/images/heroimg.webp',
+  image = 'https://www.jirakovaiva.cz/images/hlavnihero.webp',
   children,
 }: SeoHeadProps) {
   return (
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content="Ivana Jiráková, Jiráková, podnikatelka, mentorka, finanční svoboda, přímý prodej, TOP 1, osobní rozvoj, podnikání, finanční nezávislost, osobní růst, business mentor, podnikatelské poradenství, FARMASI, FARMASI podnikání, FARMASI business, FARMASI mentoring, FARMASI poradenství, FARMASI registrace, přímý prodej poradenství" />
+      <meta name="keywords" content="Ivana Jiráková, Jiráková, koučka, koučink, coaching, mentorka, finanční svoboda, přímý prodej, TOP 1, osobní rozvoj, podnikání, finanční nezávislost, osobní růst, business mentor, podnikatelské poradenství, FARMASI, FARMASI podnikání, FARMASI business, FARMASI mentoring, FARMASI poradenství, FARMASI registrace, přímý prodej poradenství" />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       
@@ -59,7 +59,7 @@ export default function SeoHead({
           "url": "https://www.jirakovaiva.cz/",
           "logo": "https://www.jirakovaiva.cz/images/logojirakova2.png",
           "image": "https://www.jirakovaiva.cz/images/heroimg.webp",
-          "jobTitle": "Podnikatelka & Mentorka",
+          "jobTitle": "Koučka & Mentorka",
           "description": "Jmenuji se Ivana Jiráková – jsem podnikatelka, mentorka a průvodkyně na cestě k finanční svobodě. Podnikám v oblasti přímého prodeje, kde působím jako TOP 1.",
           "address": {
             "@type": "PostalAddress",
@@ -77,6 +77,8 @@ export default function SeoHead({
             "Finanční svoboda",
             "Osobní rozvoj",
             "Mentoring",
+            "Koučink",
+            "Coaching",
             "Business strategie",
             "FARMASI poradenství",
             "Přímý prodej",
