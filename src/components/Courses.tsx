@@ -64,7 +64,7 @@ const Courses = () => {
           <div className="reveal reveal-delay-200 max-w-[650px] w-full mx-auto">
             <div className="relative w-full aspect-square rounded-2xl overflow-hidden">
               <img
-                src="/images/koucinksekce.jpg"
+                src="/images/koucinksekce.webp"
                 alt="Koučink a mentoring"
                 className="w-full h-full object-cover rounded-2xl"
               />

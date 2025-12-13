@@ -107,7 +107,7 @@ const Hero = ({ showDivider = true }: HeroProps) => {
             <div className="relative">
               <div className={`relative w-full aspect-square ${isKoucinkPage ? 'rounded-2xl' : 'rounded-full'} overflow-hidden reveal group`}>
                 <img
-                  src={isKoucinkPage ? "/images/koucinkhero.jpg" : "/images/hlavnihero.jpg"}
+                  src={isKoucinkPage ? "/images/koucinkhero.webp" : "/images/hlavnihero.webp"}
                   alt={isKoucinkPage ? "Koučink a mentoring" : "Ivana Jiráková"}
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700"
                 />

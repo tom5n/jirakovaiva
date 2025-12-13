@@ -33,7 +33,7 @@ const FarmasiSection = () => {
             <div className="relative">
               <div className="relative w-full aspect-square rounded-2xl overflow-hidden reveal group">
                 <img
-                  src="/images/farmasisekce.jpg"
+                  src="/images/farmasisekce.webp"
                   alt="Podnikej s FARMASI"
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700"
                 />
