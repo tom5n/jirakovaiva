@@ -115,6 +115,13 @@ const Navbar = () => {
                       O mně
                       <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#21435F] transition-all duration-300 group-hover:w-full"></span>
                     </a>
+                    <Link
+                      to="/koucink"
+                      className="text-gray-800 hover:text-[#21435F] transition-colors relative group"
+                    >
+                      Koučink
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#21435F] transition-all duration-300 group-hover:w-full"></span>
+                    </Link>
                     <a href="#" onClick={(e) => {
                       e.preventDefault();
                       document.getElementById('news')?.scrollIntoView({ behavior: 'smooth' });
@@ -134,13 +141,6 @@ const Navbar = () => {
                       className="text-gray-800 hover:text-[#21435F] transition-colors relative group"
                     >
                       FARMASI
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#21435F] transition-all duration-300 group-hover:w-full"></span>
-                    </Link>
-                    <Link
-                      to="/koucink"
-                      className="text-gray-800 hover:text-[#21435F] transition-colors relative group"
-                    >
-                      Koučink
                       <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#21435F] transition-all duration-300 group-hover:w-full"></span>
                     </Link>
                     <a href="#" onClick={(e) => {
@@ -375,6 +375,15 @@ const Navbar = () => {
                   </button>
                 </li>
                 <li>
+                  <Link
+                    to="/koucink"
+                    className="text-xl text-gray-800 w-full text-left"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Koučink
+                  </Link>
+                </li>
+                <li>
                   <button
                     onClick={() => scrollToSection('news')}
                     className="text-xl text-gray-800 w-full text-left"
@@ -397,15 +406,6 @@ const Navbar = () => {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     FARMASI
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/koucink"
-                    className="text-xl text-gray-800 w-full text-left"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Koučink
                   </Link>
                 </li>
                 <li>
