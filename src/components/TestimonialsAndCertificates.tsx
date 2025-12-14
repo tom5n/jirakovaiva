@@ -64,19 +64,19 @@ const TestimonialsAndCertificates = () => {
   const certificates = [
     {
       image: "/images/certifikaty/c1.webp",
-      alt: "Certifikát 1",
+      alt: "Mindset Coach",
     },
     {
       image: "/images/certifikaty/c2.webp",
-      alt: "Certifikát 2",
+      alt: "Kouč",
     },
     {
       image: "/images/certifikaty/c3.webp",
-      alt: "Certifikát 3",
+      alt: "Členství hospodářské komory",
     },
     {
       image: "/images/certifikaty/c4.webp",
-      alt: "Certifikát 4",
+      alt: "Mindset Academy",
     },
   ];
 
@@ -135,15 +135,12 @@ const TestimonialsAndCertificates = () => {
           <h3 className="text-2xl md:text-3xl font-medium text-[#21435F] mb-12 text-center font-['Montserrat'] reveal">
             Certifikace
           </h3>
-          <div className="flex flex-nowrap justify-center items-center gap-6 max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row md:flex-nowrap justify-center items-center gap-6 max-w-6xl mx-auto">
             {certificates.map((cert, index) => (
               <div
                 key={index}
                 onClick={() => setSelectedCertificate(index)}
-                className="relative group reveal overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer flex-shrink-0 bg-white"
-                style={{ 
-                  width: "280px"
-                }}
+                className="relative group reveal overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer flex-shrink-0 bg-white w-full max-w-[280px] md:w-[280px]"
               >
                 <img
                   src={cert.image}

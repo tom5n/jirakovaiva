@@ -76,8 +76,7 @@ const Contact = () => {
               Kontaktujte mě
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto reveal reveal-delay-200">
-              Máte otázky nebo chcete začít spolupráci? Neváhejte mě kontaktovat.<br />
-              Ráda vám pomůžu na Vaší cestě s FARMASI.
+              Máte otázky nebo chcete začít spolupráci? Neváhejte mě kontaktovat. Ráda Vám pomohu na Vaší cestě koučinkem, mentoringem. Samozřejmě i podnikáním ve FARMASI – v osobním i profesním rozvoji.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
