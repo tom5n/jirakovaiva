@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Náhled e-mailů – Spolupráce</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f0f0f0; margin: 0; padding: 24px; }
+    h1 { text-align: center; color: #21435F; margin-bottom: 8px; }
+    p.intro { text-align: center; color: #666; margin-bottom: 12px; }
+    .nav { text-align: center; margin-bottom: 32px; }
+    .nav a { color: #21435F; margin: 0 12px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1400px; margin: 0 auto; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    .meta { font-size: 13px; color: #555; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #eee; }
+    .meta strong { color: #21435F; }
+    iframe { width: 100%; height: 720px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <h1>Náhled e-mailů – /spoluprace</h1>
+  <p class="intro">Ukázková data: Jana Nováková, jan.novakova@email.cz, +420 777 123 456</p>
+  <p class="nav">
+    <a href="/email-preview-beautybox.html">Beautybox</a> ·
+    <a href="/email-preview-spoluprace.html">Spolupráce</a>
+  </p>
+  <div class="grid">
+    <div class="card">
+      <div class="meta">
+        <strong>1) E-mail pro Ivanu</strong><br>
+        Od: Spolupráce &lt;info@jirakovaiva.cz&gt;<br>
+        Komu: jirakovaiva@seznam.cz<br>
+        Předmět: <em>Nová žádost o spolupráci FARMASI</em>
+      </div>
+      <iframe id="admin" title="Admin email"></iframe>
+    </div>
+    <div class="card">
+      <div class="meta">
+        <strong>2) E-mail pro klienta</strong><br>
+        Od: Ivana Jiráková &lt;info@jirakovaiva.cz&gt;<br>
+        Komu: jan.novakova@email.cz<br>
+        Předmět: <em>Děkujeme za zájem o spolupráci s FARMASI</em>
+      </div>
+      <iframe id="client" title="Client email"></iframe>
+    </div>
+  </div>
+  <script>
+    const sample = {
+      name: 'Jana',
+      surname: 'Nováková',
+      email: 'jan.novakova@email.cz',
+      phone: '+420 777 123 456',
+      street: 'Hlavní 12',
+      zip: '110 00',
+      city: 'Praha',
+      message: 'Mám zájem o spolupráci a ráda bych se dozvěděla více o možnostech.',
+      id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    };
+
+    const adminHtml = `<!DOCTYPE html><html lang="cs"><head><meta charset="UTF-8"></head>
+    <body style="margin:0;padding:0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+        <tr><td align="center">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;border-radius:16px;box-shadow:0 2px 8px #0001;overflow:hidden;outline:2px solid #21435F;">
+            <tr><td style="background:#FFF5F0;padding:24px 32px 12px;text-align:center;">
+              <h2 style="color:#21435F;font-family:Montserrat,Arial,sans-serif;margin:0;font-size:22px;text-transform:uppercase;">NOVÁ ŽÁDOST O SPOLUPRÁCI</h2>
+            </td></tr>
+            <tr><td style="background:#fff;padding:24px 32px;color:#333;font-family:Arial,sans-serif;font-size:16px;">
+              <div style="background:#FFE3D6;border-radius:8px;padding:16px;color:#21435F;margin-bottom:24px;">Nová žádost o spolupráci s FARMASI z formuláře na webu. Vyplněné údaje:</div>
+              <p><strong>Jméno:</strong> <span style="color:#21435F">${sample.name}</span></p>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>Příjmení:</strong> <span style="color:#21435F">${sample.surname}</span></p>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>E-mail:</strong> <span style="color:#21435F">${sample.email}</span></p>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>Telefon:</strong> <span style="color:#21435F">${sample.phone}</span></p>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>Ulice:</strong> <span style="color:#21435F">${sample.street}</span></p>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>PSČ:</strong> <span style="color:#21435F">${sample.zip}</span></p>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>Město:</strong> <span style="color:#21435F">${sample.city}</span></p>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>Zpráva:</strong></p>
+              <div style="background:#FFE3D6;border-radius:8px;padding:16px;color:#21435F;">${sample.message}</div>
+              <hr style="border:none;border-top:1px solid #FFD1C1;margin:12px 0;">
+              <p><strong>ID žádosti:</strong> <span style="color:#21435F">${sample.id}</span></p>
+            </td></tr>
+            <tr><td style="background:#FFD1C1;color:#21435F;text-align:center;font-size:14px;padding:16px 32px;">Odesláno z www.jirakovaiva.cz/spoluprace</td></tr>
+          </table>
+        </td></tr>
+      </table>
+    </body></html>`;
+
+    const clientHtml = `<!DOCTYPE html><html lang="cs"><head><meta charset="UTF-8"></head>
+    <body style="margin:0;padding:0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+        <tr><td align="center">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;border-radius:16px;box-shadow:0 2px 8px #0001;overflow:hidden;outline:2px solid #21435F;">
+            <tr><td style="background:#FFF5F0;padding:24px 32px;color:#333;font-family:Arial,sans-serif;font-size:16px;">
+              <p>Dobrý den,</p>
+              <p>děkuji za Váš zájem o spolupráci s FARMASI pod mým vedením.</p>
+              <p>Vaši žádost jsem přijala a ozvu se Vám co nejdříve, abychom společně probrali možnosti spolupráce, podporu i další kroky.</p>
+              <p>Prosím o chvilku strpení, všechny žádosti vyřizuji postupně.</p>
+              <p>Těším se na naši spolupráci!</p>
+              <p>S pozdravem,<br>Ivana Jiráková</p>
+            </td></tr>
+            <tr><td style="background:#FFD1C1;color:#21435F;text-align:center;font-size:14px;padding:16px 32px;">Odesláno z www.jirakovaiva.cz/spoluprace</td></tr>
+          </table>
+        </td></tr>
+      </table>
+    </body></html>`;
+
+    document.getElementById('admin').srcdoc = adminHtml;
+    document.getElementById('client').srcdoc = clientHtml;
+  </script>
+</body>
+</html>

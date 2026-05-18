@@ -1,0 +1,145 @@
+import React from "react";
+import { Instagram, Mail } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
+import RezitFooterLogo from "./RezitFooterLogo";
+
+const Footer = () => {
+  // Zjistím aktuální cestu
+  const isAllNewsPage = typeof window !== 'undefined' && window.location.pathname === '/novinky';
+  const isReservationPage = typeof window !== 'undefined' && window.location.pathname === '/rezervace';
+  const isKoucinkPage = typeof window !== 'undefined' && window.location.pathname === '/koucink';
+  const isKoucinkOsobniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/individualni';
+  const isKoucinkTymovyPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/rodiny';
+  const isKoucinkLeadershipPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/podnikatele';
+  const isKoucinkFiremniPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/firemni';
+  const isKoucinkTymovyRozvojPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/tymovy-rozvoj';
+  const isKoucinkPremiumPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/premium';
+  const isVIPPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/zeny-maminky';
+  const isFarmasiPage = typeof window !== 'undefined' && window.location.pathname === '/farmasi';
+  const isHomePage = typeof window !== 'undefined' && window.location.pathname === '/';
+  const shouldHideDivider = isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage || isFarmasiPage || isHomePage;
+  return (
+    <>
+      {!shouldHideDivider && (
+      <div className="w-full">
+        <img src={isReservationPage ? "/images/footer-top3.svg" : isAllNewsPage ? "/images/footer-top2.svg" : "/images/footer-top.svg"} alt="Separator" className="w-full h-auto" />
+      </div>
+      )}
+      <footer className="bg-[#21435F] text-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center justify-center space-y-4 py-6">
+            <div className="flex flex-col md:flex-row justify-between items-center w-full space-y-2 md:space-y-0">
+              <span className="font-['Dancing_Script'] text-2xl text-white hidden md:block">
+                Ivana Jiráková
+              </span>
+              <div className="flex flex-col items-center md:flex-row md:items-center md:space-x-2 text-sm">
+                <p className="text-sm text-center md:text-left">
+                  © {new Date().getFullYear()} Ivana Jiráková - Všechna práva vyhrazena
+                  <span className="hidden md:inline mx-2">|</span>
+                </p>
+                <div className="flex flex-row justify-center items-center space-x-2 mt-1 md:mt-0">
+                  <a href="/zasady" className="underline hover:text-[#FFD1C1] transition-colors">Zásady zpracování údajů</a>
+                  <span>/</span>
+                  <a href="/cookies" className="underline hover:text-[#FFD1C1] transition-colors">Cookies</a>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4 hidden md:flex">
+                <a
+                  href="https://www.instagram.com/jirakova_iva/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-80 transition-opacity"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={24} />
+                </a>
+                <a
+                  href="https://www.tiktok.com/@ivanajirakova"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-80 transition-opacity"
+                  aria-label="TikTok"
+                >
+                  <FaTiktok size={24} />
+                </a>
+                <a
+                  href="mailto:info@jirakovaiva.cz"
+                  className="hover:opacity-80 transition-opacity"
+                  aria-label="Email"
+                >
+                  <Mail size={24} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-white/10 py-4">
+            <div className="flex justify-center">
+              <RezitFooterLogo />
+            </div>
+          </div>
+        </div>
+      </footer>
+    </>
+  );
+};
+
+export const FooterNews = () => (
+  <>
+    <div className="w-full">
+      <img src="/images/footer-top2.svg" alt="Separator" className="w-full h-auto" />
+    </div>
+    <footer className="bg-[#21435F] text-white">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col items-center justify-center space-y-4 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center w-full space-y-2 md:space-y-0">
+            <span className="font-['Dancing_Script'] text-2xl text-white hidden md:block">
+              Ivana Jiráková
+            </span>
+            <div className="flex flex-col items-center md:flex-row md:items-center md:space-x-2 text-sm">
+              <p className="text-sm text-center md:text-left">
+                © {new Date().getFullYear()} Ivana Jiráková. Všechna práva vyhrazena.
+                <span className="hidden md:inline mx-2">|</span>
+              </p>
+              <div className="flex flex-row justify-center items-center space-x-2 mt-1 md:mt-0">
+                <a href="/zasady" className="underline hover:text-[#FFD1C1] transition-colors">Zásady zpracování údajů</a>
+                <span>/</span>
+                <a href="/cookies" className="underline hover:text-[#FFD1C1] transition-colors">Cookies</a>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 hidden md:flex">
+              <a
+                href="https://www.instagram.com/jirakova_iva/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity"
+              >
+                <Instagram size={24} />
+              </a>
+              <a
+                href="https://www.tiktok.com/@ivanajirakova"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity"
+              >
+                <FaTiktok size={24} />
+              </a>
+              <a
+                href="mailto:ivana.jirakova@farmasi.com"
+                className="hover:opacity-80 transition-opacity"
+              >
+                <Mail size={24} />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/10 py-4">
+          <div className="flex justify-center">
+            <RezitFooterLogo />
+          </div>
+        </div>
+      </div>
+    </footer>
+  </>
+);
+
+export default Footer;
