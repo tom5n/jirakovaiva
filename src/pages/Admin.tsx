@@ -6,10 +6,11 @@ import AdminReservationsCalendar from '@/components/admin/AdminReservationsCalen
 import WorkingHours from '@/components/admin/WorkingHours'
 import BeautyboxRegistrations from '@/components/admin/BeautyboxRegistrations'
 import SpolupraceRegistrations from '@/components/admin/SpolupraceRegistrations'
+import SpoluvkondiciRegistrations from '@/components/admin/SpoluvkondiciRegistrations'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Newspaper, FileText, Calendar, CheckSquare, Check, X, Trash2, Users, Handshake } from 'lucide-react'
+import { LogOut, Newspaper, FileText, Calendar, CheckSquare, Check, X, Trash2, Users, Handshake, Heart } from 'lucide-react'
 
 // Přidání Google fontu Dancing Script pouze pro tento soubor
 const dancingFontUrl = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap';
@@ -331,6 +332,7 @@ export default function Admin() {
   const [templateCount, setTemplateCount] = useState(0)
   const [beautyboxCount, setBeautyboxCount] = useState<number | undefined>(undefined)
   const [spolupraceCount, setSpolupraceCount] = useState<number | undefined>(undefined)
+  const [spoluvkondiciCount, setSpoluvkondiciCount] = useState<number | undefined>(undefined)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -369,6 +371,16 @@ export default function Admin() {
       setSpolupraceCount(count || 0)
     }
     fetchSpolupraceCount()
+  }, [activeSection])
+
+  useEffect(() => {
+    const fetchSpoluvkondiciCount = async () => {
+      const { count } = await supabase
+        .from('spoluvkondici_registrations')
+        .select('*', { count: 'exact', head: true })
+      setSpoluvkondiciCount(count || 0)
+    }
+    fetchSpoluvkondiciCount()
   }, [activeSection])
 
   useEffect(() => {
@@ -526,6 +538,17 @@ export default function Admin() {
                 Spolupráce
               </button>
             </li>
+            <li>
+              <button
+                onClick={() => {
+                  setActiveSection('spoluvkondici');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xl text-gray-800 w-full text-left"
+              >
+                Spolu v Kondici
+              </button>
+            </li>
           </ul>
           <div className="pt-8 border-t border-gray-200">
             <button
@@ -627,6 +650,17 @@ export default function Admin() {
             <Handshake size={20} />
             <span>Spolupráce</span>
           </button>
+          <button
+            onClick={() => setActiveSection('spoluvkondici')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              activeSection === 'spoluvkondici' 
+                ? 'bg-[#21435F] text-white' 
+                : 'text-[#21435F] hover:bg-white/20'
+            }`}
+          >
+            <Heart size={20} />
+            <span>Spolu v Kondici</span>
+          </button>
         </nav>
       </div>
 
@@ -686,6 +720,11 @@ export default function Admin() {
           {activeSection === 'spoluprace' && (
             <div className="bg-white/80 rounded-2xl shadow p-6">
               <SpolupraceRegistrations count={spolupraceCount || 0} />
+            </div>
+          )}
+          {activeSection === 'spoluvkondici' && (
+            <div className="bg-white/80 rounded-2xl shadow p-6">
+              <SpoluvkondiciRegistrations count={spoluvkondiciCount || 0} />
             </div>
           )}
         </div>

@@ -16,8 +16,9 @@ const Footer = () => {
   const isKoucinkPremiumPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/premium';
   const isVIPPage = typeof window !== 'undefined' && window.location.pathname === '/koucink/zeny-maminky';
   const isFarmasiPage = typeof window !== 'undefined' && window.location.pathname === '/farmasi';
+  const isSpoluVKondiciPage = typeof window !== 'undefined' && window.location.pathname === '/spolu-v-kondici';
   const isHomePage = typeof window !== 'undefined' && window.location.pathname === '/';
-  const shouldHideDivider = isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage || isFarmasiPage || isHomePage;
+  const shouldHideDivider = isKoucinkPage || isKoucinkOsobniPage || isKoucinkTymovyPage || isKoucinkLeadershipPage || isKoucinkFiremniPage || isKoucinkTymovyRozvojPage || isKoucinkPremiumPage || isVIPPage || isFarmasiPage || isSpoluVKondiciPage || isHomePage;
   return (
     <>
       {!shouldHideDivider && (

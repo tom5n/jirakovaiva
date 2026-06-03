@@ -11,6 +11,7 @@ import AllNews from "./pages/AllNews";
 import Reservation from "./pages/Reservation";
 import Beautybox from "./pages/Beautybox";
 import Spoluprace from "./pages/Spoluprace";
+import SpoluVKondici from "./pages/SpoluVKondici";
 import Zasady from "./pages/Zasady";
 import Cookies from "./pages/Cookies";
 import Koucink from "./pages/Koucink";
@@ -84,6 +85,7 @@ const App = () => (
                 <Route path="/rezervace" element={<React.Suspense fallback={<>Načítání...</>}><Reservation /></React.Suspense>} />
                 <Route path="/beautybox" element={<React.Suspense fallback={<>Načítání...</>}><Beautybox /></React.Suspense>} />
                 <Route path="/spoluprace" element={<React.Suspense fallback={<>Načítání...</>}><Spoluprace /></React.Suspense>} />
+                <Route path="/spolu-v-kondici" element={<React.Suspense fallback={<>Načítání...</>}><SpoluVKondici /></React.Suspense>} />
                 <Route path="/koucink" element={<React.Suspense fallback={<>Načítání...</>}><Koucink /></React.Suspense>} />
                 <Route path="/koucink/individualni" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkOsobni /></React.Suspense>} />
                 <Route path="/koucink/rodiny" element={<React.Suspense fallback={<>Načítání...</>}><KoucinkTymovy /></React.Suspense>} />
