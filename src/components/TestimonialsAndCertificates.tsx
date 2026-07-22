@@ -61,11 +61,7 @@ const TestimonialsAndCertificates = () => {
     },
   ];
 
-  const certificates = [
-    {
-      image: "/images/certifikaty/c1.webp",
-      alt: "Mindset Coach",
-    },
+  const tallCertificates = [
     {
       image: "/images/certifikaty/c2.webp",
       alt: "Kouč",
@@ -74,11 +70,48 @@ const TestimonialsAndCertificates = () => {
       image: "/images/certifikaty/c3.webp",
       alt: "Členství hospodářské komory",
     },
+  ];
+
+  const wideCertificates = [
+    {
+      image: "/images/certifikaty/c1.webp",
+      alt: "Mindset Coach",
+    },
+    {
+      image: "/images/certifikaty/certifikat_novy.webp",
+      alt: "Advanced Team & Leadership Coaching",
+    },
     {
       image: "/images/certifikaty/c4.webp",
       alt: "Mindset Academy",
     },
   ];
+
+  const certificates = [...tallCertificates, ...wideCertificates];
+
+  const renderCertificateCard = (
+    cert: { image: string; alt: string },
+    index: number
+  ) => (
+    <div
+      key={cert.image}
+      onClick={() => setSelectedCertificate(index)}
+      className="relative group reveal overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer flex-shrink-0 bg-white w-full max-w-[280px]"
+    >
+      <img
+        src={cert.image}
+        alt={cert.alt}
+        className="w-full h-auto object-contain transform group-hover:scale-110 transition-transform duration-700"
+        onError={(e) => {
+          e.currentTarget.src = "/images/about.webp";
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#21435F]/0 via-[#21435F]/0 to-[#21435F]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#21435F]/90">
+        <p className="text-white text-sm font-medium font-['Montserrat']">{cert.alt}</p>
+      </div>
+    </div>
+  );
 
   return (
     <section id="testimonials" className="section-padding bg-[#F3E8E2]">
@@ -135,27 +168,18 @@ const TestimonialsAndCertificates = () => {
           <h3 className="text-2xl md:text-3xl font-medium text-[#21435F] mb-12 text-center font-['Montserrat'] reveal">
             Certifikace
           </h3>
-          <div className="flex flex-col md:flex-row md:flex-nowrap justify-center items-center gap-6 max-w-6xl mx-auto">
-            {certificates.map((cert, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedCertificate(index)}
-                className="relative group reveal overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer flex-shrink-0 bg-white w-full max-w-[280px] md:w-[280px]"
-              >
-                <img
-                  src={cert.image}
-                  alt={cert.alt}
-                  className="w-full h-auto object-contain transform group-hover:scale-110 transition-transform duration-700"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/about.webp";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-[#21435F]/0 via-[#21435F]/0 to-[#21435F]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#21435F]/90">
-                  <p className="text-white text-sm font-medium font-['Montserrat']">{cert.alt}</p>
-                </div>
-              </div>
-            ))}
+          <div className="flex flex-col gap-6 max-w-5xl mx-auto">
+            {/* Nahoře: dva vysoké certifikáty */}
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+              {tallCertificates.map((cert, index) => renderCertificateCard(cert, index))}
+            </div>
+
+            {/* Dole: tři menší certifikáty na šířku */}
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+              {wideCertificates.map((cert, index) =>
+                renderCertificateCard(cert, tallCertificates.length + index)
+              )}
+            </div>
           </div>
         </div>
       </div>
